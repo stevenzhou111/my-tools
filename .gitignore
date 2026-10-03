@@ -13,4 +13,3 @@ playwright-report
 blob-report
 playwright/.cache
 coverage
-.github/workflows/deploy.yml
