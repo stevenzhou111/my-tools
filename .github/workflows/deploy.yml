@@ -71,4 +71,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=my-toolbox
+          # pages.dev 子域名全 Cloudflare 唯一,my-toolbox/my-tools 均已被占,
+          # 这里用一个可注册的名字;想换名字时同步改这里即可
+          command: pages deploy dist --project-name=my-tools-111

@@ -157,7 +157,7 @@ npx wrangler login
 npm run deploy            # 等价于 vite build && wrangler pages deploy dist
 ```
 
-首次执行会提示创建 Pages 项目,按提示输入项目名(如 `my-toolbox`)即可。
+首次执行会提示创建 Pages 项目,按提示输入项目名即可(注意 pages.dev 子域名全平台唯一,`my-toolbox`/`my-tools` 已被占用,选个自己的名字)。
 
 ### 方式三:GitHub Actions 自动部署
 
