@@ -103,6 +103,11 @@ const TOOLS = {
   'docker-compose': 'container',
   totp: 'timer-reset',
   'gif-maker': 'image-play',
+  xml2json: 'repeat-2',
+  keycode: 'keyboard',
+  pangu: 'text-quote',
+  mortgage: 'piggy-bank',
+  stopwatch: 'alarm-clock',
 
 
   'pdf-merge': 'files',

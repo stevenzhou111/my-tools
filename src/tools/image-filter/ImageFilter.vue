@@ -123,6 +123,24 @@ function sketchify(src) {
   return oc
 }
 
+// 马赛克:先缩小到 1/block 再无插值放大回来,块大小随强度变化
+function pixelate(src, i) {
+  const w = src.width
+  const h = src.height
+  const block = Math.max(2, Math.round(2 + i * 28))
+  const small = document.createElement('canvas')
+  small.width = Math.max(1, Math.round(w / block))
+  small.height = Math.max(1, Math.round(h / block))
+  small.getContext('2d').drawImage(src, 0, 0, small.width, small.height)
+  const out = document.createElement('canvas')
+  out.width = w
+  out.height = h
+  const octx = out.getContext('2d')
+  octx.imageSmoothingEnabled = false
+  octx.drawImage(small, 0, 0, w, h)
+  return out
+}
+
 function render() {
   const img = image.value
   if (!img) return
@@ -131,6 +149,8 @@ function render() {
     canvas = oilify(baseCanvas())
   } else if (activeFilter.value === 'sketch') {
     canvas = sketchify(baseCanvas())
+  } else if (activeFilter.value === 'mosaic') {
+    canvas = pixelate(baseCanvas(), intensity.value / 100)
   } else {
     canvas = document.createElement('canvas')
     canvas.width = img.naturalWidth
@@ -165,6 +185,7 @@ function download() {
   let canvas
   if (activeFilter.value === 'oil') canvas = oilify(baseCanvas())
   else if (activeFilter.value === 'sketch') canvas = sketchify(baseCanvas())
+  else if (activeFilter.value === 'mosaic') canvas = pixelate(baseCanvas(), intensity.value / 100)
   else {
     canvas = document.createElement('canvas')
     canvas.width = image.value.naturalWidth
@@ -205,7 +226,7 @@ function download() {
           { id: 'none', name: '原图' }, { id: 'gray', name: '黑白' }, { id: 'contrast', name: '高对比' },
           { id: 'invert', name: '反色' }, { id: 'sepia', name: '复古' }, { id: 'warm', name: '暖阳' },
           { id: 'cool', name: '冷调' }, { id: 'vivid', name: '鲜艳' }, { id: 'blur', name: '毛玻璃' },
-          { id: 'oil', name: '油画' }, { id: 'sketch', name: '铅笔画' },
+          { id: 'mosaic', name: '马赛克' }, { id: 'oil', name: '油画' }, { id: 'sketch', name: '铅笔画' },
         ]"
         :key="f.id"
         class="btn btn-sm filter-btn"

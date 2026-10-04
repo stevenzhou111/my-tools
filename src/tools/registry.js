@@ -112,6 +112,13 @@ export const TOOLS = [
     component: lazy(() => import('./xml-format/XmlFormat.vue')),
   },
   {
+    id: 'xml2json', name: 'XML ↔ JSON', category: 'convert', icon: 'repeat-2',
+    desc: 'XML 与 JSON 双向转换,属性、数组、文本按约定映射',
+    keywords: 'xml json 转换 互转 属性 数组 解析 配置 rss',
+    about: '元素属性转成「@属性名」键、元素内文本转成「#text」键,只有文本的元素直接输出字符串,同名兄弟元素合并为数组;反向转换时顶层必须是单键对象。支持双向结果互换后继续编辑,非法输入会给出可读的报错。',
+    component: lazy(() => import('./xml2json/Xml2Json.vue')),
+  },
+  {
     id: 'json-tree', name: 'JSON 树查看器', category: 'convert', icon: 'list-tree',
     desc: '把 JSON 解析成可折叠的结构树,层级一目了然',
     keywords: 'json 树 结构 层级 可视化 viewer 折叠 查看器',
@@ -218,6 +225,13 @@ export const TOOLS = [
     about: '拖入任意文件计算 MD5 与 SHA-1/256/384/512。MD5 分块增量计算,SHA 由 Web Crypto 完成;与官方提供的校验值比对即可确认文件未被篡改。',
     component: lazy(() => import('./file-hash/FileHash.vue')),
   },
+  {
+    id: 'keycode', name: '按键检测', category: 'dev', icon: 'keyboard',
+    desc: '按下任意键显示 event.key / code / keyCode 与修饰键状态',
+    keywords: 'keycode 按键 键盘 key code 修饰键 快捷键 调试 javascript',
+    about: '按下键盘上任意一个键,实时显示 event.key、event.code(物理键位)与旧的 keyCode,以及 Ctrl/Alt/Shift/Meta/CapsLock 状态,可一键复制 JSON,适合写快捷键逻辑或排查键盘映射时参考。工具只监听不拦截,不影响你的任何组合键;keyCode 已被标准废弃,仅供兼容旧代码时查用。',
+    component: lazy(() => import('./keycode/KeycodeInfo.vue')),
+  },
 
   // ---------- 文本工具 ----------
   {
@@ -275,6 +289,13 @@ export const TOOLS = [
     keywords: '删除空行 删除重复行 删除空格 清理 文本',
     about: '七个清理操作基于输入文本生成输出,输出框可直接编辑,方便继续微调;实时显示前后字符数。',
     component: lazy(() => import('./text-clean/TextClean.vue')),
+  },
+  {
+    id: 'pangu', name: '中文排版格式化', category: 'text', icon: 'text-quote',
+    desc: '中英文之间加空格、全半角标点归一,一键整理排版',
+    keywords: '盘古之白 中英文 空格 排版 格式化 全角 半角 标点 文案 公众号',
+    about: '俗称「盘古之白」:在中文与英文/数字之间加空格,是技术文档与公众号排版的主流惯例。附带全角字母数字转半角、中文后半角标点转全角(不碰 3.5 这类小数点)、合并连续空格与行尾空白五项开关,可叠加使用。正文不会写入地址栏,分享链接只携带排版选项。',
+    component: lazy(() => import('./pangu/PanguFormat.vue')),
   },
   {
     id: 'case-convert', name: '大小写转换', category: 'text', icon: 'case-sensitive',
@@ -350,9 +371,9 @@ export const TOOLS = [
   },
   {
     id: 'image-filter', name: '图片滤镜调色', category: 'image', icon: 'sliders-horizontal',
-    desc: '灰度、反色、复古、毛玻璃、油画、铅笔画等滤镜',
-    keywords: '图片 滤镜 调色 灰度 复古 毛玻璃 油画 铅笔画 照片',
-    about: '常规滤镜基于 Canvas filter;油画是色彩量化算法、铅笔画是灰度反色模糊 + color dodge 混合,全部本地像素运算,大图处理约需一秒。',
+    desc: '灰度、反色、复古、毛玻璃、马赛克、油画、铅笔画等滤镜',
+    keywords: '图片 滤镜 调色 灰度 复古 毛玻璃 马赛克 像素化 油画 铅笔画 照片',
+    about: '常规滤镜基于 Canvas filter;马赛克按强度调整像素块大小,油画是色彩量化算法、铅笔画是灰度反色模糊 + color dodge 混合,全部本地像素运算,大图处理约需一秒。',
     component: lazy(() => import('./image-filter/ImageFilter.vue')),
   },
   {
@@ -555,6 +576,13 @@ export const TOOLS = [
     about: '选一个基准时间与时区,一眼看到北京/东京/伦敦/纽约/悉尼等 18 个时区对应的本地日期与时间,标注 UTC 偏移、相对基准的时差与「是否工作时间」(当地 9:00~18:00),夏令时由系统 Intl 自动处理。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./tz-convert/TzConvert.vue')),
   },
+  {
+    id: 'mortgage', name: '房贷计算器', category: 'calc', icon: 'piggy-bank',
+    desc: '等额本息 / 等额本金月供与总利息对比,支持商贷+公积金组合',
+    keywords: '房贷 月供 等额本息 等额本金 利息 公积金 组合贷款 贷款 计算器 买房',
+    about: '商业贷款与公积金贷款可以分别填金额、利率与期限,两笔按月合并成一份月供;等额本息(月供固定)与等额本金(月供递减)两种方式都算一遍,直观对比总利息差与首月压力差。附按年还款明细(每年还款额 / 本金 / 利息 / 年末剩余)。计算完全在本地进行,利率请以实际审批为准。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./mortgage/MortgageCalc.vue')),
+  },
 
   // ---------- 文档处理 ----------
   {
@@ -704,6 +732,13 @@ export const TOOLS = [
     keywords: '番茄钟 番茄工作法 专注 计时器 pomodoro',
     about: '基于真实时钟倒计时(后台标签页被浏览器节流也不影响准确性),阶段结束自动衔接并播放提示音。',
     component: lazy(() => import('./pomodoro/Pomodoro.vue')),
+  },
+  {
+    id: 'stopwatch', name: '秒表与倒计时', category: 'office', icon: 'alarm-clock',
+    desc: '精确到百分秒的秒表(可计次)与倒计时,后台走时也准确',
+    keywords: '秒表 停表 计时 倒计时 计次 stopwatch timer 提醒',
+    about: '秒表精确到百分秒,支持计次并自动标出最快 / 最慢一圈;倒计时时分秒任意组合,附常用预设,结束播放提示音。计时基于系统时间戳而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确。',
+    component: lazy(() => import('./stopwatch/Stopwatch.vue')),
   },
   {
     id: 'decision', name: '小决定', category: 'office', icon: 'compass',
