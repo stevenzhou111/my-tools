@@ -108,6 +108,10 @@ const TOOLS = {
   pangu: 'text-quote',
   mortgage: 'piggy-bank',
   stopwatch: 'alarm-clock',
+  'sort-lines': 'arrow-down-wide-narrow',
+  lorem: 'pilcrow',
+  'color-shades': 'swatch-book',
+  'cam-mic-test': 'webcam',
 
 
   'pdf-merge': 'files',

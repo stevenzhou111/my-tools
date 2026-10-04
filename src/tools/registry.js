@@ -298,6 +298,13 @@ export const TOOLS = [
     component: lazy(() => import('./pangu/PanguFormat.vue')),
   },
   {
+    id: 'sort-lines', name: '文本行整理', category: 'text', icon: 'arrow-down-wide-narrow',
+    desc: '多行文本排序、去重、反转、随机打乱、加行号,一键整理',
+    keywords: '排序 去重 行 排列 随机 打乱 行号 名单 清单 文本 sort shuffle',
+    about: '四种排序:字母序(本地化规则、忽略大小写)、数字序(按行首数字数值排,2 排在 10 前面)、按长度与随机打乱(加密级随机,适合抽签);另附去重、去空行、行首尾去空白与加行号(可补零)。操作按顺序叠加,结果可直接覆盖原文继续处理。正文不会写入地址栏,分享链接只携带整理选项。',
+    component: lazy(() => import('./sort-lines/SortLines.vue')),
+  },
+  {
     id: 'case-convert', name: '大小写转换', category: 'text', icon: 'case-sensitive',
     desc: '全大写、全小写、标题大写、大小写互换、驼峰/下划线',
     keywords: '大小写 大写 小写 标题 驼峰 snake camel 转换',
@@ -442,10 +449,10 @@ export const TOOLS = [
 
   // ---------- 生成器 ----------
   {
-    id: 'uuid', name: 'UUID 生成', category: 'generate', icon: 'id-card',
-    desc: '批量生成 UUID v4 随机标识符,可大写、去连字符',
-    keywords: 'uuid guid 生成 唯一标识 随机',
-    about: 'UUID v4 由浏览器加密级随机数生成,122 位随机空间,碰撞概率可以忽略。',
+    id: 'uuid', name: 'UUID / NanoID / ULID', category: 'generate', icon: 'id-card',
+    desc: '批量生成 UUID v4、NanoID 短 ID 与可排序 ULID',
+    keywords: 'uuid guid ulid nanoid 短id 生成 唯一标识 随机 主键',
+    about: '三种 ID 一页生成:UUID v4 由加密级随机数生成,122 位随机空间碰撞可忽略,可大写/去连字符;NanoID 是 21 字符左右的 URL 安全短 ID(长度 6~64 可调),适合做主键与分享码;ULID 为 26 位大写 Crockford Base32,前 10 位是毫秒时间戳、可按字典序排序也可反解时间。全部使用浏览器加密级随机数,无第三方依赖。',
     component: lazy(() => import('./uuid/UuidGenerator.vue')),
   },
   {
@@ -510,6 +517,13 @@ export const TOOLS = [
     keywords: '测试数据 mock 假数据 姓名 手机号 身份证 填充',
     about: '一键生成表格数据,身份证号校验位合法但纯属随机,仅供开发测试填充;可复制为 CSV 或 JSON。',
     component: lazy(() => import('./mock-data/MockData.vue')),
+  },
+  {
+    id: 'lorem', name: '假文生成器', category: 'generate', icon: 'pilcrow',
+    desc: '生成 Lorem Ipsum 占位假文,按段落或句子,可输出 HTML',
+    keywords: 'lorem ipsum 假文 乱数 占位 排版 设计 mockup 哑文',
+    about: '生成排版行业沿用了五百多年的 Lorem Ipsum 占位假文,按段落或句子控制数量,可选以经典的「Lorem ipsum dolor sit amet」开头、用 <p> 标签包裹输出。词库内置在页面里,生成完全离线,每批随机。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./lorem/LoremGenerator.vue')),
   },
   {
     id: 'gif-maker', name: 'GIF 合成', category: 'generate', icon: 'image-play',
@@ -582,6 +596,13 @@ export const TOOLS = [
     keywords: '房贷 月供 等额本息 等额本金 利息 公积金 组合贷款 贷款 计算器 买房',
     about: '商业贷款与公积金贷款可以分别填金额、利率与期限,两笔按月合并成一份月供;等额本息(月供固定)与等额本金(月供递减)两种方式都算一遍,直观对比总利息差与首月压力差。附按年还款明细(每年还款额 / 本金 / 利息 / 年末剩余)。计算完全在本地进行,利率请以实际审批为准。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./mortgage/MortgageCalc.vue')),
+  },
+  {
+    id: 'color-shades', name: '色阶生成器', category: 'calc', icon: 'swatch-book',
+    desc: '一个主色生成 50~950 完整色阶,导出 Tailwind / CSS 变量',
+    keywords: '色阶 调色板 配色 颜色 tailwind css 变量 设计 主色 shades',
+    about: '以输入色为 500 档基准(明度钳制在 30%–62%),按固定明度锚点向两端推亮/推暗,生成 Tailwind 风格的 50~950 共 11 档色阶,色相保持不变;每个色块按亮度自动选择黑/白文字,点击即复制 HEX。支持一键导出 Tailwind 配置与 CSS 变量,变量名可自定义。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./color-shades/ColorShades.vue')),
   },
 
   // ---------- 文档处理 ----------
@@ -715,6 +736,13 @@ export const TOOLS = [
     about: '开始后由浏览器弹出共享选择器(屏幕/窗口/标签页),支持暂停与麦克风混录;录制内容只保存在本地。需要 https 或 localhost 环境。',
     component: lazy(() => import('./screen-record/ScreenRecord.vue')),
   },
+  {
+    id: 'cam-mic-test', name: '摄像头麦克风测试', category: 'av', icon: 'webcam',
+    desc: '开会前试一试摄像头与麦克风:画面、分辨率、帧率与收音电平',
+    keywords: '摄像头 麦克风 测试 会议 视频通话 相机 摄像头检测 麦克风检测 webcam',
+    about: '一键开启摄像头与麦克风,本地预览画面并显示实际分辨率 / 帧率,麦克风电平表实时反映收音是否正常,同时列出检测到的全部设备;任何画面与声音都不会被录制或上传。权限被拒、设备被占用等失败情形都有明确的中文提示。需要 https 或 localhost 环境。',
+    component: lazy(() => import('./cam-mic-test/CamMicTest.vue')),
+  },
 
   // ---------- 数据图表 ----------
   {
@@ -737,7 +765,7 @@ export const TOOLS = [
     id: 'stopwatch', name: '秒表与倒计时', category: 'office', icon: 'alarm-clock',
     desc: '精确到百分秒的秒表(可计次)与倒计时,后台走时也准确',
     keywords: '秒表 停表 计时 倒计时 计次 stopwatch timer 提醒',
-    about: '秒表精确到百分秒,支持计次并自动标出最快 / 最慢一圈;倒计时时分秒任意组合,附常用预设,结束播放提示音。计时基于系统时间戳而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确。',
+    about: '秒表精确到百分秒,支持计次并自动标出最快 / 最慢一圈,快捷键:空格开始/暂停、L 计次、R 重置;倒计时时分秒任意组合,附常用预设,结束播放提示音。计时基于系统时间戳而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确。',
     component: lazy(() => import('./stopwatch/Stopwatch.vue')),
   },
   {

@@ -1,8 +1,28 @@
 <script setup>
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 // 两个模式共用「基于真实时间戳」的计时,后台标签页被节流也不会越走越慢
 const tab = ref('stopwatch')
+
+// ---------- 快捷键(仅秒表页签):空格 开始/暂停,L 计次,R 重置 ----------
+function isTyping(e) {
+  const t = e.target
+  return t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)
+}
+function onKey(e) {
+  if (isTyping(e) || e.isComposing) return
+  if (e.code === 'Space') {
+    // 空格同时会触发焦点按钮,先吃掉默认行为避免双重切换
+    if (e.target?.closest?.('button')) e.preventDefault()
+    if (tab.value === 'stopwatch') (swRunning.value ? swPause : swStart)()
+  } else if (e.code === 'KeyL') {
+    if (tab.value === 'stopwatch' && swRunning.value) swLap()
+  } else if (e.code === 'KeyR') {
+    if (tab.value === 'stopwatch') swReset()
+  }
+}
+onMounted(() => window.addEventListener('keydown', onKey))
+onUnmounted(() => window.removeEventListener('keydown', onKey))
 
 // ---------- 秒表 ----------
 const swRunning = ref(false)
@@ -194,6 +214,7 @@ onUnmounted(() => {
         <button class="btn" :disabled="!swRunning" @click="swLap">🏁 计次</button>
         <button class="btn" :disabled="swElapsed === 0" @click="swReset">↺ 重置</button>
       </div>
+      <p class="tip" style="margin-top: 12px">快捷键:空格 开始/暂停 · L 计次 · R 重置(输入框内不生效)</p>
     </div>
 
     <div v-if="laps.length" class="panel" style="margin-top: 14px">
