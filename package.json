@@ -14,7 +14,6 @@
     "gen:icons": "node scripts/gen-icons.mjs"
   },
   "dependencies": {
-    "blueimp-md5": "^2.19.0",
     "cronstrue": "^3.27.0",
     "dompurify": "^3.2.4",
     "echarts": "^6.1.0",

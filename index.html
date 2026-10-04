@@ -3,8 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/pwa-192.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="一个基于 Vue 3 的在线工具箱:JSON、Base64、二维码、图片压缩等常用工具,全部在浏览器本地运行。" />
+    <meta name="description" content="一个基于 Vue 3 的在线工具箱:JSON、Base64、二维码、PDF、图片处理、文档转换等 90 个常用工具与 145 款软件推荐,全部在浏览器本地运行,数据不上传,可离线使用。" />
+    <meta name="keywords" content="在线工具,工具箱,JSON 格式化,二维码,PDF,图片压缩,正则测试,时间戳,前端工具" />
+    <!-- 主题色跟随明暗模式,影响浏览器地址栏配色 -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f5fb" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1117" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- 分享到社交/IM 时的卡片信息(og:image 需部署后在 Cloudflare 后台绑定域名,再改成绝对地址) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="我的工具箱 - 90 个在线小工具,开箱即用" />
+    <meta property="og:description" content="JSON、二维码、PDF、图片处理、文档转换等 90 个常用工具,全部在浏览器本地运行,可离线使用。" />
+    <meta property="og:image" content="/pwa-512.png" />
+    <meta name="twitter:card" content="summary" />
     <title>我的工具箱</title>
     <script>
       // 首屏渲染前应用主题,避免深色模式闪白

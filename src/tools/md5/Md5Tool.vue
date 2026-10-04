@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref } from 'vue'
-import md5Lib from 'blueimp-md5'
+import { computed, ref, watch } from 'vue'
+import SparkMD5 from 'spark-md5'
 import { useCopy } from '@/utils/useCopy'
 
 const input = ref('你好,工具箱!')
@@ -8,11 +8,20 @@ const upper = ref(false)
 const short16 = ref(false)
 const { copiedKey, copy } = useCopy()
 
-const full = computed(() => {
-  const h = md5Lib(input.value)
-  return upper.value ? h.toUpperCase() : h
-})
+// spark-md5 是流式 API(与文件哈希工具共用一个库):文本按 UTF-8 字节计算,
+// 与 blueimp-md5 对字符串的编码方式一致;先存小写摘要,大写/16 位在展示层处理
+const digest = ref('')
+watch(
+  input,
+  (s) => {
+    const spark = new SparkMD5()
+    spark.append(new TextEncoder().encode(s))
+    digest.value = spark.end()
+  },
+  { immediate: true },
+)
 
+const full = computed(() => (upper.value ? digest.value.toUpperCase() : digest.value))
 const output = computed(() => (short16.value ? full.value.slice(8, 24) : full.value))
 </script>
 
