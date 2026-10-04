@@ -1,23 +1,23 @@
 # 我的工具箱
 
-[![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/deploy.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/deploy.yml)
+[![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **97 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
+一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **99 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
 
 **所有工具均在浏览器本地运行,数据不上传服务器**——纯静态站点、零后端、零跟踪,可一键部署到 Cloudflare Pages,并支持 PWA 安装后完整离线使用。
 
 布局采用经典的**左侧分类导航 + 右侧内容区**:桌面端侧边栏常驻(当前工具高亮、分类可折叠、支持搜索过滤);移动端自动收起为汉堡按钮唤起的抽屉导航。每个工具底部附有可展开的「关于这个工具」使用说明。
 
-## ✨ 内置工具(97 个 / 12 分类)
+## ✨ 内置工具(99 个 / 12 分类)
 
 | 分类 | 工具 |
 | ---- | ---- |
 | 🔄 编码转换 | JSON 格式化、Base64 编解码、URL 编解码、HTML 转义、进制转换(大数)、文本进制互转、Unicode 转义、哈希计算(SHA 系列)、MD5 编码、URL 解析、JWT 解析、国密 SM2/SM3/SM4、JSON 树查看器 |
 | 🛠️ 开发工具 | SQL 格式化(10 种方言)、YAML ↔ JSON、Cron 表达式中文解读、UA 解析、HTTP 状态码速查、Chmod 计算、AES 文本加解密(Web Crypto)、文件哈希校验、JSON → TypeScript 类型、Docker run → compose 转换、TOTP 两步验证码(RFC 6238 向量验证) |
-| 📝 文本工具 | Markdown 预览(可复制 HTML)、正则测试、文本统计、词频统计、文本比对(diff)、文本替换、文本提取(URL/邮箱/数字/手机号/IP)、文本清理、大小写转换、文本反转、空格换行转换、摩尔斯电码、文本分割 |
+| 📝 文本工具 | Markdown 预览(可复制 HTML)、正则测试、文本统计、词频统计、文本比对(diff)、文本替换、文本提取(URL/邮箱/数字/手机号/IP)、文本清理、大小写转换、文本反转、空格换行转换、摩尔斯电码、文本分割、HTML → Markdown |
 | 🖼️ 图片工具 | 图片压缩、图片转 Base64、图片圆角、图片旋转翻转、图片加边框、图片滤镜调色(含油画/铅笔画)、颜色吸取器、图片裁切、图片拼接、图片格式转换(PNG/JPG/WebP)、图片加水印(文字/Logo/平铺)、九宫格切图、证件照换背景、图片信息/EXIF 查看、favicon 生成器(多尺寸 ICO) |
-| ✨ 生成器 | UUID 生成、密码生成、二维码生成、网址转二维码、WiFi 转二维码(扫码免密连网)、二维码解析、条形码生成、随机数、数字↔英文互转、随机测试数据 |
+| ✨ 生成器 | UUID 生成、密码生成、二维码生成、网址转二维码、WiFi 转二维码(扫码免密连网)、二维码解析、条形码生成、随机数、数字↔英文互转、随机测试数据、GIF 合成(表情包,逐帧调延迟) |
 | 🧮 计算换算 | 时间戳转换、颜色转换(HEX/RGB/HSL)、单位换算(17 大类,含配速与速度互转)、罗马数字互转、日期计算器(日期差/加减天数/工作日)、人民币大写、颜色对比度检查(WCAG AA/AAA)、时区会议换算(18 时区,含夏令时) |
 | 📄 文档处理 | PDF 合并、PDF 页面整理(提取/删除/旋转/自定义页序重排/拆分)、PDF 添加水印、PDF 添加页码、图片转 PDF、Excel 格式转换(支持 UTF-8/GBK 的 CSV)、JSON ↔ Excel、Excel 合并/拆分 |
 | 🔁 文档转换 | PDF 转图片(pdf.js 逐页渲染)、PDF 提取文本(→ 纯文本/Word/HTML)、PDF 压缩(光栅化)、Word(.docx) 转 HTML、Excel 转图片/PDF、办公格式互转(XLSX↔XLS↔ODS↔CSV↔HTML) |
@@ -46,9 +46,9 @@
 ## 🧪 测试与质量
 
 ```bash
-npm test                # 单元测试(Vitest,206 项)
+npm test                # 单元测试(Vitest,218 项)
 npm run test:watch      # 单元测试 watch 模式
-npm run test:e2e        # 端到端测试(Playwright,25 项,含全部 97 个工具页逐页挂载)
+npm run test:e2e        # 端到端测试(Playwright,25 项,含全部 99 个工具页逐页挂载)
 ```
 
 两层防线:
@@ -56,7 +56,7 @@ npm run test:e2e        # 端到端测试(Playwright,25 项,含全部 97 个工�
 - **单元测试**覆盖 utils 纯函数(体积格式化、防抖、圆角路径、剪贴板降级、手写 OOXML、人民币大写、日期计算、子网计算、XML 格式化、面板计算器白名单)、收藏/最近使用/草稿指令,以及数据层完整性——工具 id 唯一、分类存在、描述与关键词非空、软件官网是合法 https、图标名存在。数据写错(挂错分类、官网地址打错、图标名拼错)会在测试阶段暴露,而不是等到页面上出现一个空白图标。
 - **端到端测试**跑的是真正要发布的构建产物(`vite build` + `vite preview`):从首页抓取全部工具链接,逐页断言异步组件挂载成功、无运行期报错、标题/描述/图标/关于说明齐全;并覆盖命令面板(搜索/计算器/动作项)、URL 状态回填、收藏与最近使用、主题切换、快捷键帮助、移动端抽屉与焦点管理、404 等全局交互。
 
-GitHub Actions 会先跑完两套测试,**全绿才执行部署**(见 `.github/workflows/deploy.yml`)。
+GitHub Actions(`.github/workflows/ci.yml`)在每次 push 时跑完两套测试,作为部署的质量门禁(见下文「等待 CI」)。
 
 ## 🚀 本地开发
 
@@ -134,38 +134,34 @@ npm run deploy       # vite build && wrangler pages deploy dist
 
 约定:`tag` 取值固定(免费/开源/免费+开源/基础免费/个人免费/社区版免费/系统内置/网页/付费);`site` 必须是软件官方 https 地址;不收录有推广合作的项目。单元测试会校验分类存在、域名合法、名称不重复、tag 合法。
 
-## ☁️ 部署到 Cloudflare Pages
+## ☁️ 部署(本站已用 Cloudflare Pages 直连 Git)
 
-以下三种方式任选其一,构建配置均为:
+本站当前模式:**Cloudflare Pages 直连 GitHub 仓库** —— push 到 main 后 Cloudflare 自动拉代码、执行 `npm run build` 并发布到 https://my-tools-11w.pages.dev ,全程无需配置任何凭据。
+
+构建配置:
 
 - **构建命令**:`npm run build`
 - **输出目录**:`dist`
 
-### 方式一:连接 Git 仓库(推荐)
+建议在 Cloudflare 后台开启质量门禁:**Settings → Builds & deployments → Wait for CI status checks**,让 GitHub Actions 的测试(单测 + 端到端)先跑完再发布——测试不过不上线。
 
-1. Fork 或推送本仓库到 GitHub / GitLab;
-2. 打开 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**,选择本仓库;
-3. 构建设置中:框架预设选 **Vite**(或 None),构建命令 `npm run build`,输出目录 `dist`;
-4. 点击 **Save and Deploy**,之后每次 push 都会自动部署,并拿到 `xxx.pages.dev` 域名。
+### 自己从零配置的两种方式
 
-> 项目已内置 `public/_redirects`(`/* → /index.html`),SPA 路由刷新不会 404;`public/_headers` 为带哈希的静态资源开启了长期缓存。
+**方式 A:Cloudflare 直连 Git(本站在用,推荐)**
 
-### 方式二:Wrangler 命令行直传
+1. 推送本仓库到 GitHub;
+2. [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** 选仓库;
+3. 构建设置:框架预设 **Vite**(或 None),构建命令 `npm run build`,输出目录 `dist`;
+4. 之后每次 push 自动部署。注意 pages.dev 子域名全平台唯一,`my-toolbox`/`my-tools` 已被占用。
+
+**方式 B:Wrangler 命令行手动直传**
 
 ```bash
 npx wrangler login
 npm run deploy            # 等价于 vite build && wrangler pages deploy dist
 ```
 
-首次执行会提示创建 Pages 项目,按提示输入项目名即可(注意 pages.dev 子域名全平台唯一,`my-toolbox`/`my-tools` 已被占用,选个自己的名字)。
-
-### 方式三:GitHub Actions 自动部署
-
-仓库自带的 `.github/workflows/deploy.yml` 分两步:**test**(单元测试 + 端到端)→ **deploy**(构建并用 wrangler 发布到 Cloudflare Pages)。
-
-1. 在 Cloudflare 创建 API Token(权限:`Cloudflare Pages — Edit`),并获取 Account ID;
-2. 在 GitHub 仓库 **Settings → Secrets and variables → Actions** 添加两个 Secret:`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`;
-3. 推送到 `main` 分支即可自动测试并部署(线上地址 https://my-tools-11w.pages.dev )。**未配置这两个 Secret 时测试照常运行,部署步骤会自动跳过**。
+> 项目已内置 `public/_redirects`(`/* → /index.html`),SPA 路由刷新不会 404;`public/_headers` 为带哈希的静态资源开启了长期缓存。
 
 ## 🎨 自定义
 

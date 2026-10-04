@@ -48,6 +48,7 @@ const TOOLS = {
   'json-tree': 'list-tree',
   'json-to-ts': 'brackets',
   favicon: 'component',
+  'html-to-md': 'file-output',
 
 
 
@@ -101,6 +102,7 @@ const TOOLS = {
   'tz-convert': 'earth',
   'docker-compose': 'container',
   totp: 'timer-reset',
+  'gif-maker': 'image-play',
 
 
   'pdf-merge': 'files',

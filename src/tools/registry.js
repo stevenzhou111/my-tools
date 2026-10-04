@@ -56,6 +56,13 @@ export const TOOLS = [
     component: lazy(() => import('./html-entity/HtmlEscape.vue')),
   },
   {
+    id: 'html-to-md', name: 'HTML → Markdown', category: 'text', icon: 'file-output',
+    desc: '网页 HTML 片段转 Markdown,复制笔记即用',
+    keywords: 'html markdown 转换 网页 笔记 复制 turndown',
+    about: '把 HTML 片段转成 Markdown:标题/加粗斜体/链接图片/列表/围栏代码块等常见标签均可识别,可直接打开本地 .html 文件。与「Markdown 预览」互为反向。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./html-to-md/HtmlToMd.vue')),
+  },
+  {
     id: 'radix', name: '进制转换', category: 'convert', icon: 'binary',
     desc: '二进制、八进制、十进制、十六进制数字互转,支持大数',
     keywords: '进制 二进制 十六进制 binary hex radix 大数',
@@ -482,6 +489,13 @@ export const TOOLS = [
     keywords: '测试数据 mock 假数据 姓名 手机号 身份证 填充',
     about: '一键生成表格数据,身份证号校验位合法但纯属随机,仅供开发测试填充;可复制为 CSV 或 JSON。',
     component: lazy(() => import('./mock-data/MockData.vue')),
+  },
+  {
+    id: 'gif-maker', name: 'GIF 合成', category: 'generate', icon: 'image-play',
+    desc: '多图合成动图/表情包,逐帧调延迟',
+    keywords: 'gif 动图 表情包 合成 帧 动画 制作',
+    about: '多张图片按顺序合成一张 GIF:每帧可独立调节停留时长(50~1500ms)、上下移动排序,输出尺寸可选,支持透明背景(适合做表情包)。合成完全在本地进行。与摩尔斯电码、随机测试数据同属「生成器」分类。',
+    component: lazy(() => import('./gif-maker/GifMaker.vue')),
   },
 
   // ---------- 计算换算 ----------
