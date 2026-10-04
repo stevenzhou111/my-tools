@@ -45,6 +45,8 @@ const TOOLS = {
   'aes-crypto': 'lock-keyhole',
   'file-hash': 'file-check',
   'subnet-calc': 'network',
+  'json-tree': 'list-tree',
+
 
   markdown: 'file-code',
   regex: 'regex',
@@ -92,6 +94,7 @@ const TOOLS = {
   roman: 'landmark',
   'date-calc': 'calendar-days',
   'rmb-uppercase': 'banknote',
+  contrast: 'contrast',
 
   'pdf-merge': 'files',
   'pdf-organize': 'rows-3',
@@ -147,6 +150,8 @@ const UI = {
   keyboard: 'keyboard',
   shuffle: 'shuffle',
   x: 'x',
+  'chevron-down': 'chevron-down',
+  'chevron-right': 'chevron-right',
 }
 
 // 软件推荐的 8 个子分类

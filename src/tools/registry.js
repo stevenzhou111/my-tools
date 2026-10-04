@@ -105,6 +105,13 @@ export const TOOLS = [
     component: lazy(() => import('./xml-format/XmlFormat.vue')),
   },
   {
+    id: 'json-tree', name: 'JSON 树查看器', category: 'convert', icon: 'list-tree',
+    desc: '把 JSON 解析成可折叠的结构树,层级一目了然',
+    keywords: 'json 树 结构 层级 可视化 viewer 折叠 查看器',
+    about: '与「JSON 格式化」互补:那边看文本,这边看结构。支持节点折叠/展开、类型徽章(字符串/数字/布尔/null/对象/数组)、悬停复制节点路径(如 $.tools[0].id),并统计节点总数与最大深度;超过 1500 个节点时自动折叠深层以保持流畅。',
+    component: lazy(() => import('./json-tree/JsonTree.vue')),
+  },
+  {
     id: 'jwt', name: 'JWT 解析', category: 'convert', icon: 'ticket',
     desc: '解码 JWT 的 Header / Payload,检查是否过期',
     keywords: 'jwt token 解码 解析 鉴权 过期',
@@ -491,6 +498,13 @@ export const TOOLS = [
     keywords: '人民币 大写 金额 中文 财务 报销 发票 数字大写',
     about: '按财务规范转换:拾位必须写「壹拾」、角后无分写「整」、零档补零。支持千分位逗号,精确到分,上限 9999 亿。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./rmb-uppercase/RmbUppercase.vue')),
+  },
+  {
+    id: 'contrast', name: '颜色对比度检查', category: 'calc', icon: 'contrast',
+    desc: 'WCAG 对比度计算,AA/AAA 达标一眼判定',
+    keywords: '对比度 wcag aa aaa 无障碍 颜色 可读性 contrast 设计',
+    about: '按 WCAG 2.1 公式计算文字与背景的对比度(1 ~ 21),并判定普通文字与大文字的 AA / AAA 等级(阈值 4.5 / 7 / 3 / 4.5),附实时预览,适合检查界面配色是否满足无障碍要求。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./contrast/ContrastChecker.vue')),
   },
 
   // ---------- 文档处理 ----------
