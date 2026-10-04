@@ -126,6 +126,13 @@ export const TOOLS = [
     component: lazy(() => import('./docker-compose/DockerCompose.vue')),
   },
   {
+    id: 'totp', name: 'TOTP 两步验证码', category: 'dev', icon: 'timer-reset',
+    desc: '本地生成 2FA 动态验证码,不用掏手机',
+    keywords: 'totp 2fa 两步验证 动态验证码 otp 身份验证器 google authenticator',
+    about: '粘贴 2FA 设置页给出的 Base32 密钥(或生成随机密钥用于测试),本地实时计算动态验证码,支持 6/8 位、30/60 秒与 SHA-1/256/512。已通过 RFC 6238 全套官方向量验证。⚠️ 密钥仅在本页内存中参与计算,不写入任何存储;本工具不能替代官方验证器管理你的真实账号,请自行权衡。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./totp/TotpTool.vue')),
+  },
+  {
     id: 'jwt', name: 'JWT 解析', category: 'convert', icon: 'ticket',
     desc: '解码 JWT 的 Header / Payload,检查是否过期',
     keywords: 'jwt token 解码 解析 鉴权 过期',
@@ -396,6 +403,13 @@ export const TOOLS = [
     keywords: 'exif 信息 相机 参数 gps 位置 隐私 查看',
     about: '读取相机品牌型号、拍摄时间、曝光/光圈/ISO/焦距等参数与 GPS 坐标(附地图链接)。⚠️ 反向提醒:分享原图会泄露位置,发图前建议抹除。',
     component: lazy(() => import('./image-exif/ImageExif.vue')),
+  },
+  {
+    id: 'favicon', name: 'favicon 生成器', category: 'image', icon: 'component',
+    desc: '一张图生成全尺寸 favicon.ico 与 PNG',
+    keywords: 'favicon ico 图标 网站 生成 站点图标 多尺寸',
+    about: '上传一张图(建议 ≥256×256 正方形),自动居中裁切生成 16/32/48/64/128/256 六个尺寸,打包成标准 .ico(内嵌 PNG,全浏览器兼容)下载,单个尺寸的 PNG 也可单独下载。文件名可用站点标识自定义。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./favicon/FaviconMaker.vue')),
   },
 
   // ---------- 生成器 ----------

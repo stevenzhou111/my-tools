@@ -13,6 +13,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['tests/unit/**/*.test.js'],
+    setupFiles: ['tests/unit/setup.js'],
     restoreMocks: true,
     // 复用线程里的 jsdom 环境:默认每文件新建一个 jsdom,环境搭建占了 85% 耗时
     pool: 'vmThreads',

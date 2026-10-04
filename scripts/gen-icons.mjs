@@ -47,6 +47,7 @@ const TOOLS = {
   'subnet-calc': 'network',
   'json-tree': 'list-tree',
   'json-to-ts': 'brackets',
+  favicon: 'component',
 
 
 
@@ -99,6 +100,8 @@ const TOOLS = {
   contrast: 'contrast',
   'tz-convert': 'earth',
   'docker-compose': 'container',
+  totp: 'timer-reset',
+
 
   'pdf-merge': 'files',
   'pdf-organize': 'rows-3',
