@@ -165,7 +165,7 @@ npm run deploy            # 等价于 vite build && wrangler pages deploy dist
 
 1. 在 Cloudflare 创建 API Token(权限:`Cloudflare Pages — Edit`),并获取 Account ID;
 2. 在 GitHub 仓库 **Settings → Secrets and variables → Actions** 添加两个 Secret:`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`;
-3. 推送到 `main` 分支即可自动测试并部署。**未配置这两个 Secret 时测试照常运行,部署步骤会自动跳过**。
+3. 推送到 `main` 分支即可自动测试并部署(线上地址 https://my-tools-11w.pages.dev )。**未配置这两个 Secret 时测试照常运行,部署步骤会自动跳过**。
 
 ## 🎨 自定义
 
