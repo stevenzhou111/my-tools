@@ -3,22 +3,22 @@
 [![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/deploy.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **92 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
+一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **95 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
 
 **所有工具均在浏览器本地运行,数据不上传服务器**——纯静态站点、零后端、零跟踪,可一键部署到 Cloudflare Pages,并支持 PWA 安装后完整离线使用。
 
 布局采用经典的**左侧分类导航 + 右侧内容区**:桌面端侧边栏常驻(当前工具高亮、分类可折叠、支持搜索过滤);移动端自动收起为汉堡按钮唤起的抽屉导航。每个工具底部附有可展开的「关于这个工具」使用说明。
 
-## ✨ 内置工具(92 个 / 12 分类)
+## ✨ 内置工具(95 个 / 12 分类)
 
 | 分类 | 工具 |
 | ---- | ---- |
 | 🔄 编码转换 | JSON 格式化、Base64 编解码、URL 编解码、HTML 转义、进制转换(大数)、文本进制互转、Unicode 转义、哈希计算(SHA 系列)、MD5 编码、URL 解析、JWT 解析、国密 SM2/SM3/SM4、JSON 树查看器 |
-| 🛠️ 开发工具 | SQL 格式化(10 种方言)、YAML ↔ JSON、Cron 表达式中文解读、UA 解析、HTTP 状态码速查、Chmod 计算、AES 文本加解密(Web Crypto)、文件哈希校验 |
+| 🛠️ 开发工具 | SQL 格式化(10 种方言)、YAML ↔ JSON、Cron 表达式中文解读、UA 解析、HTTP 状态码速查、Chmod 计算、AES 文本加解密(Web Crypto)、文件哈希校验、JSON → TypeScript 类型、Docker run → compose 转换 |
 | 📝 文本工具 | Markdown 预览(可复制 HTML)、正则测试、文本统计、词频统计、文本比对(diff)、文本替换、文本提取(URL/邮箱/数字/手机号/IP)、文本清理、大小写转换、文本反转、空格换行转换、摩尔斯电码、文本分割 |
 | 🖼️ 图片工具 | 图片压缩、图片转 Base64、图片圆角、图片旋转翻转、图片加边框、图片滤镜调色(含油画/铅笔画)、颜色吸取器、图片裁切、图片拼接、图片格式转换(PNG/JPG/WebP)、图片加水印(文字/Logo/平铺)、九宫格切图、证件照换背景、图片信息/EXIF 查看 |
 | ✨ 生成器 | UUID 生成、密码生成、二维码生成、网址转二维码、WiFi 转二维码(扫码免密连网)、二维码解析、条形码生成、随机数、数字↔英文互转、随机测试数据 |
-| 🧮 计算换算 | 时间戳转换、颜色转换(HEX/RGB/HSL)、单位换算(17 大类,含配速与速度互转)、罗马数字互转、日期计算器(日期差/加减天数/工作日)、人民币大写、颜色对比度检查(WCAG AA/AAA) |
+| 🧮 计算换算 | 时间戳转换、颜色转换(HEX/RGB/HSL)、单位换算(17 大类,含配速与速度互转)、罗马数字互转、日期计算器(日期差/加减天数/工作日)、人民币大写、颜色对比度检查(WCAG AA/AAA)、时区会议换算(18 时区,含夏令时) |
 | 📄 文档处理 | PDF 合并、PDF 页面整理(提取/删除/旋转/自定义页序重排/拆分)、PDF 添加水印、PDF 添加页码、图片转 PDF、Excel 格式转换(支持 UTF-8/GBK 的 CSV)、JSON ↔ Excel、Excel 合并/拆分 |
 | 🔁 文档转换 | PDF 转图片(pdf.js 逐页渲染)、PDF 提取文本(→ 纯文本/Word/HTML)、PDF 压缩(光栅化)、Word(.docx) 转 HTML、Excel 转图片/PDF、办公格式互转(XLSX↔XLS↔ODS↔CSV↔HTML) |
 | 🎬 音视频 | 文字转语音(系统 TTS)、视频截帧、音频剪辑(波形/裁剪/倒放/音量,导出 WAV)、在线录屏(WebM) |
@@ -46,9 +46,9 @@
 ## 🧪 测试与质量
 
 ```bash
-npm test                # 单元测试(Vitest,155 项)
+npm test                # 单元测试(Vitest,189 项)
 npm run test:watch      # 单元测试 watch 模式
-npm run test:e2e        # 端到端测试(Playwright,25 项,含全部 92 个工具页逐页挂载)
+npm run test:e2e        # 端到端测试(Playwright,25 项,含全部 95 个工具页逐页挂载)
 ```
 
 两层防线:

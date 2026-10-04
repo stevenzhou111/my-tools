@@ -112,6 +112,20 @@ export const TOOLS = [
     component: lazy(() => import('./json-tree/JsonTree.vue')),
   },
   {
+    id: 'json-to-ts', name: 'JSON → TypeScript', category: 'dev', icon: 'brackets',
+    desc: '从 JSON 样本推断 TypeScript 接口定义',
+    keywords: 'json typescript ts 接口 类型 生成 interface 联调',
+    about: '粘贴一段 JSON 样本(接口返回、配置文件),自动生成对应的 interface/type:嵌套对象逐层生成、数组取元素形状并集、同形对象按结构签名去重只生成一次、非法标识符键自动加引号。根类型名可自定义。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./json-to-ts/JsonToTs.vue')),
+  },
+  {
+    id: 'docker-compose', name: 'Docker run → compose', category: 'dev', icon: 'container',
+    desc: '把 docker run 命令转成 docker-compose.yml',
+    keywords: 'docker run compose 容器 yaml 转换 部署',
+    about: '解析 docker run 的常用旗标(-d/-it/-p/-v/-e/--name/--restart/--network/--privileged 与镜像后的启动命令)生成 compose 服务块;未识别的旗标不会被静默丢弃,而是列在下方提醒手动补全。引号内空格会被正确处理。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./docker-compose/DockerCompose.vue')),
+  },
+  {
     id: 'jwt', name: 'JWT 解析', category: 'convert', icon: 'ticket',
     desc: '解码 JWT 的 Header / Payload,检查是否过期',
     keywords: 'jwt token 解码 解析 鉴权 过期',
@@ -505,6 +519,13 @@ export const TOOLS = [
     keywords: '对比度 wcag aa aaa 无障碍 颜色 可读性 contrast 设计',
     about: '按 WCAG 2.1 公式计算文字与背景的对比度(1 ~ 21),并判定普通文字与大文字的 AA / AAA 等级(阈值 4.5 / 7 / 3 / 4.5),附实时预览,适合检查界面配色是否满足无障碍要求。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./contrast/ContrastChecker.vue')),
+  },
+  {
+    id: 'tz-convert', name: '时区会议换算', category: 'calc', icon: 'earth',
+    desc: '同一时刻在 18 个时区的本地时间,挑开会时间不头疼',
+    keywords: '时区 换算 会议 时间 国际 utc gmt 夏令时',
+    about: '选一个基准时间与时区,一眼看到北京/东京/伦敦/纽约/悉尼等 18 个时区对应的本地日期与时间,标注 UTC 偏移、相对基准的时差与「是否工作时间」(当地 9:00~18:00),夏令时由系统 Intl 自动处理。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./tz-convert/TzConvert.vue')),
   },
 
   // ---------- 文档处理 ----------

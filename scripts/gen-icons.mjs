@@ -46,6 +46,8 @@ const TOOLS = {
   'file-hash': 'file-check',
   'subnet-calc': 'network',
   'json-tree': 'list-tree',
+  'json-to-ts': 'brackets',
+
 
 
   markdown: 'file-code',
@@ -95,6 +97,8 @@ const TOOLS = {
   'date-calc': 'calendar-days',
   'rmb-uppercase': 'banknote',
   contrast: 'contrast',
+  'tz-convert': 'earth',
+  'docker-compose': 'container',
 
   'pdf-merge': 'files',
   'pdf-organize': 'rows-3',
