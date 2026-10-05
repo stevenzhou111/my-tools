@@ -1,37 +1,57 @@
 <script setup>
-import { onUnmounted, ref, watch } from 'vue'
+import { onUnmounted, reactive, ref } from 'vue'
 import { debounce, formatSize } from '@/utils/format'
-import { downloadUrl } from '@/utils/image'
+import { downloadBlob, downloadUrl } from '@/utils/image'
+import { zipSync } from 'fflate'
 
 const fileInput = ref(null)
-const lastFile = ref(null)
-const fileName = ref('')
-const originalSize = ref(0)
-const originalUrl = ref('')
-const resultUrl = ref('')
-const resultSize = ref(0)
+const items = reactive([])
 const quality = ref(0.7)
 const format = ref('image/jpeg')
 const maxWidth = ref(0)
 const error = ref('')
-const busy = ref(false)
+const busyCount = ref(0)
 const dragging = ref(false)
 
-let resultBlob = null
+// 每张图的对象引用要稳定,便于设置变化时整体重跑
+let uid = 0
 
 function pick() {
   fileInput.value?.click()
 }
 
 function onFileChange(e) {
-  const f = e.target.files?.[0]
-  if (f) process(f)
+  addFiles([...(e.target.files ?? [])])
 }
 
 function onDrop(e) {
   dragging.value = false
-  const f = e.dataTransfer?.files?.[0]
-  if (f) process(f)
+  addFiles([...(e.dataTransfer?.files ?? [])])
+}
+
+function addFiles(files) {
+  const imgs = files.filter((f) => f.type.startsWith('image/'))
+  if (!imgs.length) {
+    error.value = '请选择图片文件'
+    return
+  }
+  error.value = ''
+  for (const f of imgs.slice(0, 30)) {
+    const item = reactive({
+      id: ++uid,
+      file: f,
+      name: f.name,
+      originalSize: f.size,
+      originalUrl: URL.createObjectURL(f),
+      resultUrl: '',
+      resultSize: 0,
+      blob: null,
+      status: 'pending', // pending | busy | done | error
+      errorMsg: '',
+    })
+    items.push(item)
+  }
+  runAll()
 }
 
 function loadImage(file) {
@@ -54,24 +74,15 @@ function loadImage(file) {
   })
 }
 
-async function process(file) {
-  error.value = ''
-  if (resultUrl.value) {
-    URL.revokeObjectURL(resultUrl.value)
-    resultUrl.value = ''
+async function processItem(item) {
+  item.status = 'busy'
+  item.errorMsg = ''
+  if (item.resultUrl) {
+    URL.revokeObjectURL(item.resultUrl)
+    item.resultUrl = ''
   }
-  if (originalUrl.value) URL.revokeObjectURL(originalUrl.value)
-  if (!file.type.startsWith('image/')) {
-    error.value = '请选择图片文件'
-    return
-  }
-  lastFile.value = file
-  fileName.value = file.name
-  originalSize.value = file.size
-  originalUrl.value = URL.createObjectURL(file)
-  busy.value = true
   try {
-    const img = await loadImage(file)
+    const img = await loadImage(item.file)
     const scale = maxWidth.value > 0 ? Math.min(1, maxWidth.value / img.naturalWidth) : 1
     const w = Math.max(1, Math.round(img.naturalWidth * scale))
     const h = Math.max(1, Math.round(img.naturalHeight * scale))
@@ -85,39 +96,91 @@ async function process(file) {
       ctx.fillRect(0, 0, w, h)
     }
     ctx.drawImage(img, 0, 0, w, h)
-    resultBlob = await new Promise((resolve, reject) => {
+    const blob = await new Promise((resolve, reject) => {
       canvas.toBlob(
         (b) => (b ? resolve(b) : reject(new Error('当前浏览器可能不支持输出该格式'))),
         format.value,
         quality.value,
       )
     })
-    resultSize.value = resultBlob.size
-    resultUrl.value = URL.createObjectURL(resultBlob)
+    item.blob = blob
+    item.resultSize = blob.size
+    item.resultUrl = URL.createObjectURL(blob)
+    item.status = 'done'
   } catch (e) {
-    error.value = '处理失败:' + e.message
-  } finally {
-    busy.value = false
+    item.status = 'error'
+    item.errorMsg = e.message
   }
 }
 
-watch(
-  [quality, format, maxWidth],
-  debounce(() => {
-    if (lastFile.value) process(lastFile.value)
-  }, 200),
-)
+async function runAll() {
+  const pending = items.filter((i) => i.status !== 'done' || !i.blob)
+  if (!pending.length) return
+  busyCount.value = pending.length
+  // 串行处理,避免同时解码大量大图撑爆内存
+  for (const item of pending) {
+    await processItem(item)
+    busyCount.value--
+  }
+}
+
+const rerunAll = debounce(() => {
+  for (const item of items) item.status = 'pending'
+  runAll()
+}, 250)
+
+function removeItem(item) {
+  const idx = items.indexOf(item)
+  if (idx === -1) return
+  URL.revokeObjectURL(item.originalUrl)
+  if (item.resultUrl) URL.revokeObjectURL(item.resultUrl)
+  items.splice(idx, 1)
+}
+
+function clearAll() {
+  for (const item of items) {
+    URL.revokeObjectURL(item.originalUrl)
+    if (item.resultUrl) URL.revokeObjectURL(item.resultUrl)
+  }
+  items.length = 0
+}
 
 onUnmounted(() => {
-  if (originalUrl.value) URL.revokeObjectURL(originalUrl.value)
-  if (resultUrl.value) URL.revokeObjectURL(resultUrl.value)
+  rerunAll.cancel()
+  clearAll()
 })
 
-function download() {
-  if (!resultUrl.value) return
-  const ext = format.value.split('/')[1].replace('jpeg', 'jpg')
-  // resultUrl 由组件 onUnmounted 统一 revoke,这里只触发下载
-  downloadUrl(resultUrl.value, fileName.value.replace(/\.[^.]+$/, '') + '-min.' + ext)
+function ext() {
+  return format.value.split('/')[1].replace('jpeg', 'jpg')
+}
+function outName(item) {
+  return item.name.replace(/\.[^.]+$/, '') + '-min.' + ext()
+}
+
+function download(item) {
+  if (item.resultUrl) downloadUrl(item.resultUrl, outName(item))
+}
+
+async function downloadZip() {
+  const entries = {}
+  const used = new Set()
+  for (const item of items) {
+    if (!item.blob) continue
+    let name = outName(item)
+    if (used.has(name)) name = name.replace(/(\.[^.]+)$/, `-${item.id}$1`)
+    used.add(name)
+    entries[name] = new Uint8Array(await item.blob.arrayBuffer())
+  }
+  downloadBlob(new Blob([zipSync(entries)], { type: 'application/zip' }), `images-min-${ext()}.zip`)
+}
+
+const totals = () => {
+  const done = items.filter((i) => i.status === 'done')
+  return {
+    count: done.length,
+    before: done.reduce((s, i) => s + i.originalSize, 0),
+    after: done.reduce((s, i) => s + i.resultSize, 0),
+  }
 }
 </script>
 
@@ -130,18 +193,18 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
-    <div v-if="!originalUrl">
+    <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onFileChange" />
+    <div v-if="!items.length">
       <div class="dz-icon">🖼️</div>
-      <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
-      <p class="tip">支持 JPG / PNG / WebP / GIF 等常见格式,全程本地处理</p>
+      <p><strong>点击选择图片</strong> 或拖拽图片到此处(可一次多选)</p>
+      <p class="tip">支持 JPG / PNG / WebP / GIF 等,最多 30 张,全程本地处理</p>
     </div>
-    <p v-else class="tip">点击或拖拽可更换图片</p>
+    <p v-else class="tip">点击或拖拽可继续添加图片</p>
   </div>
 
   <div v-if="error" class="error-box" style="margin: 12px 0">✗ {{ error }}</div>
 
-  <div v-if="originalUrl" class="controls panel" style="margin-top: 14px">
+  <div v-if="items.length" class="controls panel" style="margin-top: 14px">
     <div class="row">
       <label class="ctrl">
         <span class="ctrl-label">输出格式</span>
@@ -169,33 +232,38 @@ function download() {
     <p v-if="format === 'image/png'" class="tip">PNG 为无损格式,质量滑块对它不生效。</p>
   </div>
 
-  <div v-if="originalUrl" class="grid-2" style="margin-top: 14px">
-    <div class="panel">
-      <div class="preview-head">
-        <strong>原图</strong>
-        <span class="tip">{{ formatSize(originalSize) }}</span>
+  <div v-if="items.length" class="panel" style="margin-top: 14px; padding: 10px 14px">
+    <div v-for="item in items" :key="item.id" class="item-row">
+      <img :src="item.resultUrl || item.originalUrl" class="thumb" alt="" />
+      <div class="item-main">
+        <div class="item-name" :title="item.name">{{ item.name }}</div>
+        <div class="item-sizes">
+          {{ formatSize(item.originalSize) }}
+          <template v-if="item.status === 'done'">
+            →
+            <span class="size-after" :class="{ bigger: item.resultSize >= item.originalSize }">{{ formatSize(item.resultSize) }}</span>
+            <span class="tip">(-{{ Math.max(0, Math.round((1 - item.resultSize / item.originalSize) * 100)) }}%)</span>
+          </template>
+          <template v-else-if="item.status === 'busy'">处理中…</template>
+          <template v-else-if="item.status === 'error'" class="tip">✗ {{ item.errorMsg }}</template>
+        </div>
       </div>
-      <img :src="originalUrl" class="preview-img" alt="原图" />
-    </div>
-    <div class="panel">
-      <div class="preview-head">
-        <strong>压缩后</strong>
-        <span v-if="resultSize" class="size-after">{{ formatSize(resultSize) }}</span>
-      </div>
-      <div v-if="busy" class="preview-empty">处理中…</div>
-      <img v-else-if="resultUrl" :src="resultUrl" class="preview-img" alt="压缩后" />
-      <div v-else class="preview-empty">等待生成</div>
+      <button v-if="item.status === 'done'" class="btn btn-sm" @click="download(item)">下载</button>
+      <button class="btn btn-sm" aria-label="移除" @click="removeItem(item)">✕</button>
     </div>
   </div>
 
-  <div v-if="resultUrl" class="row" style="margin-top: 14px">
-    <button class="btn btn-primary" @click="download">⬇️ 下载压缩后的图片</button>
-    <span v-if="resultSize" class="tip">
-      {{
-        resultSize < originalSize
-          ? `比原图小 ${formatSize(originalSize - resultSize)}(省 ${Math.max(0, Math.round((1 - resultSize / originalSize) * 100))}%)`
-          : '压缩结果比原图更大,可尝试调低质量或改用 JPEG'
-      }}
+  <div v-if="items.length" class="row" style="margin-top: 14px">
+    <button class="btn btn-primary" :disabled="busyCount > 0" @click="downloadZip">
+      ⬇️ 打包下载全部(ZIP)
+    </button>
+    <button class="btn" :disabled="busyCount > 0" @click="clearAll">清空列表</button>
+    <span v-if="totals().count" class="tip">
+      {{ totals().count }} 张完成:{{ formatSize(totals().before) }} → {{ formatSize(totals().after) }}
+      <template v-if="totals().after < totals().before">
+        (共省 {{ formatSize(totals().before - totals().after) }})
+      </template>
+      <template v-else>(整体反而更大,可尝试调低质量或改用 JPEG)</template>
     </span>
   </div>
 </template>
@@ -236,30 +304,44 @@ function download() {
 .ctrl .select {
   width: 180px;
 }
-.preview-head {
+.item-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 12px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+}
+.item-row:last-child {
+  border-bottom: none;
+}
+.thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--bg-soft);
+  flex-shrink: 0;
+}
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+.item-name {
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item-sizes {
+  font-size: 13.5px;
+  font-family: var(--mono);
+  color: var(--muted);
 }
 .size-after {
   color: var(--accent);
   font-weight: 600;
 }
-.preview-img {
-  width: 100%;
-  max-height: 340px;
-  object-fit: contain;
-  border-radius: 8px;
-  background: var(--bg-soft);
-}
-.preview-empty {
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  background: var(--bg-soft);
-  border-radius: 8px;
+.size-after.bigger {
+  color: var(--danger);
 }
 </style>

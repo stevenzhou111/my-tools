@@ -115,6 +115,9 @@ const TOOLS = {
   'cron-builder': 'hourglass',
   'rate-convert': 'percent',
   'palette-extract': 'paint-bucket',
+  'curl-to-fetch': 'terminal',
+  'id-card-parse': 'square-user',
+  'float-bits': 'sigma',
 
 
   'pdf-merge': 'files',

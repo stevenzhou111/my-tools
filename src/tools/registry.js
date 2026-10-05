@@ -133,11 +133,32 @@ export const TOOLS = [
     component: lazy(() => import('./json-to-ts/JsonToTs.vue')),
   },
   {
+    id: 'float-bits', name: '浮点数解剖', category: 'dev', icon: 'sigma',
+    desc: '看数字在 IEEE 754 双精度/单精度下的实际存储位型',
+    keywords: '浮点数 ieee754 精度 位型 二进制 尾数 指数 float double 0.1',
+    about: '输入任意数字,展示它在 64 位 double(JS 的 number)与 32 位 float 下的符号/指数/尾数位与十六进制位型,附特殊值分类(零/次正规数/无穷大/NaN)与 32 位舍入回读对比,理解 0.1+0.2 !== 0.3 的直观入口。位型由 DataView 写入后按字节读出,与平台无关。数值会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./float-bits/FloatBitsView.vue')),
+  },
+  {
     id: 'docker-compose', name: 'Docker run → compose', category: 'dev', icon: 'container',
     desc: '把 docker run 命令转成 docker-compose.yml',
     keywords: 'docker run compose 容器 yaml 转换 部署',
     about: '解析 docker run 的常用旗标(-d/-it/-p/-v/-e/--name/--restart/--network/--privileged 与镜像后的启动命令)生成 compose 服务块;未识别的旗标不会被静默丢弃,而是列在下方提醒手动补全。引号内空格会被正确处理。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./docker-compose/DockerCompose.vue')),
+  },
+  {
+    id: 'curl-to-fetch', name: 'curl → 代码', category: 'dev', icon: 'terminal',
+    desc: '把 curl 命令转成 JavaScript fetch 或 Python requests 代码',
+    keywords: 'curl fetch requests 转换 http 请求 接口 调试 转代码 javascript python',
+    about: '粘贴 curl 命令(支持多行续行与引号转义),生成可直接使用的 JavaScript fetch 或 Python requests 代码:解析 -X 方法、-H 请求头、-d 请求体(多个用 & 连接、JSON 体自动补 Content-Type)、-F 表单(含 @文件,生成 FormData/files 代码)、-u 基本认证与 --get。未识别的旗标会列出提醒,不被静默丢弃。与「Docker run → compose」同一套解析策略。命令里常带密钥,本工具不写入地址栏也不发任何请求。',
+    component: lazy(() => import('./curl-to-fetch/CurlToFetch.vue')),
+  },
+  {
+    id: 'id-card-parse', name: '身份证号解析', category: 'dev', icon: 'square-user',
+    desc: '解析省份 / 生日 / 性别 / 年龄,校验 GB 11643 校验位',
+    keywords: '身份证 解析 校验 校验位 身份证号 验证 测试数据 隐私 打码',
+    about: '解析 18 位身份证号的省级行政区(前 2 位)、出生日期、性别(第 17 位奇偶)与周岁,并按 GB 11643-1999 加权取模校验末位校验码;附一键打码展示(保留前 6 后 4)。校验位正确不代表号码真实存在,仅供开发测试验证格式,可配合「随机测试数据」使用。号码是敏感信息,本工具不写入地址栏、不联网。',
+    component: lazy(() => import('./id-card-parse/IdCardParse.vue')),
   },
   {
     id: 'totp', name: 'TOTP 两步验证码', category: 'dev', icon: 'timer-reset',
@@ -350,9 +371,9 @@ export const TOOLS = [
   // ---------- 图片工具 ----------
   {
     id: 'image-compress', name: '图片压缩', category: 'image', icon: 'shrink',
-    desc: '本地压缩图片,可调质量与尺寸,支持 JPG / WebP / PNG',
-    keywords: '图片压缩 压缩 image compress webp 缩放 图片',
-    about: '通过 Canvas 重编码实现:质量滑块控制压缩率,最大宽度选项常用于把手机照片缩到网页尺寸。JPEG 输出会自动铺白底避免透明区域变黑。',
+    desc: '批量本地压缩图片,可调质量与尺寸,支持 JPG / WebP / PNG',
+    keywords: '图片压缩 压缩 批量 image compress webp 缩放 图片 zip',
+    about: '批量压缩:一次拖入最多 30 张,统一调质量、输出格式与最大宽度,逐张显示压缩前后体积与节省比例,支持单张下载或打包 ZIP。通过 Canvas 重编码实现,JPEG 输出自动铺白底避免透明区域变黑。',
     component: lazy(() => import('./image-compress/ImageCompress.vue')),
   },
   {
