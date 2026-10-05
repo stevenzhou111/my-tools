@@ -23,6 +23,23 @@ const FLAG_ITEMS = [
   { id: 'u', label: 'u Unicode' },
 ]
 
+// 常用正则速查,点击即填入(点击后自行核对业务边界,如身份证尾号校验位)
+const PRESETS = [
+  { label: '邮箱', re: '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}' },
+  { label: '手机号(大陆)', re: '1[3-9]\\d{9}' },
+  { label: 'URL', re: 'https?://[^\\s<>"\']+' },
+  { label: 'IPv4', re: '(?:(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)' },
+  { label: '身份证(18 位)', re: '[1-9]\\d{5}(?:18|19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])\\d{3}[\\dXx]' },
+  { label: '日期 YYYY-MM-DD', re: '\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])' },
+  { label: '中文字符', re: '[\\u4e00-\\u9fff]+' },
+  { label: '十六进制颜色', re: '#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\b' },
+  { label: '正整数', re: '[1-9]\\d*' },
+  { label: '空白字符', re: '\\s+' },
+]
+function usePreset(p) {
+  pattern.value = p.re
+}
+
 const flagsStr = computed(() => [...new Set(flags.value)].join(''))
 
 const error = computed(() => {
@@ -95,6 +112,15 @@ const result = computed(() => {
         <input v-model="flags" type="checkbox" :value="f.id" />{{ f.label }}
       </label>
     </div>
+
+    <details class="panel" style="margin-top: 12px">
+      <summary>📋 常用正则速查(点击填入)</summary>
+      <div class="row preset-row">
+        <button v-for="p in PRESETS" :key="p.label" class="btn btn-sm" :title="p.re" @click="usePreset(p)">
+          {{ p.label }}
+        </button>
+      </div>
+    </details>
   </div>
 
   <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ 无效正则:{{ error }}</div>
@@ -163,6 +189,9 @@ const result = computed(() => {
   padding: 0 10px;
   color: var(--muted);
   font-family: var(--mono);
+}
+.preset-row {
+  margin-top: 8px;
 }
 .highlight-out {
   white-space: pre-wrap;

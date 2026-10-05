@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 import { debounce } from '@/utils/format'
+import { decorateOps } from '@/utils/inlineDiff'
 
 const left = ref(`我的工具箱 v1.0
 支持 17 个工具
@@ -62,6 +63,12 @@ const ops = computed(() => {
   return diffLines(input.value.left, input.value.right)
 })
 
+// 行级 LCS 之后,对相邻的删除/新增行再做字符级标注,标出行内具体改动
+const rows = computed(() => {
+  if (!ops.value) return null
+  return decorateOps(ops.value)
+})
+
 const stats = computed(() => {
   if (!ops.value) return null
   return {
@@ -99,10 +106,10 @@ const diffText = computed(() =>
     </button>
   </div>
 
-  <div v-if="ops" class="panel diff-view">
-    <div v-for="(o, i) in ops" :key="i" class="diff-line" :class="o.t === '+' ? 'line-add' : o.t === '-' ? 'line-del' : ''">
+  <div v-if="rows" class="panel diff-view">
+    <div v-for="(o, i) in rows" :key="i" class="diff-line" :class="o.t === '+' ? 'line-add' : o.t === '-' ? 'line-del' : ''">
       <span class="diff-mark">{{ o.t }}</span>
-      <span class="diff-text">{{ o.s || ' ' }}</span>
+      <span class="diff-text"><template v-if="o.segs"><template v-for="(s, j) in o.segs" :key="j"><mark v-if="s.op !== 'same'" :class="s.op === 'add' ? 'seg-add' : 'seg-del'">{{ s.text }}</mark><template v-else>{{ s.text }}</template></template></template><template v-else>{{ o.s || ' ' }}</template></span>
     </div>
   </div>
 
@@ -158,5 +165,13 @@ const diffText = computed(() =>
 .diff-text {
   white-space: pre-wrap;
   word-break: break-all;
+}
+.seg-add {
+  background: rgba(22, 163, 74, 0.32);
+  border-radius: 2px;
+}
+.seg-del {
+  background: rgba(220, 38, 38, 0.3);
+  border-radius: 2px;
 }
 </style>

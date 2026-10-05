@@ -112,6 +112,9 @@ const TOOLS = {
   lorem: 'pilcrow',
   'color-shades': 'swatch-book',
   'cam-mic-test': 'webcam',
+  'cron-builder': 'hourglass',
+  'rate-convert': 'percent',
+  'palette-extract': 'paint-bucket',
 
 
   'pdf-merge': 'files',

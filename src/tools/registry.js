@@ -184,6 +184,13 @@ export const TOOLS = [
     component: lazy(() => import('./cron-explainer/CronExplainer.vue')),
   },
   {
+    id: 'cron-builder', name: 'Cron 表达式生成器', category: 'dev', icon: 'hourglass',
+    desc: '可视化拼 Cron 表达式,实时中文含义与未来 5 次执行时间',
+    keywords: 'cron 生成器 定时任务 计划任务 crontab 下次执行 调度',
+    about: '与「Cron 表达式解读」配套:8 组常用预设一键填入,五个字段分开编辑并实时校验,即时给出中文含义与接下来 5 次执行时间(按本机时区逐分钟推算,日与周同时受限按标准「或」语义)。表达式会同步到地址栏,复制链接即可分享。',
+    component: lazy(() => import('./cron-builder/CronBuilder.vue')),
+  },
+  {
     id: 'user-agent', name: 'UA 解析', category: 'dev', icon: 'scan-face',
     desc: '解析 User-Agent 得到浏览器、系统、设备与引擎信息',
     keywords: 'user agent ua 解析 浏览器 设备 系统 ua-parser',
@@ -389,6 +396,13 @@ export const TOOLS = [
     keywords: '取色 颜色吸取 吸管 color picker 色值 调色',
     about: '在图片上点击吸取颜色并积累成色板;「屏幕吸管」(Chrome/Edge)可吸取屏幕上任意位置的颜色,做设计还原很方便。',
     component: lazy(() => import('./color-picker/ColorPickerTool.vue')),
+  },
+  {
+    id: 'palette-extract', name: '图片取色调色板', category: 'image', icon: 'paint-bucket',
+    desc: '提取图片主色形成调色板,显示占比,可导出 CSS 变量',
+    keywords: '取色 主色 调色板 配色 palette 图片 分析 配色方案',
+    about: '上传图片后按 RGB 量化分桶统计主色,给出前 N 个主色的 HEX 与像素占比(数量可调 1~12),点击色块复制,或一键导出为 CSS 变量。做设计配色、提取品牌色时很顺手;统计完全在本地进行。与「颜色吸取器」互补:那边精确取一个像素,这边看整张图的主色构成。',
+    component: lazy(() => import('./palette-extract/PaletteExtract.vue')),
   },
   {
     id: 'image-crop', name: '图片裁切', category: 'image', icon: 'crop',
@@ -601,8 +615,15 @@ export const TOOLS = [
     id: 'color-shades', name: '色阶生成器', category: 'calc', icon: 'swatch-book',
     desc: '一个主色生成 50~950 完整色阶,导出 Tailwind / CSS 变量',
     keywords: '色阶 调色板 配色 颜色 tailwind css 变量 设计 主色 shades',
-    about: '以输入色为 500 档基准(明度钳制在 30%–62%),按固定明度锚点向两端推亮/推暗,生成 Tailwind 风格的 50~950 共 11 档色阶,色相保持不变;每个色块按亮度自动选择黑/白文字,点击即复制 HEX。支持一键导出 Tailwind 配置与 CSS 变量,变量名可自定义。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    about: '以输入色为 500 档基准(明度钳制在 30%–62%),按固定明度锚点向两端推亮/推暗,生成 Tailwind 风格的 50~950 共 11 档色阶,色相保持不变;每个色块按亮度自动选择黑/白文字并标注该底色下的 WCAG 对比度,点击即复制 HEX。支持一键导出 Tailwind 配置与 CSS 变量,变量名可自定义。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./color-shades/ColorShades.vue')),
+  },
+  {
+    id: 'rate-convert', name: '利率换算', category: 'calc', icon: 'percent',
+    desc: '日 / 月 / 年利率互转,单利复利两种口径,看清「日息万几」的真实年化',
+    keywords: '利率 换算 年化 日息 万几 月息 单利 复利 apr 贷款 借钱',
+    about: '在日 / 月 / 年利率之间换算,支持单利与复利两种口径;内置「万1 / 万5 / 千1 / 月息1分」快捷输入并自动切换档位,显示对应的口头表述。贷款广告只说「日息万几」时,换算成年化利率才能看清真实成本(如日息万 5 单利即年化 18.25%)。计算在本地完成,工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./rate-convert/RateConvert.vue')),
   },
 
   // ---------- 文档处理 ----------
