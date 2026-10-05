@@ -2,6 +2,7 @@
 import { onUnmounted, ref, watch } from 'vue'
 import QRCode from 'qrcode'
 import { debounce } from '@/utils/format'
+import { roundRectPath } from '@/utils/image'
 import { useUrlState, shortString } from '@/utils/urlState'
 
 const text = ref('https://example.com')
@@ -12,18 +13,57 @@ const dataUrl = ref('')
 const error = ref('')
 useUrlState([{ key: 'q', ref: text, parse: shortString(800) }])
 
+// 中央 Logo:开启后纠错等级自动提到 H(30% 冗余),保证遮挡后仍可扫
+const canvasEl = ref(null)
+const logoInput = ref(null)
+const logoUrl = ref('')
+const logoScale = ref(22)
+let logoImg = null
+
+function pickLogo() {
+  logoInput.value?.click()
+}
+function onLogoChange(e) {
+  const f = e.target.files?.[0]
+  if (!f) return
+  if (logoUrl.value) URL.revokeObjectURL(logoUrl.value)
+  logoUrl.value = URL.createObjectURL(f)
+}
+function clearLogo() {
+  if (logoUrl.value) URL.revokeObjectURL(logoUrl.value)
+  logoUrl.value = ''
+  logoImg = null
+  if (logoInput.value) logoInput.value.value = ''
+}
+
 async function generate() {
   if (!text.value.trim()) {
     dataUrl.value = ''
     return
   }
   try {
-    dataUrl.value = await QRCode.toDataURL(text.value, {
+    const canvas = canvasEl.value
+    await QRCode.toCanvas(canvas, text.value, {
       width: size.value,
       margin: 2,
-      errorCorrectionLevel: 'M',
+      errorCorrectionLevel: logoUrl.value ? 'H' : 'M',
       color: { dark: dark.value, light: light.value },
     })
+    if (logoImg && canvas) {
+      const ctx = canvas.getContext('2d')
+      const w = (canvas.width * logoScale.value) / 100
+      const pad = w * 0.12
+      const x = (canvas.width - w) / 2
+      ctx.fillStyle = light.value
+      roundRectPath(ctx, x - pad, x - pad, w + pad * 2, w + pad * 2, w * 0.18)
+      ctx.fill()
+      ctx.save()
+      roundRectPath(ctx, x, x, w, w, w * 0.14)
+      ctx.clip()
+      ctx.drawImage(logoImg, x, x, w, w)
+      ctx.restore()
+    }
+    dataUrl.value = canvas?.toDataURL('image/png') ?? ''
     error.value = ''
   } catch (e) {
     error.value = '生成失败:' + e.message
@@ -32,9 +72,22 @@ async function generate() {
 }
 
 const generateDebounced = debounce(generate, 300)
-watch([text, size, dark, light], () => generateDebounced(), { immediate: true })
+watch([text, size, dark, light, logoUrl, logoScale], () => generateDebounced(), { immediate: true })
+// Logo 图片要等 onload 后再画
+watch(logoUrl, (url) => {
+  if (!url) return
+  const img = new Image()
+  img.onload = () => {
+    logoImg = img
+    generate()
+  }
+  img.src = url
+})
 
-onUnmounted(() => generateDebounced.cancel())
+onUnmounted(() => {
+  generateDebounced.cancel()
+  if (logoUrl.value) URL.revokeObjectURL(logoUrl.value)
+})
 </script>
 
 <template>
@@ -70,19 +123,31 @@ onUnmounted(() => generateDebounced.cancel())
           <input v-model="light" type="color" class="input color-input" />
         </label>
       </div>
+      <div class="field" style="margin-top: 14px">
+        <span class="field-label">中央 Logo(可选)</span>
+        <input ref="logoInput" type="file" accept="image/*" hidden @change="onLogoChange" />
+        <div class="row">
+          <template v-if="!logoUrl">
+            <button class="btn btn-sm" @click="pickLogo">上传 Logo 图片</button>
+          </template>
+          <template v-else>
+            <img :src="logoUrl" class="logo-thumb" alt="Logo 预览" />
+            <button class="btn btn-sm" @click="pickLogo">更换</button>
+            <button class="btn btn-sm" @click="clearLogo">移除</button>
+          </template>
+        </div>
+        <div v-if="logoUrl" class="field" style="margin-top: 10px">
+          <label class="field-label">Logo 大小 {{ logoScale }}%</label>
+          <input v-model.number="logoScale" type="range" min="12" max="30" step="1" style="width: 100%" />
+          <p class="tip">已自动切换到 H 级纠错;Logo 越大越难扫,建议不超过 25%。</p>
+        </div>
+      </div>
       <p v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</p>
     </div>
 
     <div class="panel preview-panel">
-      <img
-        v-if="dataUrl"
-        :src="dataUrl"
-        class="qr-img"
-        alt="二维码"
-        width="300"
-        height="300"
-      />
-      <div v-else class="qr-empty">输入内容后自动生成</div>
+      <canvas v-show="dataUrl" ref="canvasEl" class="qr-canvas" aria-label="二维码预览"></canvas>
+      <div v-if="!dataUrl" class="qr-empty">输入内容后自动生成</div>
       <a v-if="dataUrl" :href="dataUrl" download="qrcode.png" class="btn btn-primary" style="margin-top: 14px">
         ⬇️ 下载 PNG
       </a>
@@ -110,7 +175,7 @@ onUnmounted(() => generateDebounced.cancel())
   min-height: 300px;
   justify-content: center;
 }
-.qr-img {
+.qr-canvas {
   width: 100%;
   max-width: 300px;
   height: auto;
@@ -121,5 +186,13 @@ onUnmounted(() => generateDebounced.cancel())
 .qr-empty {
   color: var(--muted);
   padding: 60px 0;
+}
+.logo-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
 }
 </style>

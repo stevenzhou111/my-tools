@@ -42,6 +42,13 @@ export const TOOLS = [
     component: lazy(() => import('./base64/Base64Tool.vue')),
   },
   {
+    id: 'base-enc', name: 'Base 编码', category: 'convert', icon: 'boxes',
+    desc: 'Base32 / Base58 / Base62 与文本互转,中文按 UTF-8 处理',
+    keywords: 'base32 base58 base62 编码 解码 bitcoin cid 短链 totp',
+    about: '三种常用 Base 编码:Base32(RFC 4648,TOTP 密钥与配置常用)、Base58(Bitcoin 字母表,地址与 IPFS CID)、Base62(短链与邀请码)。全部按 UTF-8 字节、BigInt 实现,中文不乱码;解码容忍小写与缺失填充,非法字符给出明确报错,支持编码/解码一键反向继续。',
+    component: lazy(() => import('./base-enc/BaseEncTool.vue')),
+  },
+  {
     id: 'url', name: 'URL 编解码', category: 'convert', icon: 'link',
     desc: 'URL 百分号编码与解码,支持表单空格转 +',
     keywords: 'url encode decode uri 百分号编码',
@@ -270,6 +277,13 @@ export const TOOLS = [
     component: lazy(() => import('./markdown/MarkdownPreview.vue')),
   },
   {
+    id: 'md-toc', name: 'Markdown 目录生成', category: 'text', icon: 'table-of-contents',
+    desc: '提取标题生成带锚点链接的目录,跳过代码块',
+    keywords: 'markdown 目录 toc 锚点 标题 readme 文档 博客 生成',
+    about: '从 Markdown 提取 H1–H6 标题,生成 GitHub 风格锚点链接的目录(小写化、剔标点、空格转 -、连续连字符不合并,与 GitHub 渲染结果一致),代码块内的 # 行不会误判。层级范围与有序/无序列表可调,复制后直接贴进 README 或博客顶部。选项会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./md-toc/MdToc.vue')),
+  },
+  {
     id: 'regex', name: '正则测试', category: 'text', icon: 'regex',
     desc: '在线测试正则表达式,高亮匹配结果并展示分组',
     keywords: 'regex 正则 表达式 测试 匹配 regexp',
@@ -352,6 +366,13 @@ export const TOOLS = [
     keywords: '换行转空格 空格转回车 tab 空格 空白 转换',
     about: '五种常见空白转换:处理从 PDF/Excel 复制出来的文本、缩进风格调整时很好用。',
     component: lazy(() => import('./whitespace-convert/WhitespaceConvert.vue')),
+  },
+  {
+    id: 'invisible-chars', name: '换行符与零宽字符', category: 'text', icon: 'eraser',
+    desc: '统计统一 CRLF/LF,揪出并清除零宽字符等隐形捣乱者',
+    keywords: '换行符 crlf lf 零宽字符 隐形字符 bom 空白 清理 不可见 排查',
+    about: '排查「字符串看起来一样却比不相等」的元凶:统计 CRLF 与 LF 数量并一键统一;逐类揪出零宽空格、BOM 等零宽字符并一键清除;「显示不可见字符」模式把空格、Tab、NBSP 等渲染成可见占位符。清理直接替换原文,可继续编辑。',
+    component: lazy(() => import('./invisible-chars/InvisibleChars.vue')),
   },
   {
     id: 'morse', name: '摩尔斯电码', category: 'text', icon: 'radio',
@@ -499,9 +520,9 @@ export const TOOLS = [
   },
   {
     id: 'qrcode', name: '二维码生成', category: 'generate', icon: 'qr-code',
-    desc: '将文本或链接生成二维码,自定义尺寸与颜色',
-    keywords: '二维码 qr code 生成 扫码',
-    about: '输入内容变化后自动重新生成;可自定义前景/背景色,导出 PNG。长文本会自动使用更密集的版本。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    desc: '将文本或链接生成二维码,可加中央 Logo,自定义尺寸与颜色',
+    keywords: '二维码 qr code 生成 扫码 logo 美化',
+    about: '输入内容变化后自动重新生成;可自定义前景/背景色,导出 PNG。支持上传中央 Logo(自动切换 H 级纠错保证遮挡后仍可扫描,大小可调)。长文本会自动使用更密集的版本。工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
     component: lazy(() => import('./qrcode/QrCodeTool.vue')),
   },
   {
@@ -807,7 +828,7 @@ export const TOOLS = [
     id: 'stopwatch', name: '秒表与倒计时', category: 'office', icon: 'alarm-clock',
     desc: '精确到百分秒的秒表(可计次)与倒计时,后台走时也准确',
     keywords: '秒表 停表 计时 倒计时 计次 stopwatch timer 提醒',
-    about: '秒表精确到百分秒,支持计次并自动标出最快 / 最慢一圈,快捷键:空格开始/暂停、L 计次、R 重置;倒计时时分秒任意组合,附常用预设,结束播放提示音。计时基于系统时间戳而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确。',
+    about: '秒表精确到百分秒,支持计次并自动标出最快 / 最慢一圈,计次记录可一键复制 CSV;快捷键:空格开始/暂停、L 计次、R 重置;倒计时时分秒任意组合,附常用预设,结束播放提示音。计时基于系统时间戳而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确。',
     component: lazy(() => import('./stopwatch/Stopwatch.vue')),
   },
   {

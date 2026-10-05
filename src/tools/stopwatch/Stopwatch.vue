@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useCopy } from '@/utils/useCopy'
 
 // 两个模式共用「基于真实时间戳」的计时,后台标签页被节流也不会越走越慢
 const tab = ref('stopwatch')
@@ -71,6 +72,15 @@ const lapStats = computed(() => {
   const splits = laps.value.map((l) => l.split)
   return { best: splits.indexOf(Math.min(...splits)), worst: splits.indexOf(Math.max(...splits)) }
 })
+
+const { copiedKey, copy } = useCopy()
+/** 计次记录导出为 CSV(按时间正序) */
+const lapsCsv = computed(() =>
+  [
+    '计次,分段,累计',
+    ...[...laps.value].reverse().map((l, i) => `${i + 1},${fmtStopwatch(l.split)},${fmtStopwatch(l.total)}`),
+  ].join('\n'),
+)
 
 // ---------- 倒计时 ----------
 const cdRunning = ref(false)
@@ -220,7 +230,12 @@ onUnmounted(() => {
     <div v-if="laps.length" class="panel" style="margin-top: 14px">
       <div class="row" style="justify-content: space-between">
         <span class="field-label" style="margin: 0">计次({{ laps.length }})</span>
-        <span class="tip">🟢 最快 · 🔴 最慢</span>
+        <span class="row" style="gap: 10px">
+          <span class="tip">🟢 最快 · 🔴 最慢</span>
+          <button class="btn btn-sm" @click="copy('laps', lapsCsv)">
+            {{ copiedKey === 'laps' ? '✓ 已复制' : '复制 CSV' }}
+          </button>
+        </span>
       </div>
       <div class="lap-list" style="margin-top: 8px">
         <div v-for="(lap, i) in laps" :key="i" class="lap-row">

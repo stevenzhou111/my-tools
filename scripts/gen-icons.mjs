@@ -118,6 +118,9 @@ const TOOLS = {
   'curl-to-fetch': 'terminal',
   'id-card-parse': 'square-user',
   'float-bits': 'sigma',
+  'md-toc': 'table-of-contents',
+  'base-enc': 'boxes',
+  'invisible-chars': 'eraser',
 
 
   'pdf-merge': 'files',
