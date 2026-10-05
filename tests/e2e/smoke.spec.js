@@ -89,6 +89,8 @@ test.describe('工具页', () => {
       [...new Set(els.map((e) => e.getAttribute('href')?.replace('/tool/', '')).filter(Boolean))],
     )
     expect(ids.length, '首页没有抓到任何工具链接').toBeGreaterThanOrEqual(80)
+    // 巡检耗时随工具数量线性增长,固定超时会随规模增长误报;按数量自适应
+    test.setTimeout(ids.length * 600 + 30_000)
 
     const failed = []
     for (const id of ids) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { annuityPayment, combineLoans, loanSchedule, yearlySummary } from '@/utils/mortgage'
+import { annuityPayment, combineLoans, loanSchedule, prepayOptions, yearlySummary } from '@/utils/mortgage'
 
 // 基准值由 node 按公式现算得出,勿凭记忆手算修改
 describe('mortgage · 等额本息', () => {
@@ -84,6 +84,53 @@ describe('mortgage · 组合贷款', () => {
     expect(years[0].payment).toBeCloseTo(s.rows.slice(0, 12).reduce((a, r) => a + r.payment, 0), 6)
     expect(years[0].balance).toBeCloseTo(s.rows[11].balance, 6)
     expect(years[29].balance).toBeCloseTo(0, 6)
+  })
+})
+
+describe('mortgage · 提前还款', () => {
+  // 基准:100万@4.2%360期等额本息,第12期后提前还20万,node 现算
+  const opts = prepayOptions({ principal: 1_000_000, annualRate: 0.042, months: 360, method: 'annuity', afterPeriod: 12, extra: 200_000 })
+
+  it('剩余本金与原计划剩余利息', () => {
+    expect(opts.balanceAfter).toBeCloseTo(982993.0333, 3)
+    expect(opts.baselineRemainingInterest).toBeCloseTo(718786.7312, 3)
+    expect(opts.settled).toBe(false)
+  })
+
+  it('方式A 期限不变:新月供 3895.22,省利息 146244.52', () => {
+    expect(opts.keepTerm.months).toBe(348)
+    expect(opts.keepTerm.firstPayment).toBeCloseTo(3895.2162, 3)
+    expect(opts.keepTerm.totalInterest).toBeCloseTo(572542.2093, 3)
+    expect(opts.keepTerm.savedInterest).toBeCloseTo(146244.5220, 3)
+  })
+
+  it('方式B 月供不变:缩到 236 期,省利息 350096.35(比 A 更省)', () => {
+    expect(opts.keepPay.months).toBe(236)
+    expect(opts.keepPay.firstPayment).toBeCloseTo(4880.0145, 3)
+    expect(opts.keepPay.totalInterest).toBeCloseTo(368690.3854, 3)
+    expect(opts.keepPay.savedInterest).toBeCloseTo(350096.3458, 3)
+    expect(opts.keepPay.savedInterest).toBeGreaterThan(opts.keepTerm.savedInterest)
+  })
+
+  it('一次结清:省下全部剩余利息', () => {
+    const full = prepayOptions({ principal: 1_000_000, annualRate: 0.042, months: 360, method: 'annuity', afterPeriod: 12, extra: 1_000_000 })
+    expect(full.settled).toBe(true)
+    expect(full.savedInterest).toBeCloseTo(718786.7312, 3)
+    expect(full.keepTerm).toBe(null)
+  })
+
+  it('等额本金不提供缩年限方案', () => {
+    const p = prepayOptions({ principal: 1_000_000, annualRate: 0.042, months: 360, method: 'principal', afterPeriod: 12, extra: 200_000 })
+    expect(p.keepPay).toBe(null)
+    expect(p.keepTerm.months).toBe(348)
+  })
+
+  it('非法输入抛错', () => {
+    const loan = { principal: 1_000_000, annualRate: 0.042, months: 360, method: 'annuity' }
+    expect(() => prepayOptions({ ...loan, afterPeriod: 0, extra: 1000 })).toThrow('期数')
+    expect(() => prepayOptions({ ...loan, afterPeriod: 360, extra: 1000 })).toThrow('期数')
+    expect(() => prepayOptions({ ...loan, afterPeriod: 12, extra: 0 })).toThrow('金额')
+    expect(() => prepayOptions({ ...loan, afterPeriod: 12, extra: -5 })).toThrow('金额')
   })
 })
 

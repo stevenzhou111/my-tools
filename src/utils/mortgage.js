@@ -120,3 +120,58 @@ export function yearlySummary(rows, perYear = 12) {
   }
   return years
 }
+
+/**
+ * 提前还款测算:第 afterPeriod 期后一次性额外偿还 extra 本金,给出两种走向的对比。
+ * - keepTerm:期限不变,剩余本金重算月供(减月供);
+ * - keepPay:月供不变,解出新的剩余期数(缩年限;仅等额本息适用,等额本金月供本身逐期递减)。
+ * extra 大于等于剩余本金时视为一次结清(settled)。
+ * @returns {{ settled:boolean, balanceAfter:number, baselineRemainingInterest:number, savedInterest:number,
+ *   keepTerm:{months,firstPayment,totalInterest,savedInterest}|null,
+ *   keepPay:{months,firstPayment,totalInterest,savedInterest}|null }}
+ */
+export function prepayOptions({ principal, annualRate, months, method = 'annuity', afterPeriod, extra }) {
+  assertLoan({ principal, annualRate, months })
+  if (method !== 'annuity' && method !== 'principal') throw new Error('未知的还款方式')
+  if (!Number.isInteger(afterPeriod) || afterPeriod < 1 || afterPeriod >= months) {
+    throw new Error('提前还款期数必须在第 1 期到最后一期之前')
+  }
+  if (!Number.isFinite(extra) || extra <= 0) throw new Error('提前还款金额必须大于 0')
+
+  const base = loanSchedule({ principal, annualRate, months, method })
+  const balanceAfter = base.rows[afterPeriod - 1].balance
+  const baselineRemainingInterest =
+    base.totalInterest - base.rows.slice(0, afterPeriod).reduce((s, r) => s + r.interest, 0)
+
+  if (extra >= balanceAfter) {
+    return { settled: true, balanceAfter, baselineRemainingInterest, savedInterest: baselineRemainingInterest, keepTerm: null, keepPay: null }
+  }
+
+  const B = balanceAfter - extra
+  const keepTermSchedule = loanSchedule({ principal: B, annualRate, months: months - afterPeriod, method })
+  const keepTerm = {
+    months: months - afterPeriod,
+    firstPayment: keepTermSchedule.firstPayment,
+    totalInterest: keepTermSchedule.totalInterest,
+    savedInterest: baselineRemainingInterest - keepTermSchedule.totalInterest,
+  }
+
+  let keepPay = null
+  if (method === 'annuity') {
+    const r = annualRate / 12
+    const target = base.rows[0].payment
+    if (target > r * B) {
+      const nExact = Math.log(target / (target - r * B)) / Math.log(1 + r)
+      const nNew = Math.min(Math.ceil(nExact), months - afterPeriod)
+      const s = loanSchedule({ principal: B, annualRate, months: nNew, method: 'annuity' })
+      keepPay = {
+        months: nNew,
+        firstPayment: s.firstPayment,
+        totalInterest: s.totalInterest,
+        savedInterest: baselineRemainingInterest - s.totalInterest,
+      }
+    }
+  }
+
+  return { settled: false, balanceAfter, baselineRemainingInterest, savedInterest: 0, keepTerm, keepPay }
+}

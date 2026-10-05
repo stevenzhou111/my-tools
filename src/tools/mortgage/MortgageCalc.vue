@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { combineLoans, loanSchedule, yearlySummary } from '@/utils/mortgage'
+import { combineLoans, loanSchedule, prepayOptions, yearlySummary } from '@/utils/mortgage'
 import { useUrlState } from '@/utils/urlState'
 
 const method = ref('annuity')
@@ -50,6 +50,29 @@ const years = computed(() => yearlySummary(result.value.current?.rows ?? []))
 
 const fmt = (n) => Number(n).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 const fmtWan = (n) => fmt(n / 10000)
+
+const zhMonths = (m) => (m % 12 === 0 ? `${m / 12} 年` : `${Math.floor(m / 12)} 年 ${m % 12} 个月`)
+
+// 提前还款测算(单笔贷款;组合贷款利率不唯一,不给近似结果)
+const prepayAfter = ref(12)
+const prepayExtra = ref(20)
+const prepay = computed(() => {
+  if (result.value.error) return null
+  if (useFund.value) return { combo: true }
+  try {
+    const data = prepayOptions({
+      principal: amount1.value * 10000,
+      annualRate: rate1.value / 100,
+      months: years1.value * 12,
+      method: method.value,
+      afterPeriod: Math.floor(Number(prepayAfter.value) || 1),
+      extra: (Number(prepayExtra.value) || 0) * 10000,
+    })
+    return { combo: false, error: '', data }
+  } catch (e) {
+    return { combo: false, error: e.message, data: null }
+  }
+})
 
 const cards = computed(() => {
   const c = result.value.current
@@ -184,6 +207,55 @@ const cards = computed(() => {
       </div>
     </details>
 
+    <details class="panel" style="margin-top: 14px">
+      <summary>⏫ 提前还款测算</summary>
+      <template v-if="prepay?.combo">
+        <p class="tip" style="margin-top: 12px">
+          组合贷款两笔利率不同,提前还款的省息取决于先还哪一笔,本工具不给近似结果;请分开单笔测算参考。
+        </p>
+      </template>
+      <template v-else-if="prepay">
+        <div class="row" style="margin-top: 12px">
+          <label class="pp-ctrl">
+            <span class="field-label" style="margin: 0">第几期后还款</span>
+            <input v-model.number="prepayAfter" class="input pp-input" type="number" min="1" :max="years1 * 12 - 1" />
+          </label>
+          <label class="pp-ctrl">
+            <span class="field-label" style="margin: 0">一次性还款(万)</span>
+            <input v-model.number="prepayExtra" class="input pp-input" type="number" min="0.1" step="1" />
+          </label>
+        </div>
+        <div v-if="prepay.error" class="error-box" style="margin-top: 10px">✗ {{ prepay.error }}</div>
+        <template v-else-if="prepay.data">
+          <p class="tip" style="margin-top: 10px">
+            第 {{ prepayAfter }} 期后剩余本金 {{ fmt(prepay.data.balanceAfter) }} 元;一次性还
+            {{ fmt(prepayExtra) }} 万后,两种走法:
+          </p>
+          <div v-if="prepay.data.settled" class="tip" style="margin-top: 8px">
+            🎉 该金额已覆盖全部剩余本金,贷款一次结清,共节省利息
+            <strong>{{ fmt(prepay.data.savedInterest) }}</strong> 元。
+          </div>
+          <div v-else class="grid-2" style="margin-top: 8px">
+            <div class="pp-card">
+              <div class="pp-title">期限不变 · 减月供</div>
+              <div class="pp-line">新月供 <strong>{{ fmt(prepay.data.keepTerm.firstPayment) }}</strong> 元</div>
+              <div class="pp-line">剩余期限 {{ zhMonths(prepay.data.keepTerm.months) }}</div>
+              <div class="pp-line">剩余利息 {{ fmtWan(prepay.data.keepTerm.totalInterest) }} 万</div>
+              <div class="pp-save">比不提前省 {{ fmt(prepay.data.keepTerm.savedInterest) }} 元</div>
+            </div>
+            <div v-if="prepay.data.keepPay" class="pp-card">
+              <div class="pp-title">月供不变 · 缩期限</div>
+              <div class="pp-line">剩余期限缩到 <strong>{{ zhMonths(prepay.data.keepPay.months) }}</strong>({{ prepay.data.keepPay.months }} 期)</div>
+              <div class="pp-line">新月供约 {{ fmt(prepay.data.keepPay.firstPayment) }} 元</div>
+              <div class="pp-line">剩余利息 {{ fmtWan(prepay.data.keepPay.totalInterest) }} 万</div>
+              <div class="pp-save">比不提前省 {{ fmt(prepay.data.keepPay.savedInterest) }} 元</div>
+            </div>
+          </div>
+          <p class="tip" style="margin-top: 8px">一般「缩期限」比「减月供」省更多利息,但月供压力不变;实际规则以贷款银行执行为准(部分银行有提前还款次数 / 违约金限制)。</p>
+        </template>
+      </template>
+    </details>
+
     <p class="tip" style="margin-top: 12px">
       计算完全在本地完成;利率与额度请以银行 / 公积金中心实际审批为准,结果仅供参考。
       分享本页链接会带上你填写的金额与利率(不含其他隐私)。
@@ -250,6 +322,36 @@ const cards = computed(() => {
   top: 0;
   background: var(--card);
   color: var(--muted);
+  font-weight: 600;
+}
+.pp-ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pp-input {
+  width: 130px;
+}
+.pp-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--bg-soft);
+}
+.pp-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  margin-bottom: 6px;
+}
+.pp-line {
+  font-size: 14px;
+  color: var(--text);
+  padding: 2px 0;
+}
+.pp-save {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #16a34a;
   font-weight: 600;
 }
 </style>

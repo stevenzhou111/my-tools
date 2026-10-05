@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { buildScale, hexToHsl, readableOn, toCssVars, toTailwind } from '@/utils/colorScale'
+import { contrastRatio } from '@/utils/contrast'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState } from '@/utils/urlState'
 
@@ -16,6 +17,12 @@ const { copiedKey, copy } = useCopy()
 
 const scale = computed(() => buildScale(color.value))
 const baseHsl = computed(() => hexToHsl(color.value))
+
+/** 每档色块上自动选定文字色后的对比度(评估该档做文字底色的可读性) */
+function ratioOn(c) {
+  const r = contrastRatio(c.hex, readableOn(c.hex))
+  return r == null ? '' : r.toFixed(1) + ':1'
+}
 
 function randomColor() {
   const h = Math.floor(Math.random() * 360)
@@ -73,6 +80,7 @@ function randomColor() {
       >
         <span class="sw-step">{{ c.step }}<template v-if="c.isBase"> · 基准</template></span>
         <span class="sw-hex">{{ c.hex.toUpperCase() }}</span>
+        <span class="sw-ratio">{{ ratioOn(c) }}</span>
         <span v-if="copiedKey === 'sw-' + c.step" class="sw-copied">已复制</span>
       </button>
     </div>
@@ -151,6 +159,10 @@ function randomColor() {
 .sw-hex {
   font-size: 12.5px;
   opacity: 0.85;
+}
+.sw-ratio {
+  font-size: 11.5px;
+  opacity: 0.75;
 }
 .sw-copied {
   position: absolute;

@@ -58,18 +58,20 @@ function trapDrawerTab(e) {
 
 function onKeydown(e) {
   if (e.key === 'Escape') drawerOpen.value = false
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable
   // '?' 帮助:仅在非输入场景触发(输入框里打问号是正常文字)
-  if (
-    e.key === '?' &&
-    !shortcutsOpen.value &&
-    !e.ctrlKey &&
-    !e.metaKey &&
-    !e.altKey &&
-    !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) &&
-    !e.target.isContentEditable
-  ) {
+  if (e.key === '?' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && !shortcutsOpen.value) {
     e.preventDefault()
     shortcutsOpen.value = true
+  }
+  // '/' 聚焦侧栏搜索框;移动端侧栏隐藏,改为打开命令面板
+  if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    e.preventDefault()
+    if (window.matchMedia('(min-width: 901px)').matches) {
+      document.querySelector('.side-search')?.focus()
+    } else {
+      paletteRef.value?.open?.()
+    }
   }
 }
 onMounted(() => window.addEventListener('keydown', onKeydown))
