@@ -168,6 +168,13 @@ export const TOOLS = [
     component: lazy(() => import('./id-card-parse/IdCardParse.vue')),
   },
   {
+    id: 'sql-params', name: 'SQL 参数填充', category: 'dev', icon: 'table-2',
+    desc: '把 ? / $n 占位符与绑定参数还原成可执行的 SQL',
+    keywords: 'sql 参数 占位符 填充 慢查询 日志 预编译 绑定变量 调试',
+    about: '慢查询日志 / ORM 只给你参数化 SQL 和一串绑定参数?粘贴两段自动拼成可直接执行的语句:支持 ? 与 $n 两种占位符,字符串自动转义引号(MySQL 反斜杠风格可选),JSON 里的 null / true / false / 数字输出对应字面量,SQL 字符串字面量与行注释里的 ? 不会误判,参数个数不匹配时明确报错。带密钥的语句不写入地址栏。',
+    component: lazy(() => import('./sql-params/SqlParams.vue')),
+  },
+  {
     id: 'totp', name: 'TOTP 两步验证码', category: 'dev', icon: 'timer-reset',
     desc: '本地生成 2FA 动态验证码,不用掏手机',
     keywords: 'totp 2fa 两步验证 动态验证码 otp 身份验证器 google authenticator',
@@ -175,10 +182,10 @@ export const TOOLS = [
     component: lazy(() => import('./totp/TotpTool.vue')),
   },
   {
-    id: 'jwt', name: 'JWT 解析', category: 'convert', icon: 'ticket',
-    desc: '解码 JWT 的 Header / Payload,检查是否过期',
-    keywords: 'jwt token 解码 解析 鉴权 过期',
-    about: '仅对两段 Payload 做 Base64URL 解码展示,不校验签名(签名验证需要密钥,应在服务端完成)。会根据 exp 字段提示是否过期。',
+    id: 'jwt', name: 'JWT 解析与签名', category: 'convert', icon: 'ticket',
+    desc: '解码 JWT 的 Header / Payload,支持 HS256 签名生成与校验',
+    keywords: 'jwt token 解码 解析 鉴权 过期 签名 hs256 生成 校验',
+    about: '「解析」页解码 Header / Payload 并根据 exp 提示是否过期;「签名 / 校验」页用 WebCrypto 在本地完成 HS256/384/512 签名生成与验证(重算签名比对,可确认 Token 是否由该密钥签发、是否被篡改)。RS/ES 等非对称算法涉及私钥管理,不适合在网页操作;切勿粘贴生产环境密钥。',
     component: lazy(() => import('./jwt/JwtTool.vue')),
   },
   {
@@ -647,6 +654,13 @@ export const TOOLS = [
     component: lazy(() => import('./tz-convert/TzConvert.vue')),
   },
   {
+    id: 'lunar-calendar', name: '农历公历互转', category: 'calc', icon: 'moon',
+    desc: '公历查农历(干支生肖)与农历反查公历,1900–2100',
+    keywords: '农历 阴历 公历 互转 干支 生肖 春节 老黄历 日期 lunar',
+    about: '公历日期一键查农历(含闰月标注、干支纪年与生肖),农历(年/月/日/闰月)反查公历日期;覆盖 1900–2100 年,数据表以历年春节锚点与全年逐日往返校验。注意干支按农历年取,与按立春排盘的工具有差异。日期会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。',
+    component: lazy(() => import('./lunar-calendar/LunarCalendar.vue')),
+  },
+  {
     id: 'mortgage', name: '房贷计算器', category: 'calc', icon: 'piggy-bank',
     desc: '等额本息 / 等额本金月供与总利息对比,支持商贷+公积金组合',
     keywords: '房贷 月供 等额本息 等额本金 利息 公积金 组合贷款 贷款 计算器 买房',
@@ -724,6 +738,13 @@ export const TOOLS = [
     keywords: 'excel 合并 拆分 sheet 工作表 xlsx 多文件',
     about: '合并时所有工作表汇入一个 xlsx(同名自动加序号);拆分把每个 Sheet 导出为独立 xlsx 并打包 ZIP。',
     component: lazy(() => import('./excel-merge/ExcelMerge.vue')),
+  },
+  {
+    id: 'xlsx-sql', name: 'Excel → SQL', category: 'doc', icon: 'database-zap',
+    desc: '把 Excel / CSV 行生成 INSERT INTO 语句,MySQL / PG 方言',
+    keywords: 'excel csv sql insert 生成 数据库 灌数据 导入 mysql postgresql',
+    about: '选一个 Excel / CSV,把每行数据生成 INSERT INTO 语句用于给测试库灌数据:MySQL(反引号)与 PostgreSQL(双引号)两种方言、多行合并或每行一条、空单元格输出 NULL、字符串自动转义单引号、日期按 YYYY-MM-DD HH:MM:SS;多工作表可切换,结果可复制或下载 .sql。全部在本地解析,不上传文件。',
+    component: lazy(() => import('./xlsx-sql/XlsxSql.vue')),
   },
 
   // ---------- 文档转换 ----------

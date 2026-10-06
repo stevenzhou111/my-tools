@@ -121,6 +121,9 @@ const TOOLS = {
   'md-toc': 'table-of-contents',
   'base-enc': 'boxes',
   'invisible-chars': 'eraser',
+  'lunar-calendar': 'moon',
+  'sql-params': 'table-2',
+  'xlsx-sql': 'database-zap',
 
 
   'pdf-merge': 'files',
