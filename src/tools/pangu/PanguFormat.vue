@@ -52,13 +52,13 @@ const SAMPLE = `这是一段随手粘贴的文本, mixing English and 中文,标
   <div class="field">
     <label class="field-label" for="pangu-in">原文</label>
     <textarea id="pangu-in" v-model="text" class="textarea" style="min-height: 150px" placeholder="粘贴要排版的文本…" spellcheck="false"></textarea>
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button class="btn btn-sm" @click="text = SAMPLE">填入示例</button>
       <button class="btn btn-sm" :disabled="!text" @click="text = ''">清空</button>
     </div>
   </div>
 
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <span class="field-label">选项</span>
     <div class="opt-list">
       <label v-for="o in OPTIONS" :key="o.label" class="check opt-item">
@@ -77,7 +77,7 @@ const SAMPLE = `这是一段随手粘贴的文本, mixing English and 中文,标
       <span v-if="text" class="tip">{{ changed ? '已调整' : '没有需要调整的内容' }}</span>
     </label>
     <textarea id="pangu-out" class="textarea" style="min-height: 150px" readonly :value="output" placeholder="结果实时生成…"></textarea>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('pangu', output)">
         {{ copiedKey === 'pangu' ? '✓ 已复制' : '复制结果' }}
       </button>

@@ -124,10 +124,10 @@ const swatchStyle = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px">
+  <div class="row mb-16">
     <div class="field" style="flex: 1; margin: 0; min-width: 240px">
-      <label class="field-label">输入任意颜色值</label>
-      <input
+      <label class="field-label" for="input">输入任意颜色值</label>
+      <input id="input"
         v-model="input"
         class="input"
         placeholder="支持 #ff6600 / rgb(99,102,241) / hsl(239,84%,67%)"

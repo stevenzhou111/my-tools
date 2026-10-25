@@ -120,7 +120,7 @@ function pretty(obj) {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px" role="tablist">
+  <div class="row mb-16" role="tablist">
     <button class="btn" :class="{ 'btn-primary': tab === 'parse' }" role="tab" :aria-selected="tab === 'parse'" @click="tab = 'parse'">
       🔍 解析 Token
     </button>
@@ -132,15 +132,15 @@ function pretty(obj) {
   <!-- 解析 -->
   <template v-if="tab === 'parse'">
     <div class="field">
-      <label class="field-label">粘贴 JWT Token</label>
+      <label class="field-label" for="jwt-payload">粘贴 JWT Token</label>
       <!-- 不挂 v-draft:用户粘贴的真实 token 含敏感 claims,不应明文落盘 sessionStorage -->
       <textarea v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
     </div>
 
-    <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+    <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
     <template v-if="parts">
-      <div class="row" style="margin-bottom: 14px">
+      <div class="row mb-14">
         <span v-if="expired !== null" class="badge" :class="expired ? 'bad' : 'ok'">
           {{ expired ? '⛔ 已过期' : '✅ 未过期' }}
         </span>
@@ -152,7 +152,7 @@ function pretty(obj) {
         <code>{{ f.value }}</code>
       </div>
 
-      <div class="grid-2" style="margin-top: 14px">
+      <div class="grid-2 mt-14">
         <div>
           <div class="snippet-head">
             <label class="field-label">Header</label>
@@ -189,22 +189,22 @@ function pretty(obj) {
         </div>
         <div class="row">
           <label class="ctrl">
-            <span class="field-label" style="margin: 0">算法</span>
+            <span class="field-label m-0">算法</span>
             <select v-model="algo" class="select" style="width: 120px">
               <option v-for="a in ALGOS" :key="a" :value="a">{{ a }}</option>
             </select>
           </label>
         </div>
-        <div class="field" style="margin-top: 12px">
+        <div class="field mt-12">
           <label class="field-label" for="jwt-extra">Header 扩展字段(可选,JSON)</label>
           <input id="jwt-extra" v-model="extraHeader" class="input" style="font-family: var(--mono); font-size: 13.5px" spellcheck="false" />
         </div>
         <button class="btn btn-primary" @click="doSign">✍️ 生成签名 Token</button>
-        <div v-if="signError" class="error-box" style="margin-top: 10px">✗ {{ signError }}</div>
+        <div v-if="signError" class="error-box mt-10">✗ {{ signError }}</div>
         <template v-if="signed">
-          <label class="field-label" style="margin-top: 12px" for="jwt-signed">生成的 Token</label>
+          <label class="field-label mt-12" for="jwt-signed">生成的 Token</label>
           <textarea id="jwt-signed" class="textarea" style="min-height: 90px; font-size: 12.5px" readonly :value="signed"></textarea>
-          <button class="btn btn-sm btn-primary" style="margin-top: 8px" @click="copy('signed', signed)">
+          <button class="btn btn-sm btn-primary mt-8" @click="copy('signed', signed)">
             {{ copiedKey === 'signed' ? '✓ 已复制' : '复制 Token' }}
           </button>
         </template>
@@ -228,7 +228,7 @@ function pretty(obj) {
       </div>
     </div>
 
-    <p class="tip" style="margin-top: 14px">
+    <p class="tip mt-14">
       签名由 WebCrypto 在本地计算,密钥与 Payload 不会上传;alg 头自动写入,扩展字段(如 kid)可自定义。
       仅支持 HMAC 对称算法(HS256/384/512),RS/ES 等非对称算法涉及私钥管理,不适合在网页里操作。
       切勿在此粘贴生产环境密钥。

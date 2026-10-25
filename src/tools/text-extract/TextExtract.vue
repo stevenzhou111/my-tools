@@ -40,7 +40,7 @@ const results = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label v-for="(p, key) in PATTERNS" :key="key" class="check">
       <input v-model="mode" type="radio" :value="key" />{{ p.label }}
     </label>
@@ -48,14 +48,14 @@ const results = computed(() => {
   </div>
 
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-draft="'extract'" v-model="input" class="textarea" rows="7" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入文本</label>
+    <textarea id="input" v-draft="'extract'" v-model="input" class="textarea" rows="7" spellcheck="false"></textarea>
   </div>
 
   <template v-if="results.length">
     <label class="field-label">提取结果({{ results.length }} 条)</label>
     <pre class="output">{{ results.join('\n') }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', results.join('\n'))">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
       </button>

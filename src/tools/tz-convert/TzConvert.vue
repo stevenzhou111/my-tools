@@ -40,14 +40,14 @@ function shareText() {
 </script>
 
 <template>
-  <div class="grid-2" style="margin-bottom: 14px">
+  <div class="grid-2 mb-14">
     <div class="field">
-      <label class="field-label">基准时间</label>
-      <input v-model="localTime" type="datetime-local" step="60" class="input" />
+      <label class="field-label" for="localTime">基准时间</label>
+      <input id="localTime" v-model="localTime" type="datetime-local" step="60" class="input" />
     </div>
     <div class="field">
-      <label class="field-label">基准时区</label>
-      <select v-model="baseZone" class="select">
+      <label class="field-label" for="baseZone">基准时区</label>
+      <select id="baseZone" v-model="baseZone" class="select">
         <option v-for="z in ZONES" :key="z.tz" :value="z.tz">{{ z.label }}({{ z.tz }})</option>
       </select>
     </div>
@@ -68,7 +68,7 @@ function shareText() {
         <span class="tz-diff">{{ diffLabel(r.diff) }}</span>
       </div>
     </div>
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-sm" @click="localTime = nowLocal()">回到现在</button>
       <button class="btn btn-sm" @click="copy('tz', shareText())">
         {{ copiedKey === 'tz' ? '✓ 已复制' : '复制对照表' }}

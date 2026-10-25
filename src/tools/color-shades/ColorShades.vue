@@ -41,14 +41,14 @@ function randomColor() {
 </script>
 
 <template>
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <div class="row">
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">主色</span>
+        <span class="field-label m-0">主色</span>
         <input v-model="color" type="color" class="color-input" aria-label="选择主色" />
       </label>
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">HEX 值</span>
+        <span class="field-label m-0">HEX 值</span>
         <input
           v-model="color"
           class="input hex-input"
@@ -57,13 +57,13 @@ function randomColor() {
         />
       </label>
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">变量名(导出用)</span>
+        <span class="field-label m-0">变量名(导出用)</span>
         <input v-model="varName" class="input name-input" spellcheck="false" aria-label="导出变量名" />
       </label>
       <button class="btn" style="align-self: flex-end" @click="randomColor">🎲 随机主色</button>
     </div>
-    <p v-if="!scale" class="error-box" style="margin-top: 12px">✗ HEX 格式不合法,请输入 #rgb 或 #rrggbb</p>
-    <p v-else-if="baseHsl" class="tip" style="margin-top: 10px">
+    <p v-if="!scale" class="error-box mt-12">✗ HEX 格式不合法,请输入 #rgb 或 #rrggbb</p>
+    <p v-else-if="baseHsl" class="tip mt-10">
       当前主色 HSL:{{ baseHsl.h }}, {{ baseHsl.s }}%, {{ baseHsl.l }}%(500 档明度会钳制到 30%–62% 以保证两端余量)
     </p>
   </div>
@@ -86,9 +86,9 @@ function randomColor() {
       </button>
     </div>
 
-    <div class="panel" style="margin-top: 16px">
+    <div class="panel mt-16">
       <span class="field-label">导出</span>
-      <div class="row" style="margin-bottom: 10px">
+      <div class="row mb-10">
         <button class="btn btn-sm" @click="copy('tailwind', toTailwind(scale, varName))">
           {{ copiedKey === 'tailwind' ? '✓ 已复制' : `复制 Tailwind 配置(${varName})` }}
         </button>
@@ -99,7 +99,7 @@ function randomColor() {
       <pre class="output" style="max-height: 200px">{{ toTailwind(scale, varName) }}</pre>
     </div>
 
-    <p class="tip" style="margin-top: 12px">
+    <p class="tip mt-12">
       以输入色为 500 档基准,按固定明度锚点向两端推亮/推暗,色相保持不变;
       点击任意色块复制 HEX。参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前色阶。
     </p>

@@ -55,9 +55,9 @@ async function merge() {
     <p class="tip">全部在浏览器本地完成,PDF 不会上传</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="files.length" class="panel" style="margin-top: 14px">
+  <div v-if="files.length" class="panel mt-14">
     <label class="field-label">文件列表({{ files.length }})</label>
     <div v-for="(f, i) in files" :key="i" class="file-row">
       <span class="file-order">{{ i + 1 }}</span>
@@ -69,7 +69,7 @@ async function merge() {
     </div>
   </div>
 
-  <div v-if="files.length" class="row" style="margin-top: 14px">
+  <div v-if="files.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="merge">
       {{ busy ? '合并中…' : `🔗 合并 ${files.length} 个文件` }}
     </button>

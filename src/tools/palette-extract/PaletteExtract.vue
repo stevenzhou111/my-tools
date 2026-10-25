@@ -91,12 +91,12 @@ const SAMPLE = '支持 JPG / PNG / WebP,纯本地统计'
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="previewUrl">
     <div class="row" style="margin-top: 14px; justify-content: space-between">
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">主色数量(1–12)</span>
+        <span class="field-label m-0">主色数量(1–12)</span>
         <input v-model.number="count" class="input count-input" type="number" min="1" max="12" @change="reload" />
       </label>
       <button class="btn btn-sm" @click="copy('cssvars', cssVars())">
@@ -104,7 +104,7 @@ const SAMPLE = '支持 JPG / PNG / WebP,纯本地统计'
       </button>
     </div>
 
-    <div class="pal-list" style="margin-top: 12px">
+    <div class="pal-list mt-12">
       <button
         v-for="(c, i) in palette"
         :key="c.hex + '-' + i"
@@ -118,10 +118,10 @@ const SAMPLE = '支持 JPG / PNG / WebP,纯本地统计'
       </button>
     </div>
 
-    <div class="preview-wrap" style="margin-top: 14px">
+    <div class="preview-wrap mt-14">
       <img :src="previewUrl" class="preview" alt="原图预览" />
     </div>
-    <p class="tip" style="margin-top: 10px">
+    <p class="tip mt-10">
       按 RGB 每 4 位一档量化分桶统计,占比为该主色覆盖的像素比例;统计完全在本地进行,图片不上传。
       做设计取色时可配合「颜色吸取器」精确取某个像素。
     </p>

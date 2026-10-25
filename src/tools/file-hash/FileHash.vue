@@ -87,10 +87,10 @@ function fmtSize(bytes) {
     <p class="tip">计算 MD5 / SHA 系列哈希,用于校验下载文件完整性,全程本地处理</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="file">
-    <p class="tip" style="margin: 12px 0">
+    <p class="tip my-12">
       {{ file.name }} · {{ fmtSize(file.size) }} <span v-if="busy">· 计算中…</span>
     </p>
 

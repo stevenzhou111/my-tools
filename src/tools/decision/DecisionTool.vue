@@ -52,7 +52,7 @@ onUnmounted(() => clearInterval(timer))
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px">
+  <div class="row mb-16">
     <label class="check"><input v-model="mode" type="radio" value="custom" @change="answer = ''" />自定义选项随机挑</label>
     <label class="check"><input v-model="mode" type="radio" value="yesno" @change="answer = ''" />是 / 否 快速决定</label>
   </div>
@@ -77,9 +77,9 @@ onUnmounted(() => clearInterval(timer))
     </button>
   </div>
 
-  <div v-if="mode === 'custom'" class="field" style="margin-top: 16px">
-    <label class="field-label">候选选项(每行一个)</label>
-    <textarea v-model="optionsText" class="textarea" rows="6" spellcheck="false"></textarea>
+  <div v-if="mode === 'custom'" class="field mt-16">
+    <label class="field-label" for="optionsText">候选选项(每行一个)</label>
+    <textarea id="optionsText" v-model="optionsText" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 </template>
 

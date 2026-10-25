@@ -84,14 +84,14 @@ function stop() {
 </script>
 
 <template>
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <div class="field">
-    <label class="field-label">要朗读的文本</label>
-    <textarea v-model="text" class="textarea" rows="5" spellcheck="false"></textarea>
+    <label class="field-label" for="text">要朗读的文本</label>
+    <textarea id="text" v-model="text" class="textarea" rows="5" spellcheck="false"></textarea>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="ctrl" style="flex: 1; min-width: 220px">
       <span class="field-label">音色(共 {{ voices.length }} 个,优先中文)</span>
       <select v-model="voiceURI" class="select">
@@ -119,7 +119,7 @@ function stop() {
     <button class="btn" :disabled="!speaking" @click="stop">⏹ 停止</button>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     语音由操作系统内置的合成引擎在本地生成(浏览器 Web Speech API),不会上传;音色数量取决于系统安装的语言包。
   </p>
 </template>

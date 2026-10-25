@@ -153,20 +153,20 @@ const TYPE_CLASS = {
 
 <template>
   <div class="field">
-    <label class="field-label">输入 JSON</label>
-    <textarea v-draft="'json-tree-input'" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入 JSON</label>
+    <textarea id="input" v-draft="'json-tree-input'" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
   <div v-if="error" class="error-box">✗ {{ error }}</div>
 
   <template v-else-if="root">
-    <div class="row" style="margin-bottom: 10px">
+    <div class="row mb-10">
       <span class="tip">共 {{ stats.nodes }} 个节点 · 最大深度 {{ stats.depth }} · 对象 {{ stats.keys }} · 数组 {{ stats.arrays }}</span>
       <button class="btn btn-sm" @click="collapseAll">全部折叠</button>
       <button class="btn btn-sm" @click="collapsed.clear()">全部展开</button>
     </div>
 
-    <div class="field" style="margin-bottom: 10px">
+    <div class="field mb-10">
       <input
         v-model="filter"
         class="input"

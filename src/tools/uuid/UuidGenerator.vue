@@ -43,7 +43,7 @@ onMounted(generate)
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px" role="radiogroup" aria-label="ID 类型">
+  <div class="row mb-14" role="radiogroup" aria-label="ID 类型">
     <button
       v-for="m in MODES"
       :key="m.id"
@@ -57,13 +57,13 @@ onMounted(generate)
     </button>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="ctrl">
-      <span class="field-label" style="margin: 0">数量(1–100)</span>
+      <span class="field-label m-0">数量(1–100)</span>
       <input v-model.number="count" type="number" min="1" max="100" class="input count-input" @change="generate" />
     </label>
     <label v-if="mode === 'nano'" class="ctrl">
-      <span class="field-label" style="margin: 0">长度(6–64)</span>
+      <span class="field-label m-0">长度(6–64)</span>
       <input v-model.number="nanoSize" type="number" min="6" max="64" class="input count-input" @change="generate" />
     </label>
     <template v-if="mode === 'uuid'">
@@ -75,13 +75,13 @@ onMounted(generate)
 
   <pre class="output">{{ list.join('\n') }}</pre>
 
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('all', list.join('\n'))">
       {{ copiedKey === 'all' ? '✓ 已复制全部' : '复制全部' }}
     </button>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     <template v-if="mode === 'uuid'">
       UUID v4 由浏览器加密级随机数生成,122 位随机空间,碰撞概率可以忽略不计。
     </template>

@@ -43,11 +43,11 @@ const LEVELS = [1, 2, 3, 4, 5, 6]
 
 <template>
   <div class="grid-2" style="margin-bottom: 14px; align-items: start">
-    <div class="field" style="margin: 0">
+    <div class="field m-0">
       <label class="field-label" for="toc-in">Markdown 原文</label>
       <textarea id="toc-in" v-model="md" v-draft="'md-toc-input'" class="textarea" style="min-height: 320px" spellcheck="false"></textarea>
     </div>
-    <div class="field" style="margin: 0">
+    <div class="field m-0">
       <label class="field-label" for="toc-out">
         目录
         <span v-if="md" class="tip">{{ toc ? '锚点为 GitHub 风格' : '没有提取到标题' }}</span>
@@ -56,23 +56,23 @@ const LEVELS = [1, 2, 3, 4, 5, 6]
     </div>
   </div>
 
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <div class="row">
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">最小层级</span>
+        <span class="field-label m-0">最小层级</span>
         <select v-model.number="minLevel" class="select level-select">
           <option v-for="l in LEVELS" :key="'lo' + l" :value="l">H{{ l }}</option>
         </select>
       </label>
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">最大层级</span>
+        <span class="field-label m-0">最大层级</span>
         <select v-model.number="maxLevel" class="select level-select">
           <option v-for="l in LEVELS" :key="'hi' + l" :value="l">H{{ l }}</option>
         </select>
       </label>
       <label class="check" style="align-self: flex-end"><input v-model="ordered" type="checkbox" />有序列表</label>
     </div>
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-sm btn-primary" :disabled="!toc" @click="copy('toc', toc)">
         {{ copiedKey === 'toc' ? '✓ 已复制' : '复制目录' }}
       </button>

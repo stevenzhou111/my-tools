@@ -150,9 +150,9 @@ async function downloadWord() {
     <p class="tip">提取全部文字,可导出为 纯文本 / Word(.docx)/ HTML;⚠️ 仅提取文字,不含图片与排版</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="file" class="row" style="margin-top: 14px">
+  <div v-if="file" class="row mt-14">
     <span class="tip">{{ file.name }} · {{ pageCount }} 页 · 提取出 {{ text.split('\n').filter((l) => l.trim()).length }} 行文字</span>
     <button class="btn btn-primary" :disabled="busy" @click="process(file)">
       {{ busy ? `提取中 ${progress}%` : '📝 重新提取' }}
@@ -164,8 +164,8 @@ async function downloadWord() {
   </div>
 
   <template v-if="text">
-    <pre class="output" style="margin-top: 14px">{{ text.slice(0, 4000) }}{{ text.length > 4000 ? '\n…(仅预览前 4000 字符,导出为完整内容)' : '' }}</pre>
-    <div class="row" style="margin-top: 12px">
+    <pre class="output mt-14">{{ text.slice(0, 4000) }}{{ text.length > 4000 ? '\n…(仅预览前 4000 字符,导出为完整内容)' : '' }}</pre>
+    <div class="row mt-12">
       <button class="btn btn-sm" @click="copy('txt', text)">
         {{ copiedKey === 'txt' ? '✓ 已复制' : '复制文本' }}
       </button>

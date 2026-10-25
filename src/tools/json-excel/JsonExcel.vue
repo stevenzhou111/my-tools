@@ -96,17 +96,17 @@ const canExport = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px">
+  <div class="row mb-16">
     <button class="btn" :class="{ 'btn-primary': tab === 'toExcel' }" @click="tab = 'toExcel'">JSON → Excel / CSV</button>
     <button class="btn" :class="{ 'btn-primary': tab === 'toJson' }" @click="tab = 'toJson'">Excel → JSON</button>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <template v-if="tab === 'toExcel'">
     <div class="field">
-      <label class="field-label">JSON 数组(对象数组,每个元素一行)</label>
-      <textarea v-model="jsonInput" class="textarea" rows="8" spellcheck="false"></textarea>
+      <label class="field-label" for="jsonInput">JSON 数组(对象数组,每个元素一行)</label>
+      <textarea id="jsonInput" v-model="jsonInput" class="textarea" rows="8" spellcheck="false"></textarea>
     </div>
     <div class="row">
       <button class="btn btn-primary" :disabled="!canExport" @click="exportFile('xlsx')">⬇️ 下载 Excel (.xlsx)</button>
@@ -123,8 +123,8 @@ const canExport = computed(() => {
     </div>
 
     <template v-if="jsonResult">
-      <pre class="output" style="margin-top: 14px">{{ jsonResult }}</pre>
-      <div class="row" style="margin-top: 10px">
+      <pre class="output mt-14">{{ jsonResult }}</pre>
+      <div class="row mt-10">
         <button class="btn btn-sm" @click="copy('json', jsonResult)">
           {{ copiedKey === 'json' ? '✓ 已复制' : '复制 JSON' }}
         </button>

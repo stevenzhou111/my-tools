@@ -101,19 +101,19 @@ const result = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">正则表达式</label>
+    <label class="field-label" for="testText">正则表达式</label>
     <div class="pattern-row">
       <span class="slash">/</span>
       <input v-model="pattern" v-draft="'regex-pattern'" class="input pattern-input" spellcheck="false" placeholder="输入正则表达式" />
       <span class="slash">/{{ flagsStr }}</span>
     </div>
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <label v-for="f in FLAG_ITEMS" :key="f.id" class="check">
         <input v-model="flags" type="checkbox" :value="f.id" />{{ f.label }}
       </label>
     </div>
 
-    <details class="panel" style="margin-top: 12px">
+    <details class="panel mt-12">
       <summary>📋 常用正则速查(点击填入)</summary>
       <div class="row preset-row">
         <button v-for="p in PRESETS" :key="p.label" class="btn btn-sm" :title="p.re" @click="usePreset(p)">
@@ -123,14 +123,14 @@ const result = computed(() => {
     </details>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ 无效正则:{{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ 无效正则:{{ error }}</div>
 
   <div class="field">
     <label class="field-label">测试文本</label>
-    <textarea v-draft="'regex-text'" v-model="testText" class="textarea" rows="6" spellcheck="false"></textarea>
+    <textarea id="testText" v-draft="'regex-text'" v-model="testText" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
-  <div v-if="backtrackRisk" class="error-box" style="margin-bottom: 12px">
+  <div v-if="backtrackRisk" class="error-box mb-12">
     ⚠️ 检测到嵌套量词(如 (a+)+),这类正则可能引发灾难性回溯导致页面卡死,请谨慎测试
   </div>
 
@@ -154,7 +154,7 @@ const result = computed(() => {
       </div>
     </div>
 
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button
         v-if="result.matches.length"
         class="btn btn-sm"

@@ -58,7 +58,7 @@ function setToday() {
         <label class="field-label" for="lc-date">公历日期</label>
         <input id="lc-date" v-model="date" type="date" class="input" />
       </div>
-      <div class="row" style="margin-bottom: 12px">
+      <div class="row mb-12">
         <button class="btn btn-sm" @click="setToday">回到今天</button>
       </div>
       <template v-if="l">
@@ -72,40 +72,40 @@ function setToday() {
 
     <div class="panel">
       <h3 style="font-size: 15.5px; margin-bottom: 12px">🌙 农历 → 公历</h3>
-      <div class="row" style="margin-bottom: 12px">
+      <div class="row mb-12">
         <label class="ctrl">
-          <span class="field-label" style="margin: 0">农历年份</span>
+          <span class="field-label m-0">农历年份</span>
           <input v-model.number="ly" type="number" min="1900" max="2100" class="input num-in" />
         </label>
         <label class="ctrl">
-          <span class="field-label" style="margin: 0">月份</span>
+          <span class="field-label m-0">月份</span>
           <select v-model.number="lm" class="select num-in">
             <option v-for="m in MONTHS" :key="m" :value="m">{{ m }} 月</option>
           </select>
         </label>
         <label class="ctrl">
-          <span class="field-label" style="margin: 0">日</span>
+          <span class="field-label m-0">日</span>
           <select v-model.number="ld" class="select num-in">
             <option v-for="d in DAYS" :key="d" :value="d">{{ d }}</option>
           </select>
         </label>
       </div>
-      <label class="check" style="margin-bottom: 12px">
+      <label class="check mb-12">
         <input v-model="lLeap" type="checkbox" />
         是闰月(仅有闰月的年份可选)
       </label>
-      <button class="btn btn-primary" style="margin-bottom: 12px" @click="fromLunar">转换为公历</button>
+      <button class="btn btn-primary mb-12" @click="fromLunar">转换为公历</button>
       <div v-if="backDate" class="lunar-result">
         <div class="lunar-big">{{ backDate }}</div>
       </div>
-      <div v-else-if="backError" class="error-box" style="margin-bottom: 12px">✗ {{ backError }}</div>
+      <div v-else-if="backError" class="error-box mb-12">✗ {{ backError }}</div>
       <p class="tip">
         如:农历 2026 年正月初一 → 2026-02-17(春节)。闰月排在该数字月之后,例如闰六月晚于六月。
       </p>
     </div>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     采用 1900–2100 年农历数据表,以历年春节锚点校验;干支纪年以立春前的农历年计(此处按农历年取干支,与部分排盘工具有差异)。
     日期会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前结果。
   </p>

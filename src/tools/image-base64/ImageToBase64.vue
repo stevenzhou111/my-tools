@@ -84,10 +84,10 @@ function process(file) {
     <p class="tip">图片会被编码为 Data URL,可直接内联到 HTML / CSS 中</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="dataUrl">
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="meta">
         <span><strong>{{ fileName }}</strong></span>
         <span class="tip">大小 {{ formatSize(fileSize) }}</span>
@@ -97,7 +97,7 @@ function process(file) {
       <img :src="dataUrl" class="preview" alt="预览" />
     </div>
 
-    <div class="field" style="margin-top: 14px">
+    <div class="field mt-14">
       <div class="snippet-head">
         <label class="field-label">Data URL</label>
         <button class="btn btn-sm" @click="copy('raw', dataUrl)">

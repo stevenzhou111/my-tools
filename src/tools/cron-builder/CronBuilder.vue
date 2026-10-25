@@ -63,7 +63,7 @@ function fmtRun(d) {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button v-for="p in PRESETS" :key="p.expr" class="btn btn-sm" @click="usePreset(p)">{{ p.label }}</button>
   </div>
 
@@ -74,7 +74,7 @@ function fmtRun(d) {
 
   <div v-if="setParts(expr)" class="field-grid">
     <label v-for="(f, i) in FIELDS" :key="f.key" class="fgrid-item">
-      <span class="field-label" style="margin: 0">{{ f.label }} <span class="tip">({{ f.hint }})</span></span>
+      <span class="field-label m-0">{{ f.label }} <span class="tip">({{ f.hint }})</span></span>
       <input
         :value="parts[i]"
         class="input fgrid-input"
@@ -86,7 +86,7 @@ function fmtRun(d) {
   </div>
 
   <template v-if="parsed.ok">
-    <div class="panel" style="margin-top: 16px">
+    <div class="panel mt-16">
       <div class="field-label">含义</div>
       <p style="margin: 0 0 12px; font-size: 16.5px">{{ desc }}</p>
       <div class="field-label">接下来 5 次执行时间</div>
@@ -97,15 +97,15 @@ function fmtRun(d) {
         </div>
       </div>
     </div>
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-sm btn-primary" @click="copy('cron', expr)">
         {{ copiedKey === 'cron' ? '✓ 已复制' : '复制表达式' }}
       </button>
     </div>
   </template>
-  <div v-else class="error-box" style="margin-top: 14px">✗ {{ parsed.error }}</div>
+  <div v-else class="error-box mt-14">✗ {{ parsed.error }}</div>
 
-  <details class="panel" style="margin-top: 16px">
+  <details class="panel mt-16">
     <summary>📖 字段语法速查</summary>
     <p class="tip">
       每个字段支持:<code>*</code>(任意值)、<code>数字</code>、<code>a-b</code> 区间、<code>*/n</code>(每 n 个)、<code>a-b/n</code>(区间内每 n 个)、<code>a,b,c</code> 列表;

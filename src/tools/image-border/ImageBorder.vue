@@ -100,10 +100,10 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-14">
       <label class="ctrl">
         <span class="ctrl-label">边框颜色</span>
         <input v-model="borderColor" type="color" class="input" />
@@ -125,7 +125,7 @@ function download() {
     </div>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG</button>
   </div>
 </template>

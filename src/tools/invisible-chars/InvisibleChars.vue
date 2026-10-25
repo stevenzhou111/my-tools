@@ -27,9 +27,9 @@ function applyStrip() {
     <textarea id="iw-in" v-model="text" v-draft="'invisible-input'" class="textarea" style="min-height: 170px" spellcheck="false"></textarea>
   </div>
 
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <span class="field-label">检测</span>
-    <div class="row" style="margin-bottom: 10px">
+    <div class="row mb-10">
       <span class="chip">CRLF(\r\n)× {{ endings.crlf }}</span>
       <span class="chip">LF(\n)× {{ endings.lf }}</span>
       <span v-if="endings.dominant" class="chip strong">当前主导:{{ endings.dominant === 'crlf' ? 'Windows CRLF' : 'Unix LF' }}</span>

@@ -224,12 +224,12 @@ onUnmounted(() => {
         <button class="btn" :disabled="!swRunning" @click="swLap">🏁 计次</button>
         <button class="btn" :disabled="swElapsed === 0" @click="swReset">↺ 重置</button>
       </div>
-      <p class="tip" style="margin-top: 12px">快捷键:空格 开始/暂停 · L 计次 · R 重置(输入框内不生效)</p>
+      <p class="tip mt-12">快捷键:空格 开始/暂停 · L 计次 · R 重置(输入框内不生效)</p>
     </div>
 
-    <div v-if="laps.length" class="panel" style="margin-top: 14px">
+    <div v-if="laps.length" class="panel mt-14">
       <div class="row" style="justify-content: space-between">
-        <span class="field-label" style="margin: 0">计次({{ laps.length }})</span>
+        <span class="field-label m-0">计次({{ laps.length }})</span>
         <span class="row" style="gap: 10px">
           <span class="tip">🟢 最快 · 🔴 最慢</span>
           <button class="btn btn-sm" @click="copy('laps', lapsCsv)">
@@ -237,7 +237,7 @@ onUnmounted(() => {
           </button>
         </span>
       </div>
-      <div class="lap-list" style="margin-top: 8px">
+      <div class="lap-list mt-8">
         <div v-for="(lap, i) in laps" :key="i" class="lap-row">
           <span class="tip">#{{ laps.length - i }}</span>
           <span class="lap-split" :class="{ best: lapStats.best === i, worst: lapStats.worst === i }">
@@ -266,7 +266,7 @@ onUnmounted(() => {
             {{ p.label }}
           </button>
         </div>
-        <p v-if="cdTotal() <= 0" class="tip" style="margin-top: 12px">请先设置时长</p>
+        <p v-if="cdTotal() <= 0" class="tip mt-12">请先设置时长</p>
       </template>
       <template v-else>
         <div class="clock-display" :class="{ 'cd-done': cdDone }" role="timer" aria-live="off">
@@ -293,7 +293,7 @@ onUnmounted(() => {
         </template>
       </div>
     </div>
-    <p class="tip" style="margin-top: 10px">
+    <p class="tip mt-10">
       计时基于系统时钟而非累计间隔,把页面切到后台或电脑休眠后恢复,结果依然准确;结束后播放提示音。
     </p>
   </section>

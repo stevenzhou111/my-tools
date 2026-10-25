@@ -39,8 +39,8 @@ const basics = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">输入 URL</label>
-    <input v-model="input" class="input" spellcheck="false" placeholder="https://…" />
+    <label class="field-label" for="input">输入 URL</label>
+    <input id="input" v-model="input" class="input" spellcheck="false" placeholder="https://…" />
   </div>
 
   <div v-if="input.trim() && !parsed" class="error-box">✗ 无法解析,请检查 URL 格式</div>
@@ -57,7 +57,7 @@ const basics = computed(() => {
       </div>
     </div>
 
-    <label class="field-label" style="margin-top: 16px">查询参数({{ params.length }} 个)</label>
+    <label class="field-label mt-16">查询参数({{ params.length }} 个)</label>
     <div v-if="params.length" class="panel" style="padding: 6px 14px">
       <div v-for="(p, i) in params" :key="i" class="row-line">
         <code class="param-key">{{ p.k }}</code>

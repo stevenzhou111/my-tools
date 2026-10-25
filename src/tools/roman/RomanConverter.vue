@@ -56,14 +56,14 @@ const result = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="encode" />数字 → 罗马数字</label>
     <label class="check"><input v-model="mode" type="radio" value="decode" />罗马数字 → 数字</label>
   </div>
 
   <div class="field">
-    <label class="field-label">{{ mode === 'encode' ? '输入数字' : '输入罗马数字' }}</label>
-    <input v-model="input" class="input" :placeholder="mode === 'encode' ? '如 2026' : '如 MMXXVI'" spellcheck="false" />
+    <label class="field-label" for="input">{{ mode === 'encode' ? '输入数字' : '输入罗马数字' }}</label>
+    <input id="input" v-model="input" class="input" :placeholder="mode === 'encode' ? '如 2026' : '如 MMXXVI'" spellcheck="false" />
   </div>
 
   <div v-if="result.error" class="error-box">✗ {{ result.error }}</div>
@@ -71,7 +71,7 @@ const result = computed(() => {
   <template v-else-if="result.text">
     <label class="field-label">转换结果</label>
     <pre class="output">{{ result.text }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', result.text)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
       </button>

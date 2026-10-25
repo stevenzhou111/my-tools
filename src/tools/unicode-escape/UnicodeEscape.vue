@@ -50,7 +50,7 @@ const result = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="escape" />文本 → \uXXXX</label>
     <label class="check"><input v-model="mode" type="radio" value="unescape" />\uXXXX → 文本</label>
     <label v-if="mode === 'escape'" class="check">
@@ -58,16 +58,16 @@ const result = computed(() => {
     </label>
   </div>
 
-  <div v-if="result.error" class="error-box" style="margin-bottom: 12px">✗ {{ result.error }}</div>
+  <div v-if="result.error" class="error-box mb-12">✗ {{ result.error }}</div>
 
   <div class="field">
-    <label class="field-label">输入</label>
-    <textarea v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入</label>
+    <textarea id="input" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出</label>
   <pre class="output">{{ result.text }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', result.text)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
     </button>

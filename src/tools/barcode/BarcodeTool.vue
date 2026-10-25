@@ -71,12 +71,12 @@ function download() {
   <div class="grid-2 barcode-grid">
     <div>
       <div class="field">
-        <label class="field-label">条形码内容</label>
-        <input v-model="text" class="input" spellcheck="false" @input="generate" />
+        <label class="field-label" for="text">条形码内容</label>
+        <input id="text" v-model="text" class="input" spellcheck="false" @input="generate" />
       </div>
       <div class="field">
-        <label class="field-label">码制</label>
-        <select v-model="format" class="select" @change="generate">
+        <label class="field-label" for="format">码制</label>
+        <select id="format" v-model="format" class="select" @change="generate">
           <option v-for="f in FORMATS" :key="f.id" :value="f.id">{{ f.id }}</option>
         </select>
         <p class="tip" style="margin-top: 6px">{{ FORMATS.find((f) => f.id === format).hint }}</p>
@@ -94,13 +94,13 @@ function download() {
           <input v-model="showText" type="checkbox" @change="generate" />显示文字
         </label>
       </div>
-      <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+      <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
     </div>
 
     <div class="panel preview-panel">
       <img v-if="dataUrl" :src="dataUrl" class="barcode-img" alt="条形码" />
       <div v-else class="tip">输入内容后自动生成</div>
-      <button v-if="dataUrl" class="btn btn-primary" style="margin-top: 14px" @click="download">
+      <button v-if="dataUrl" class="btn btn-primary mt-14" @click="download">
         ⬇️ 下载 PNG
       </button>
     </div>

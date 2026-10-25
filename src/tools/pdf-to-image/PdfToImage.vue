@@ -111,9 +111,9 @@ function downloadZip() {
     <p class="tip">每一页渲染为高清图片,打包成 ZIP 下载;全部在浏览器本地处理</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="file" class="row" style="margin-top: 14px">
+  <div v-if="file" class="row mt-14">
     <label class="ctrl">
       <span class="field-label">清晰度</span>
       <select v-model.number="scale" class="select">
@@ -138,8 +138,8 @@ function downloadZip() {
     <div class="progress-bar" :style="{ width: progress + '%' }"></div>
   </div>
 
-  <div v-if="done" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 12px">
+  <div v-if="done" class="panel mt-14">
+    <div class="row mb-12">
       <strong>转换完成</strong>
       <span class="tip">耗时 {{ totalTime }} 秒 · 仅展示前 6 页预览</span>
       <button class="btn btn-primary" @click="downloadZip">⬇️ 下载全部(ZIP)</button>

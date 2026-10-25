@@ -33,8 +33,8 @@ const stats = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-model="text" class="textarea" rows="10" spellcheck="false"></textarea>
+    <label class="field-label" for="text">输入文本</label>
+    <textarea id="text" v-model="text" class="textarea" rows="10" spellcheck="false"></textarea>
   </div>
 
   <div class="stat-grid">

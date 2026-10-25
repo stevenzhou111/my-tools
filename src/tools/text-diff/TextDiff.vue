@@ -86,18 +86,18 @@ const diffText = computed(() =>
 </script>
 
 <template>
-  <div class="grid-2" style="margin-bottom: 14px">
-    <div class="field" style="margin: 0">
-      <label class="field-label">原文本</label>
-      <textarea v-draft="'diff-left'" v-model="left" class="textarea" rows="9" spellcheck="false"></textarea>
+  <div class="grid-2 mb-14">
+    <div class="field m-0">
+      <label class="field-label" for="left">原文本</label>
+      <textarea id="left" v-draft="'diff-left'" v-model="left" class="textarea" rows="9" spellcheck="false"></textarea>
     </div>
-    <div class="field" style="margin: 0">
-      <label class="field-label">新文本</label>
-      <textarea v-draft="'diff-right'" v-model="right" class="textarea" rows="9" spellcheck="false"></textarea>
+    <div class="field m-0">
+      <label class="field-label" for="right">新文本</label>
+      <textarea id="right" v-draft="'diff-right'" v-model="right" class="textarea" rows="9" spellcheck="false"></textarea>
     </div>
   </div>
 
-  <div v-if="stats" class="row stats-row" style="margin-bottom: 12px">
+  <div v-if="stats" class="row stats-row mb-12">
     <span class="chip add">+ 新增 {{ stats.added }} 行</span>
     <span class="chip del">- 删除 {{ stats.removed }} 行</span>
     <span class="chip">未变化 {{ stats.same }} 行</span>
@@ -113,7 +113,7 @@ const diffText = computed(() =>
     </div>
   </div>
 
-  <p v-if="tooLong" class="tip" style="margin-top: 10px">文本超过 {{ MAX_LINES }} 行,只对比前 {{ MAX_LINES }} 行。</p>
+  <p v-if="tooLong" class="tip mt-10">文本超过 {{ MAX_LINES }} 行,只对比前 {{ MAX_LINES }} 行。</p>
 </template>
 
 <style scoped>

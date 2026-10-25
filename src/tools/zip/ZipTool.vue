@@ -91,12 +91,12 @@ function previewText(entry) {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px">
+  <div class="row mb-16">
     <button class="btn" :class="{ 'btn-primary': tab === 'compress' }" @click="tab = 'compress'">📦 压缩为 ZIP</button>
     <button class="btn" :class="{ 'btn-primary': tab === 'extract' }" @click="tab = 'extract'">📂 解压 ZIP</button>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <!-- 压缩 -->
   <template v-if="tab === 'compress'">
@@ -105,14 +105,14 @@ function previewText(entry) {
       <div class="dz-icon">📦</div>
       <p><strong>点击选择文件</strong>(可多选,按原文件名打包)</p>
     </div>
-    <div v-if="files.length" class="panel" style="margin-top: 14px">
+    <div v-if="files.length" class="panel mt-14">
       <div v-for="(f, i) in files" :key="i" class="file-row">
         <span class="file-name">{{ f.name }}</span>
         <span class="tip">{{ (f.size / 1024).toFixed(1) }} KB</span>
         <button class="btn btn-sm" aria-label="移除" @click="files.splice(i, 1)">✕</button>
       </div>
     </div>
-    <div v-if="files.length" class="row" style="margin-top: 14px">
+    <div v-if="files.length" class="row mt-14">
       <button class="btn btn-primary" :disabled="busy" @click="compress">
         {{ busy ? '压缩中…' : `📦 打包 ${files.length} 个文件` }}
       </button>
@@ -128,7 +128,7 @@ function previewText(entry) {
       <p><strong>点击选择 ZIP 文件</strong> 或拖拽到此处</p>
       <p class="tip">解压在浏览器本地完成,可选择其中文件单独下载</p>
     </div>
-    <div v-if="entries.length" class="panel" style="margin-top: 14px">
+    <div v-if="entries.length" class="panel mt-14">
       <label class="field-label">共 {{ entries.length }} 个文件</label>
       <details v-for="(en, i) in entries" :key="i" class="entry">
         <summary>

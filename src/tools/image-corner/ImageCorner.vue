@@ -111,19 +111,19 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
+  <div v-if="image" class="panel mt-14">
     <div class="field">
-      <label class="field-label">圆角程度:{{ radius }}%(100% 即为圆形)</label>
-      <input v-model.number="radius" type="range" min="0" max="100" step="1" style="width: 100%" />
+      <label class="field-label" for="radius">圆角程度:{{ radius }}%(100% 即为圆形)</label>
+      <input id="radius" v-model.number="radius" type="range" min="0" max="100" step="1" style="width: 100%" />
     </div>
     <div class="preview-wrap">
       <img :src="previewUrl" class="preview" alt="圆角预览" />
     </div>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG(透明背景)</button>
   </div>
 </template>

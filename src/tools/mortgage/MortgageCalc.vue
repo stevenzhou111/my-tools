@@ -133,7 +133,7 @@ const cards = computed(() => {
     </div>
 
     <div class="panel loan-panel" :class="{ dim: !useFund }">
-      <label class="check" style="margin-bottom: 12px">
+      <label class="check mb-12">
         <input v-model="useFund" type="checkbox" />
         <h3 style="font-size: 16px; user-select: none">🏛️ 公积金贷款(可选)</h3>
       </label>
@@ -155,17 +155,17 @@ const cards = computed(() => {
     </div>
   </div>
 
-  <div v-if="result.error" class="error-box" style="margin-top: 14px">✗ {{ result.error }}</div>
+  <div v-if="result.error" class="error-box mt-14">✗ {{ result.error }}</div>
 
   <template v-else>
-    <div class="stat-grid" style="margin-top: 16px">
+    <div class="stat-grid mt-16">
       <div v-for="c in cards" :key="c.label" class="panel stat-card">
         <div class="stat-value" :class="{ strong: c.strong }">{{ c.value }}</div>
         <div class="stat-label">{{ c.label }}</div>
       </div>
     </div>
 
-    <p class="tip" style="margin-top: 14px">
+    <p class="tip mt-14">
       <template v-if="method === 'annuity'">
         当前是等额本息:每月还款额固定、好规划;换成
         <a href="#" @click.prevent="method = 'principal'">等额本金</a>
@@ -181,7 +181,7 @@ const cards = computed(() => {
       </template>
     </p>
 
-    <details class="panel" style="margin-top: 14px">
+    <details class="panel mt-14">
       <summary>📅 按年还款明细({{ years.length }} 年)</summary>
       <div class="table-wrap">
         <table class="year-table">
@@ -207,35 +207,35 @@ const cards = computed(() => {
       </div>
     </details>
 
-    <details class="panel" style="margin-top: 14px">
+    <details class="panel mt-14">
       <summary>⏫ 提前还款测算</summary>
       <template v-if="prepay?.combo">
-        <p class="tip" style="margin-top: 12px">
+        <p class="tip mt-12">
           组合贷款两笔利率不同,提前还款的省息取决于先还哪一笔,本工具不给近似结果;请分开单笔测算参考。
         </p>
       </template>
       <template v-else-if="prepay">
-        <div class="row" style="margin-top: 12px">
+        <div class="row mt-12">
           <label class="pp-ctrl">
-            <span class="field-label" style="margin: 0">第几期后还款</span>
+            <span class="field-label m-0">第几期后还款</span>
             <input v-model.number="prepayAfter" class="input pp-input" type="number" min="1" :max="years1 * 12 - 1" />
           </label>
           <label class="pp-ctrl">
-            <span class="field-label" style="margin: 0">一次性还款(万)</span>
+            <span class="field-label m-0">一次性还款(万)</span>
             <input v-model.number="prepayExtra" class="input pp-input" type="number" min="0.1" step="1" />
           </label>
         </div>
-        <div v-if="prepay.error" class="error-box" style="margin-top: 10px">✗ {{ prepay.error }}</div>
+        <div v-if="prepay.error" class="error-box mt-10">✗ {{ prepay.error }}</div>
         <template v-else-if="prepay.data">
-          <p class="tip" style="margin-top: 10px">
+          <p class="tip mt-10">
             第 {{ prepayAfter }} 期后剩余本金 {{ fmt(prepay.data.balanceAfter) }} 元;一次性还
             {{ fmt(prepayExtra) }} 万后,两种走法:
           </p>
-          <div v-if="prepay.data.settled" class="tip" style="margin-top: 8px">
+          <div v-if="prepay.data.settled" class="tip mt-8">
             🎉 该金额已覆盖全部剩余本金,贷款一次结清,共节省利息
             <strong>{{ fmt(prepay.data.savedInterest) }}</strong> 元。
           </div>
-          <div v-else class="grid-2" style="margin-top: 8px">
+          <div v-else class="grid-2 mt-8">
             <div class="pp-card">
               <div class="pp-title">期限不变 · 减月供</div>
               <div class="pp-line">新月供 <strong>{{ fmt(prepay.data.keepTerm.firstPayment) }}</strong> 元</div>
@@ -251,12 +251,12 @@ const cards = computed(() => {
               <div class="pp-save">比不提前省 {{ fmt(prepay.data.keepPay.savedInterest) }} 元</div>
             </div>
           </div>
-          <p class="tip" style="margin-top: 8px">一般「缩期限」比「减月供」省更多利息,但月供压力不变;实际规则以贷款银行执行为准(部分银行有提前还款次数 / 违约金限制)。</p>
+          <p class="tip mt-8">一般「缩期限」比「减月供」省更多利息,但月供压力不变;实际规则以贷款银行执行为准(部分银行有提前还款次数 / 违约金限制)。</p>
         </template>
       </template>
     </details>
 
-    <p class="tip" style="margin-top: 12px">
+    <p class="tip mt-12">
       计算完全在本地完成;利率与额度请以银行 / 公积金中心实际审批为准,结果仅供参考。
       分享本页链接会带上你填写的金额与利率(不含其他隐私)。
     </p>

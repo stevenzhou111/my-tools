@@ -90,7 +90,7 @@ onMounted(initCanvas)
 
 <template>
   <div class="panel">
-    <div class="row" style="margin-bottom: 12px">
+    <div class="row mb-12">
       <button
         v-for="c in COLORS"
         :key="c"
@@ -127,7 +127,7 @@ onMounted(initCanvas)
       @pointerup="endDraw"
       @pointerleave="endDraw"
     ></canvas>
-    <p class="tip" style="margin-top: 10px">支持鼠标与触屏手写;画布内容仅保存在本地。</p>
+    <p class="tip mt-10">支持鼠标与触屏手写;画布内容仅保存在本地。</p>
   </div>
 </template>
 

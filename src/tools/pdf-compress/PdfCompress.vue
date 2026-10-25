@@ -96,9 +96,9 @@ function download() {
     <p class="tip">通过重采样页面图片的方式压缩体积;⚠️ 文字将变为图片,不可选中/搜索</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="file" class="row" style="margin-top: 14px">
+  <div v-if="file" class="row mt-14">
     <label class="ctrl">
       <span class="field-label">渲染倍率(越小体积越小)</span>
       <select v-model.number="scale" class="select">
@@ -124,7 +124,7 @@ function download() {
     <div class="progress-bar" :style="{ width: progress + '%' }"></div>
   </div>
 
-  <div v-if="resultBlob" class="panel" style="margin-top: 14px">
+  <div v-if="resultBlob" class="panel mt-14">
     <div class="row">
       <strong>压缩完成</strong>
       <span class="tip">耗时 {{ totalTime }} 秒</span>

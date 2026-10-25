@@ -73,15 +73,15 @@ function applyPreset(name) {
   <div class="field">
     <label class="field-label" for="sort-in">原文(每行一条)</label>
     <textarea id="sort-in" v-model="text" class="textarea" style="min-height: 160px" placeholder="粘贴多行文本,如名单、清单、日志…" spellcheck="false"></textarea>
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button class="btn btn-sm" @click="text = SAMPLE">填入示例</button>
       <button class="btn btn-sm" :disabled="!text" @click="text = ''">清空</button>
     </div>
   </div>
 
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <span class="field-label">操作(自上而下依次生效)</span>
-    <div class="row" style="margin-bottom: 10px" role="radiogroup" aria-label="排序方式">
+    <div class="row mb-10" role="radiogroup" aria-label="排序方式">
       <button
         v-for="m in MODES"
         :key="m.id"
@@ -111,7 +111,7 @@ function applyPreset(name) {
         <label class="check"><input v-model="numPad" type="checkbox" />补零对齐</label>
       </template>
     </div>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="applyPreset('dedupe-sort')">一键:排序 + 去重 + 去空行</button>
     </div>
   </div>
@@ -122,7 +122,7 @@ function applyPreset(name) {
       <span v-if="text" class="tip">{{ changed ? '已整理' : '没有变化' }}</span>
     </label>
     <textarea id="sort-out" class="textarea" style="min-height: 160px" readonly :value="output" placeholder="结果实时生成…"></textarea>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('sort', output)">
         {{ copiedKey === 'sort' ? '✓ 已复制' : '复制结果' }}
       </button>

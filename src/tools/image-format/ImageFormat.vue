@@ -108,10 +108,10 @@ function download() {
     <p class="tip">PNG / JPG / WebP 互转,支持 HEIC 之外的常见格式,全程本地转换</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-14">
       <label class="ctrl">
         <span class="field-label">目标格式</span>
         <select v-model="target" class="select">
@@ -133,7 +133,7 @@ function download() {
     <img v-if="previewUrl" :src="previewUrl" class="preview" alt="转换预览" />
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载转换结果</button>
     <span v-if="target === 'image/jpeg'" class="tip">JPG 无透明通道,已自动铺白底</span>
   </div>

@@ -88,20 +88,20 @@ function swap() {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="encrypt" />加密(明文 → 密文)</label>
     <label class="check"><input v-model="mode" type="radio" value="decrypt" />解密(密文 → 明文)</label>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <div class="field">
-    <label class="field-label">{{ mode === 'encrypt' ? '明文' : '密文(Base64)' }}</label>
-    <textarea v-model="text" class="textarea" rows="4" spellcheck="false"></textarea>
+    <label class="field-label" for="text">{{ mode === 'encrypt' ? '明文' : '密文(Base64)' }}</label>
+    <textarea id="text" v-model="text" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <div class="field">
-    <label class="field-label">密码(PBKDF2 派生 AES-256-GCM 密钥)</label>
+    <label class="field-label" for="output">密码(PBKDF2 派生 AES-256-GCM 密钥)</label>
     <div class="row" style="flex-wrap: nowrap">
       <input v-model="password" type="password" class="input" placeholder="输入密码" />
       <button class="btn btn-primary" :disabled="busy" @click="run">{{ mode === 'encrypt' ? '🔒 加密' : '🔓 解密' }}</button>
@@ -110,7 +110,7 @@ function swap() {
 
   <div class="field">
     <label class="field-label">{{ mode === 'encrypt' ? '密文(可分享给知道密码的人)' : '解密结果' }}</label>
-    <textarea v-model="output" class="textarea" rows="4" spellcheck="false"></textarea>
+    <textarea id="output" v-model="output" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <div class="row">
@@ -120,7 +120,7 @@ function swap() {
     <button v-if="output" class="btn btn-sm" @click="swap">⇄ 将输出放回输入并切换模式</button>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     算法为浏览器原生 Web Crypto(AES-256-GCM + PBKDF2-SHA256,12 万次迭代);忘记密码无法找回,密码不会离开你的设备。
   </p>
 </template>

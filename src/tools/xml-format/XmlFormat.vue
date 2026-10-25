@@ -23,11 +23,11 @@ const SAMPLE = '<catalog><book id="bk101"><author>葛拉汉姆</author><price>44
 
 <template>
   <div class="field">
-    <label class="field-label">输入 XML</label>
-    <textarea v-draft="'xml-input'" v-model="input" class="textarea" rows="8" spellcheck="false" placeholder="粘贴 XML…"></textarea>
+    <label class="field-label" for="input">输入 XML</label>
+    <textarea id="input" v-draft="'xml-input'" v-model="input" class="textarea" rows="8" spellcheck="false" placeholder="粘贴 XML…"></textarea>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="format" />格式化(美化)</label>
     <label class="check"><input v-model="mode" type="radio" value="compact" />压缩(单行)</label>
     <label v-if="mode === 'format'" class="check">
@@ -45,7 +45,7 @@ const SAMPLE = '<catalog><book id="bk101"><author>葛拉汉姆</author><price>44
   <template v-else-if="result.text">
     <label class="field-label">结果({{ result.text.length }} 字符)</label>
     <pre class="output">{{ result.text }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" @click="copy('xml', result.text)">
         {{ copiedKey === 'xml' ? '✓ 已复制' : '复制结果' }}
       </button>

@@ -51,12 +51,12 @@ function clearAll() {
 
 <template>
   <div class="field">
-    <label class="field-label">
+    <label class="field-label" for="input">
       输入 JSON
       <span v-if="status === 'ok'" class="badge ok">✓ 合法 JSON</span>
       <span v-else-if="status === 'bad'" class="badge bad">✗ 语法错误</span>
     </label>
-    <textarea
+    <textarea id="input"
       v-draft="'json'"
       v-model="input"
       class="textarea"
@@ -66,7 +66,7 @@ function clearAll() {
     ></textarea>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button class="btn btn-primary" @click="run(indent)">格式化({{ indent }} 空格)</button>
     <select v-model="indent" class="select" style="width: auto">
       <option :value="2">2 空格</option>
@@ -81,7 +81,7 @@ function clearAll() {
     <button class="btn" @click="clearAll">清空</button>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <template v-if="output">
     <label class="field-label">结果</label>

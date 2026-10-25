@@ -93,20 +93,20 @@ async function load(f) {
     <p class="tip">查看尺寸、拍摄参数(相机/光圈/ISO)与 GPS 位置;JPG 原图信息最全</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
-  <p v-if="busy" class="tip" style="margin-top: 10px">解析中…</p>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
+  <p v-if="busy" class="tip mt-10">解析中…</p>
 
   <template v-if="file">
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="base-row"><strong>{{ file.name }}</strong></div>
       <div class="base-row tip">类型 {{ file.type || '未知' }} · 大小 {{ formatSize(file.size) }}<template v-if="imageDims"> · 尺寸 {{ imageDims }}</template></div>
     </div>
 
-    <div v-if="!hasExif" class="tip" style="margin-top: 12px">
+    <div v-if="!hasExif" class="tip mt-12">
       该图片不含 EXIF 信息 —— 可能是截图、经社交软件压缩过,或拍摄时关闭了位置等信息。
     </div>
 
-    <div v-else class="panel" style="margin-top: 12px">
+    <div v-else class="panel mt-12">
       <label class="field-label">EXIF 拍摄信息</label>
       <div v-for="r in exifRows" :key="r.label" class="exif-row">
         <span class="exif-label">{{ r.label }}</span>
@@ -114,17 +114,17 @@ async function load(f) {
       </div>
     </div>
 
-    <div v-if="gps" class="panel" style="margin-top: 12px">
+    <div v-if="gps" class="panel mt-12">
       <label class="field-label">📍 拍摄位置</label>
       <div class="exif-row">
         <span class="exif-label">经纬度</span>
         <code>{{ gps.lat }}, {{ gps.lon }}</code>
       </div>
-      <div class="row" style="margin-top: 8px">
+      <div class="row mt-8">
         <a :href="`https://uri.amap.com/marker?position=${gps.lon},${gps.lat}`" target="_blank" rel="noopener noreferrer" class="btn btn-sm">高德地图查看</a>
         <a :href="`https://www.google.com/maps?q=${gps.lat},${gps.lon}`" target="_blank" rel="noopener noreferrer" class="btn btn-sm">Google 地图</a>
       </div>
-      <p class="tip" style="margin-top: 8px">⚠️ 分享原图会泄露拍摄位置,发图前建议抹除。</p>
+      <p class="tip mt-8">⚠️ 分享原图会泄露拍摄位置,发图前建议抹除。</p>
     </div>
   </template>
 </template>

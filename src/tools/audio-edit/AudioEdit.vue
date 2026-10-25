@@ -195,13 +195,13 @@ onUnmounted(() => {
     <p class="tip">裁剪片段、倒放、调音量,导出 WAV,全程本地处理</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
-  <div v-if="busy" class="tip" style="margin-top: 10px">解码中…</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
+  <div v-if="busy" class="tip mt-10">解码中…</div>
 
   <template v-if="buffer">
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <canvas ref="waveEl" width="900" height="120" class="wave" role="img" aria-label="音频波形图,选择区间用下方滑块调整"></canvas>
-      <div class="row" style="margin-top: 10px">
+      <div class="row mt-10">
         <label class="ctrl-inline">
           起点 <strong>{{ fmt(selStart) }}</strong>
           <input v-model.number="selStart" type="range" min="0" :max="duration" step="0.05" />
@@ -211,14 +211,14 @@ onUnmounted(() => {
           <input v-model.number="selEnd" type="range" min="0" :max="duration" step="0.05" />
         </label>
       </div>
-      <div class="row" style="margin-top: 10px">
+      <div class="row mt-10">
         <label class="ctrl-inline">音量 <strong>{{ volume }}%</strong>
           <input v-model.number="volume" type="range" min="0" max="300" step="10" />
         </label>
         <label class="check"><input v-model="reversed" type="checkbox" />倒放</label>
         <span class="tip">选中 {{ fmt(selectedDuration) }} · 导出约 {{ (outputSize / 1024 / 1024).toFixed(1) }} MB</span>
       </div>
-      <div class="row" style="margin-top: 14px">
+      <div class="row mt-14">
         <button class="btn" @click="preview">▶ 试听效果</button>
         <button class="btn btn-primary" @click="exportWav">⬇️ 导出 WAV</button>
         <button class="btn" @click="resetAll">↺ 恢复原始</button>

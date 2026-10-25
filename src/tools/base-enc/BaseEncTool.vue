@@ -38,7 +38,7 @@ const placeholder = computed(() =>
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px" role="tablist">
+  <div class="row mb-16" role="tablist">
     <button class="btn" :class="{ 'btn-primary': mode === 'encode' }" role="tab" :aria-selected="mode === 'encode'" @click="mode = 'encode'">
       文本 → 编码
     </button>
@@ -75,12 +75,12 @@ const placeholder = computed(() =>
     <textarea id="base-in" v-model="input" v-draft="'base-enc-input'" class="textarea" style="min-height: 110px" :placeholder="placeholder" spellcheck="false"></textarea>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 14px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-14">✗ {{ error }}</div>
 
   <div class="field">
     <label class="field-label" for="base-out">{{ mode === 'encode' ? '编码结果' : '解码结果' }}</label>
     <textarea id="base-out" class="textarea" style="min-height: 110px" readonly :value="output" placeholder="结果实时生成…"></textarea>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('base', output)">
         {{ copiedKey === 'base' ? '✓ 已复制' : '复制结果' }}
       </button>

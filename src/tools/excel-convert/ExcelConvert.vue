@@ -171,7 +171,7 @@ function download() {
     <p class="tip">转换为 JSON / CSV / Markdown / HTML / TXT,全部本地解析</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="workbook">
     <div class="row" style="margin: 14px 0">
@@ -179,14 +179,14 @@ function download() {
         <input v-model="format" type="radio" :value="f.id" />{{ f.label }}
       </label>
     </div>
-    <div class="row" style="margin-bottom: 12px">
+    <div class="row mb-12">
       <span class="tip">
         工作簿共 {{ sheetNames.length }} 个工作表:{{ sheetNames.join('、') }}(当前「{{ activeSheet }}」约 {{ rowCount }} 行)
       </span>
     </div>
 
     <pre class="output">{{ previewOutput }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', output)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制内容' }}
       </button>

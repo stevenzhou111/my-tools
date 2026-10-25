@@ -84,7 +84,7 @@ generate()
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label v-for="(g, key) in GENERATORS" :key="key" class="check">
       <input v-model="fields[key]" type="checkbox" @change="generate" />{{ g.label }}
     </label>
@@ -115,7 +115,7 @@ generate()
       </table>
     </div>
 
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-sm" @click="copy('csv', [Object.keys(rows[0]).join(','), ...rows.map((r) => Object.values(r).join(','))].join('\n'))">
         {{ copiedKey === 'csv' ? '✓ 已复制' : '复制 CSV' }}
       </button>
@@ -124,7 +124,7 @@ generate()
       </button>
     </div>
 
-    <p class="tip" style="margin-top: 10px">数据完全随机生成(身份证号校验位合法),仅供开发测试填充使用。</p>
+    <p class="tip mt-10">数据完全随机生成(身份证号校验位合法),仅供开发测试填充使用。</p>
   </template>
 </template>
 

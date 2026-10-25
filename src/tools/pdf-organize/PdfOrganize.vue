@@ -145,12 +145,12 @@ async function run(op) {
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="docRef" class="panel" style="margin-top: 14px">
+  <div v-if="docRef" class="panel mt-14">
     <div class="field">
-      <label class="field-label">页码范围(如 1-3,5,8-9;重排时允许任意顺序与重复)</label>
-      <input v-model="rangeText" class="input" spellcheck="false" />
+      <label class="field-label" for="rangeText">页码范围(如 1-3,5,8-9;重排时允许任意顺序与重复)</label>
+      <input id="rangeText" v-model="rangeText" class="input" spellcheck="false" />
     </div>
     <div class="row">
       <button class="btn btn-primary" :disabled="busy" @click="run('extract')">📤 提取所选页面</button>

@@ -37,16 +37,16 @@ const output = computed(() => {
       <input v-model="mode" type="radio" :value="m.id" />{{ m.label }}
     </label>
   </div>
-  <p class="tip" style="margin-bottom: 14px">{{ MODES.find((m) => m.id === mode).hint }}</p>
+  <p class="tip mb-14">{{ MODES.find((m) => m.id === mode).hint }}</p>
 
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入文本</label>
+    <textarea id="input" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出结果</label>
   <pre class="output">{{ output }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
     </button>

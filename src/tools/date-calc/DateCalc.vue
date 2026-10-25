@@ -57,12 +57,12 @@ function setToday(which) {
       <h3>日期差计算</h3>
       <div class="grid-2">
         <div class="field">
-          <label class="field-label">起始日期({{ diff.startName }})</label>
-          <input v-model="start" type="date" class="input" />
+          <label class="field-label" for="start">起始日期({{ diff.startName }})</label>
+          <input id="start" v-model="start" type="date" class="input" />
         </div>
         <div class="field">
-          <label class="field-label">结束日期({{ diff.endName }})</label>
-          <div class="row" style="gap: 8px">
+          <label class="field-label" for="deltaDir">结束日期({{ diff.endName }})</label>
+          <div class="row gap-8">
             <input v-model="end" type="date" class="input" />
             <button class="btn btn-sm" @click="setToday('end')">今天</button>
           </div>
@@ -92,7 +92,7 @@ function setToday(which) {
       <h3>日期推算</h3>
       <div class="field">
         <label class="field-label">基于日期</label>
-        <div class="row" style="gap: 8px">
+        <div class="row gap-8">
           <input v-model="start" type="date" class="input" />
           <button class="btn btn-sm" @click="setToday('start')">今天</button>
         </div>
@@ -100,17 +100,17 @@ function setToday(which) {
       <div class="grid-2">
         <div class="field">
           <label class="field-label">方向</label>
-          <select v-model="deltaDir" class="select">
+          <select id="deltaDir" v-model="deltaDir" class="select">
             <option value="plus">之后</option>
             <option value="minus">之前</option>
           </select>
         </div>
         <div class="field">
-          <label class="field-label">天数</label>
-          <input v-model="delta" type="number" class="input" />
+          <label class="field-label" for="delta">天数</label>
+          <input id="delta" v-model="delta" type="number" class="input" />
         </div>
       </div>
-      <div class="row" style="margin-bottom: 12px">
+      <div class="row mb-12">
         <label class="check"><input v-model="deltaMode" type="radio" value="calendar" />按日历日</label>
         <label class="check"><input v-model="deltaMode" type="radio" value="workday" />按工作日(跳过周六日)</label>
       </div>
@@ -118,7 +118,7 @@ function setToday(which) {
       <div v-if="shifted.error" class="error-box">✗ {{ shifted.error }}</div>
       <template v-else>
         <label class="field-label">结果</label>
-        <div class="row" style="gap: 8px">
+        <div class="row gap-8">
           <pre class="output" style="flex: 1">{{ shifted.date }} {{ shifted.name }}</pre>
           <button class="btn btn-sm" @click="copy('date', shifted.date)">
             {{ copiedKey === 'date' ? '✓ 已复制' : '复制' }}

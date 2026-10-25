@@ -70,14 +70,14 @@ const RESULTS = computed(() => {
       <h3>颜色设置</h3>
       <div class="field">
         <label class="field-label">前景色(文字)</label>
-        <div class="row" style="gap: 8px">
+        <div class="row gap-8">
           <input :value="fg" type="color" class="input color-input" aria-label="前景色选择器" @input="onFgInput" />
           <input v-model="fg" class="input" spellcheck="false" aria-label="前景色十六进制值" />
         </div>
       </div>
       <div class="field">
         <label class="field-label">背景色</label>
-        <div class="row" style="gap: 8px">
+        <div class="row gap-8">
           <input :value="bg" type="color" class="input color-input" aria-label="背景色选择器" @input="onBgInput" />
           <input v-model="bg" class="input" spellcheck="false" aria-label="背景色十六进制值" />
         </div>
@@ -106,7 +106,7 @@ const RESULTS = computed(() => {
           <p style="font-size: 16px; margin: 4px 0">普通文字:文本与背景的搭配是否易读,肉眼确认一遍最稳妥。</p>
           <p style="font-size: 22px; font-weight: 700; margin: 4px 0">大文字 22px Bold 适用于 ≥18pt 标准。</p>
         </div>
-        <div class="row" style="margin-top: 12px">
+        <div class="row mt-12">
           <button class="btn btn-sm" @click="copy('cc', `${fg} on ${bg} = ${ratioText}:1`)">
             {{ copiedKey === 'cc' ? '✓ 已复制' : '复制结果' }}
           </button>

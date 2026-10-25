@@ -58,7 +58,7 @@ generate()
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="ctrl">
       <span class="field-label">最小值</span>
       <input v-model.number="min" type="number" class="input num-input" />
@@ -76,10 +76,10 @@ generate()
     <button class="btn btn-primary" style="margin-top: 20px" @click="generate">🎲 重新生成</button>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <pre v-if="list.length" class="output">{{ list.join('\n') }}</pre>
-  <div v-if="list.length" class="row" style="margin-top: 10px">
+  <div v-if="list.length" class="row mt-10">
     <button class="btn btn-sm" @click="copy('nl', list.join('\n'))">
       {{ copiedKey === 'nl' ? '✓ 已复制' : '复制(换行分隔)' }}
     </button>

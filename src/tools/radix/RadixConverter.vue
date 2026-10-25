@@ -46,14 +46,14 @@ const results = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <div class="field" style="margin: 0; flex: 1; min-width: 200px">
-      <label class="field-label">数值</label>
-      <input v-model="input" v-draft="'radix-input'" class="input" placeholder="输入要转换的数字" spellcheck="false" />
+      <label class="field-label" for="input">数值</label>
+      <input id="input" v-model="input" v-draft="'radix-input'" class="input" placeholder="输入要转换的数字" spellcheck="false" />
     </div>
     <div class="field" style="margin: 0; width: 160px">
-      <label class="field-label">当前进制</label>
-      <select v-model.number="from" class="select">
+      <label class="field-label" for="from">当前进制</label>
+      <select id="from" v-model.number="from" class="select">
         <option v-for="b in BASES" :key="b.id" :value="b.id">{{ b.label }} ({{ b.id }})</option>
       </select>
     </div>
@@ -73,7 +73,7 @@ const results = computed(() => {
     </div>
   </div>
 
-  <p class="tip" style="margin-top: 12px">基于 BigInt 实现,支持任意大的整数;支持 0x / 0b / 0o 前缀。</p>
+  <p class="tip mt-12">基于 BigInt 实现,支持任意大的整数;支持 0x / 0b / 0o 前缀。</p>
 </template>
 
 <style scoped>

@@ -128,7 +128,7 @@ onUnmounted(() => {
   <div v-if="error" class="error-box">✗ {{ error }}</div>
 
   <template v-if="frames.length">
-    <div class="row" style="margin: 12px 0">
+    <div class="row my-12">
       <label class="check">
         尺寸
         <select v-model.number="size" class="select" style="width: 100px">
@@ -166,7 +166,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="row" style="margin-top: 14px">
+    <div class="row mt-14">
       <button class="btn btn-primary" :disabled="busy" @click="generate">
         {{ busy ? '合成中…' : '预览动图' }}
       </button>
@@ -177,7 +177,7 @@ onUnmounted(() => {
         <img :src="resultUrl" alt="GIF 预览" style="max-width: 100%; image-rendering: pixelated" />
         <p class="tip">{{ size }}×{{ size }} · {{ (resultSize / 1024).toFixed(1) }} KB</p>
       </div>
-      <div class="row" style="margin-top: 10px">
+      <div class="row mt-10">
         <button class="btn btn-primary" :disabled="busy" @click="downloadGif">下载 GIF</button>
       </div>
     </template>

@@ -49,7 +49,7 @@ const error = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="encode" />编码(文本 → Base64)</label>
     <label class="check"><input v-model="mode" type="radio" value="decode" />解码(Base64 → 文本)</label>
     <label class="check">
@@ -59,16 +59,16 @@ const error = computed(() => {
   </div>
 
   <div class="field">
-    <label class="field-label">输入</label>
-    <textarea v-draft="'base64'" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入</label>
+    <textarea id="input" v-draft="'base64'" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <template v-if="output">
     <label class="field-label">输出</label>
     <pre class="output">{{ output }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', output)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
       </button>

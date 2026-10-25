@@ -40,8 +40,8 @@ const groups = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">User-Agent 字符串</label>
-    <textarea v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+    <label class="field-label" for="input">User-Agent 字符串</label>
+    <textarea id="input" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <div class="ua-grid">
@@ -51,7 +51,7 @@ const groups = computed(() => {
     </div>
   </div>
 
-  <div class="row" style="margin-top: 12px">
+  <div class="row mt-12">
     <button class="btn btn-sm" @click="copy('ua', input)">
       {{ copiedKey === 'ua' ? '✓ 已复制' : '复制 UA 字符串' }}
     </button>

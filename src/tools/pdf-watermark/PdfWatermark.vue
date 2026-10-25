@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
+import { rotatedSize, uprightAnchor } from '@/utils/pdfRotate'
 
 const fileInput = ref(null)
 const file = ref(null)
@@ -44,16 +45,22 @@ async function apply() {
     const font = await doc.embedFont(StandardFonts.HelveticaBold)
     const color = rgb(0.55, 0.55, 0.6)
     for (const page of doc.getPages()) {
-      const { width, height } = page.getSize()
+      // 在"显示坐标系"里居中定位,再映射回未旋转空间;总旋转 = 用户角度 + 页面 /Rotate
+      // (补偿后扫描件上水印同样直立居中,不随页面横躺)
+      const { width: dispW, height: dispH } = rotatedSize(page)
+      const pageRot = ((page.getRotation().angle % 360) + 360) % 360
       const textWidth = font.widthOfTextAtSize(text.value, fontSize.value)
+      const xd = Math.max(0, (dispW - textWidth) / 2)
+      const yd = dispH / 2 - fontSize.value / 2
+      const anchor = uprightAnchor(page, xd, yd)
       page.drawText(text.value, {
-        x: Math.max(0, (width - textWidth) / 2),
-        y: height / 2 - fontSize.value / 2,
+        x: anchor.x,
+        y: anchor.y,
         size: fontSize.value,
         font,
         color,
         opacity: opacity.value,
-        rotate: degrees(angle.value),
+        rotate: degrees(angle.value + pageRot),
       })
     }
     downloadBlob(new Blob([await doc.save()], { type: 'application/pdf' }), file.value.name.replace(/\.pdf$/i, '') + '-水印.pdf')
@@ -73,10 +80,10 @@ async function apply() {
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="docRef" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="docRef" class="panel mt-14">
+    <div class="row mb-14">
       <label class="ctrl" style="flex: 1">
         <span class="field-label">水印文字(建议英文)</span>
         <input v-model="text" class="input" spellcheck="false" />

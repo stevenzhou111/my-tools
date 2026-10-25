@@ -221,29 +221,29 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label v-for="t in TYPES" :key="t.id" class="check">
       <input v-model="chartType" type="radio" :value="t.id" />{{ t.name }}
     </label>
   </div>
 
   <div class="field">
-    <label class="field-label">图表标题</label>
-    <input v-model="title" class="input" spellcheck="false" />
+    <label class="field-label" for="title">图表标题</label>
+    <input id="title" v-model="title" class="input" spellcheck="false" />
   </div>
 
   <div class="field">
-    <label class="field-label">
+    <label class="field-label" for="input">
       数据(每行一条,逗号分隔;第一列是标签,其余列是数值;首行非数字时视为系列名)
     </label>
-    <textarea v-model="input" class="textarea" rows="7" spellcheck="false"></textarea>
+    <textarea id="input" v-model="input" class="textarea" rows="7" spellcheck="false"></textarea>
   </div>
 
   <div class="panel chart-panel">
     <div ref="chartEl" class="chart"></div>
   </div>
 
-  <div class="row" style="margin-top: 12px">
+  <div class="row mt-12">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG</button>
     <span class="tip">共 {{ parsed.labels.length }} 行数据 · {{ parsed.series.length }} 个系列</span>
   </div>

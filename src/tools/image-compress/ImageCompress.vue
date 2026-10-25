@@ -221,9 +221,9 @@ const totals = () => {
     <p v-else class="tip">点击或拖拽可继续添加图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin: 12px 0">✗ {{ error }}</div>
+  <div v-if="error" class="error-box my-12">✗ {{ error }}</div>
 
-  <div v-if="items.length" class="controls panel" style="margin-top: 14px">
+  <div v-if="items.length" class="controls panel mt-14">
     <div class="row">
       <label class="ctrl">
         <span class="ctrl-label">输出格式</span>
@@ -272,7 +272,7 @@ const totals = () => {
     </div>
   </div>
 
-  <div v-if="items.length" class="row" style="margin-top: 14px">
+  <div v-if="items.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busyCount > 0" @click="downloadZip">
       ⬇️ 打包下载全部(ZIP)
     </button>

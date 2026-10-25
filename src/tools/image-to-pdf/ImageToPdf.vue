@@ -98,9 +98,9 @@ async function convert() {
     <p class="tip">每张图片一页,页面尺寸与图片一致,按列表顺序合并</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="items.length" class="panel" style="margin-top: 14px">
+  <div v-if="items.length" class="panel mt-14">
     <label class="field-label">图片列表({{ items.length }})</label>
     <div v-for="(it, i) in items" :key="i" class="img-row">
       <img :src="it.url" class="thumb" alt="" />
@@ -111,7 +111,7 @@ async function convert() {
     </div>
   </div>
 
-  <div v-if="items.length" class="row" style="margin-top: 14px">
+  <div v-if="items.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="convert">
       {{ busy ? '转换中…' : `🖨️ 转换为 PDF(${items.length} 张图)` }}
     </button>

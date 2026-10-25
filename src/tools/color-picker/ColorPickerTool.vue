@@ -108,10 +108,10 @@ function copyPicked() {
     <p><strong>点击选择图片</strong> 或拖拽图片到此处,然后在图上点击吸取颜色</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="image">
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <canvas
         ref="canvasEl"
         class="pick-canvas"
@@ -120,10 +120,10 @@ function copyPicked() {
         :class="{ crosshair: true }"
         @click="onClickCanvas"
       ></canvas>
-      <p class="tip" style="margin-top: 8px">👆 在图片上点击任意位置吸取颜色;点击色块可加入下方色板。</p>
+      <p class="tip mt-8">👆 在图片上点击任意位置吸取颜色;点击色块可加入下方色板。</p>
     </div>
 
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="row">
         <div class="swatch-big" :style="{ background: picked ? hex(picked) : 'var(--bg-soft)' }"></div>
         <div v-if="picked" class="picked-info">
@@ -139,7 +139,7 @@ function copyPicked() {
       </div>
     </div>
 
-    <div v-if="palette.length" class="panel" style="margin-top: 14px">
+    <div v-if="palette.length" class="panel mt-14">
       <label class="field-label">色板({{ palette.length }})点击复制</label>
       <div class="palette">
         <button

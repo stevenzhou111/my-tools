@@ -41,7 +41,7 @@ const output = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="ctrl">
       <span class="field-label">方言</span>
       <select v-model="language" class="select">
@@ -59,15 +59,15 @@ const output = computed(() => {
   </div>
 
   <div class="field">
-    <label class="field-label">SQL 语句</label>
-    <textarea v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">SQL 语句</label>
+    <textarea id="input" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <label class="field-label">格式化结果</label>
   <pre class="output">{{ output }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button v-if="output" class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
     </button>

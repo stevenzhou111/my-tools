@@ -89,10 +89,10 @@ function fmt(t) {
     <p class="tip">播放或拖动进度条到想要的位置,点击「截取当前帧」保存画面</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="videoUrl">
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <video
         ref="videoEl"
         :src="videoUrl"
@@ -102,14 +102,14 @@ function fmt(t) {
         @loadedmetadata="onLoadedMetadata"
         @timeupdate="onTimeUpdate"
       ></video>
-      <div class="row" style="margin-top: 12px">
+      <div class="row mt-12">
         <span class="tip">时间 {{ fmt(currentTime) }} / {{ fmt(duration) }} · 原始分辨率 {{ videoEl?.videoWidth }}×{{ videoEl?.videoHeight }}</span>
         <button class="btn" @click="seek">⏱ 跳转到指定时间</button>
         <button class="btn btn-primary" @click="capture">📸 截取当前帧</button>
       </div>
     </div>
 
-    <div v-if="shots.length" class="panel" style="margin-top: 14px">
+    <div v-if="shots.length" class="panel mt-14">
       <label class="field-label">已截取 {{ shots.length }} 帧(点击下载)</label>
       <div class="shot-grid">
         <div v-for="(s, i) in shots" :key="i" class="shot">

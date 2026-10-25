@@ -115,14 +115,14 @@ const result = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="toEnglish" />数字 → 英文</label>
     <label class="check"><input v-model="mode" type="radio" value="toNumber" />英文 → 数字</label>
   </div>
 
   <div class="field">
-    <label class="field-label">{{ mode === 'toEnglish' ? '输入数字(支持负数与小数)' : '输入英文数字(如 two thousand, twenty-six)' }}</label>
-    <input v-model="input" class="input" :placeholder="mode === 'toEnglish' ? '如 1234567 或 -3.14' : '如 one million two hundred'" spellcheck="false" />
+    <label class="field-label" for="input">{{ mode === 'toEnglish' ? '输入数字(支持负数与小数)' : '输入英文数字(如 two thousand, twenty-six)' }}</label>
+    <input id="input" v-model="input" class="input" :placeholder="mode === 'toEnglish' ? '如 1234567 或 -3.14' : '如 one million two hundred'" spellcheck="false" />
   </div>
 
   <div v-if="result.error" class="error-box">✗ {{ result.error }}</div>
@@ -130,7 +130,7 @@ const result = computed(() => {
   <template v-else-if="result.text">
     <label class="field-label">转换结果</label>
     <pre class="output">{{ result.text }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', result.text)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
       </button>

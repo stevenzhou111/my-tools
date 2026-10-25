@@ -107,10 +107,10 @@ async function copyHtml() {
     <p class="tip">解析为 HTML 预览,可复制 / 下载 / 直接打印存为 PDF;⚠️ 仅支持 .docx,不支持旧版 .doc</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="html">
-    <div class="row" style="margin-top: 14px">
+    <div class="row mt-14">
       <button class="btn btn-sm" :class="{ 'btn-primary': !showSource }" @click="showSource = false">👁 预览</button>
       <button class="btn btn-sm" :class="{ 'btn-primary': showSource }" @click="showSource = true">&lt;/&gt; 源码</button>
       <button class="btn btn-sm" @click="copyHtml">📋 复制 HTML</button>
@@ -118,7 +118,7 @@ async function copyHtml() {
       <button class="btn btn-sm btn-primary" @click="printHtml">🖨️ 打印 / 存为 PDF</button>
     </div>
 
-    <p v-if="messages.length" class="tip" style="margin-top: 10px">
+    <p v-if="messages.length" class="tip mt-10">
       ⚠️ 部分复杂元素被简化:{{ messages[0] }}{{ messages.length > 1 ? ` 等 ${messages.length} 项` : '' }}
     </p>
 
@@ -129,7 +129,7 @@ async function copyHtml() {
       title="文档预览"
       sandbox=""
     ></iframe>
-    <pre v-else class="output" style="margin-top: 12px">{{ html.slice(0, 8000) }}{{ html.length > 8000 ? '\n…' : '' }}</pre>
+    <pre v-else class="output mt-12">{{ html.slice(0, 8000) }}{{ html.length > 8000 ? '\n…' : '' }}</pre>
   </template>
 </template>
 

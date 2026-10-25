@@ -53,27 +53,27 @@ onUnmounted(() => generateDebounced.cancel())
   <div class="grid-2 qr-grid">
     <div>
       <div class="field">
-        <label class="field-label">Wi-Fi 名称 (SSID)</label>
-        <input v-model="ssid" class="input" spellcheck="false" placeholder="路由器的 Wi-Fi 名称" />
+        <label class="field-label" for="ssid">Wi-Fi 名称 (SSID)</label>
+        <input id="ssid" v-model="ssid" class="input" spellcheck="false" placeholder="路由器的 Wi-Fi 名称" />
       </div>
       <div class="field">
-        <label class="field-label">加密方式</label>
-        <select v-model="encryption" class="select">
+        <label class="field-label" for="encryption">加密方式</label>
+        <select id="encryption" v-model="encryption" class="select">
           <option value="WPA">WPA / WPA2 / WPA3(最常见)</option>
           <option value="WEP">WEP(老旧路由)</option>
           <option value="nopass">无密码(开放网络)</option>
         </select>
       </div>
       <div v-if="encryption !== 'nopass'" class="field">
-        <label class="field-label">Wi-Fi 密码</label>
-        <input v-model="password" type="text" class="input" spellcheck="false" placeholder="无线密码" />
+        <label class="field-label" for="password">Wi-Fi 密码</label>
+        <input id="password" v-model="password" type="text" class="input" spellcheck="false" placeholder="无线密码" />
       </div>
-      <label class="check" style="margin-bottom: 14px">
+      <label class="check mb-14">
         <input v-model="hidden" type="checkbox" />隐藏网络(不广播 SSID)
       </label>
       <div class="field">
-        <label class="field-label">尺寸</label>
-        <select v-model.number="size" class="select">
+        <label class="field-label" for="size">尺寸</label>
+        <select id="size" v-model.number="size" class="select">
           <option :value="200">200 × 200</option>
           <option :value="300">300 × 300</option>
           <option :value="400">400 × 400</option>
@@ -85,13 +85,13 @@ onUnmounted(() => generateDebounced.cancel())
     <div class="panel preview-panel">
       <img v-if="dataUrl" :src="dataUrl" class="qr-img" alt="Wi-Fi 二维码" />
       <div v-else class="tip">填写 Wi-Fi 信息后自动生成</div>
-      <a v-if="dataUrl" :href="dataUrl" download="wifi-qrcode.png" class="btn btn-primary" style="margin-top: 14px">
+      <a v-if="dataUrl" :href="dataUrl" download="wifi-qrcode.png" class="btn btn-primary mt-14">
         ⬇️ 下载 PNG(打印贴墙上)
       </a>
     </div>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     iPhone / 安卓相机扫码后即可直接连入该 Wi-Fi,无需手动输密码;密码包含分号、冒号等符号会自动转义。
   </p>
 </template>

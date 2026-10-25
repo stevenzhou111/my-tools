@@ -94,8 +94,8 @@ onUnmounted(() => {
   <div class="grid-2 qr-grid">
     <div>
       <div class="field">
-        <label class="field-label">文本或链接</label>
-        <textarea
+        <label class="field-label" for="text">文本或链接</label>
+        <textarea id="text"
           v-model="text"
           v-draft="'qrcode-text'"
           class="textarea"
@@ -105,8 +105,8 @@ onUnmounted(() => {
         ></textarea>
       </div>
       <div class="field">
-        <label class="field-label">尺寸</label>
-        <select v-model.number="size" class="select">
+        <label class="field-label" for="size">尺寸</label>
+        <select id="size" v-model.number="size" class="select">
           <option :value="200">200 × 200</option>
           <option :value="300">300 × 300</option>
           <option :value="400">400 × 400</option>
@@ -123,7 +123,7 @@ onUnmounted(() => {
           <input v-model="light" type="color" class="input color-input" />
         </label>
       </div>
-      <div class="field" style="margin-top: 14px">
+      <div class="field mt-14">
         <span class="field-label">中央 Logo(可选)</span>
         <input ref="logoInput" type="file" accept="image/*" class="sr-only" @change="onLogoChange" />
         <div class="row">
@@ -136,19 +136,19 @@ onUnmounted(() => {
             <button class="btn btn-sm" @click="clearLogo">移除</button>
           </template>
         </div>
-        <div v-if="logoUrl" class="field" style="margin-top: 10px">
-          <label class="field-label">Logo 大小 {{ logoScale }}%</label>
-          <input v-model.number="logoScale" type="range" min="12" max="30" step="1" style="width: 100%" />
+        <div v-if="logoUrl" class="field mt-10">
+          <label class="field-label" for="logoScale">Logo 大小 {{ logoScale }}%</label>
+          <input id="logoScale" v-model.number="logoScale" type="range" min="12" max="30" step="1" style="width: 100%" />
           <p class="tip">已自动切换到 H 级纠错;Logo 越大越难扫,建议不超过 25%。</p>
         </div>
       </div>
-      <p v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</p>
+      <p v-if="error" class="error-box mt-12">✗ {{ error }}</p>
     </div>
 
     <div class="panel preview-panel">
       <canvas v-show="dataUrl" ref="canvasEl" class="qr-canvas" aria-label="二维码预览"></canvas>
       <div v-if="!dataUrl" class="qr-empty">输入内容后自动生成</div>
-      <a v-if="dataUrl" :href="dataUrl" download="qrcode.png" class="btn btn-primary" style="margin-top: 14px">
+      <a v-if="dataUrl" :href="dataUrl" download="qrcode.png" class="btn btn-primary mt-14">
         ⬇️ 下载 PNG
       </a>
     </div>

@@ -56,19 +56,19 @@ const unknown = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="encode" />文本 → 摩尔斯电码</label>
     <label class="check"><input v-model="mode" type="radio" value="decode" />摩尔斯电码 → 文本</label>
   </div>
 
   <div class="field">
-    <label class="field-label">{{ mode === 'encode' ? '输入文本' : '输入摩尔斯电码(字母间空格,单词间 / )' }}</label>
-    <textarea v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+    <label class="field-label" for="input">{{ mode === 'encode' ? '输入文本' : '输入摩尔斯电码(字母间空格,单词间 / )' }}</label>
+    <textarea id="input" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出结果</label>
   <pre class="output">{{ output }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
     </button>

@@ -34,11 +34,11 @@ const max = computed(() => (shown.value[0]?.count ?? 1))
 
 <template>
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入文本</label>
+    <textarea id="input" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="tab" type="radio" value="word" />英文单词频率(共 {{ wordItems.length }} 个词)</label>
     <label class="check"><input v-model="tab" type="radio" value="char" />中文字符频率(共 {{ charItems.length }} 个字)</label>
     <select v-model.number="topN" class="select" style="width: auto">

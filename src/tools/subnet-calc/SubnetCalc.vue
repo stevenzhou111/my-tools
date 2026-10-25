@@ -35,11 +35,11 @@ function copyAll() {
 
 <template>
   <div class="field">
-    <label class="field-label">IP / 前缀 或 IP + 掩码</label>
-    <input v-model="input" class="input" placeholder="如 192.168.1.100/24 或 10.0.0.0 255.255.0.0" spellcheck="false" />
+    <label class="field-label" for="input">IP / 前缀 或 IP + 掩码</label>
+    <input id="input" v-model="input" class="input" placeholder="如 192.168.1.100/24 或 10.0.0.0 255.255.0.0" spellcheck="false" />
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button v-for="s in SAMPLES" :key="s" class="btn btn-sm" @click="input = s">{{ s }}</button>
   </div>
 
@@ -52,7 +52,7 @@ function copyAll() {
         <code class="kv-val">{{ v }}</code>
       </div>
     </div>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" @click="copyAll">
         {{ copiedKey === 'all' ? '✓ 已复制' : '复制全部' }}
       </button>

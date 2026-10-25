@@ -50,8 +50,8 @@ function applyPreset(p) {
 <template>
   <div class="preview" :style="previewStyle"></div>
 
-  <div class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div class="panel mt-14">
+    <div class="row mb-14">
       <label class="check"><input v-model="type" type="radio" value="linear" />线性渐变</label>
       <label class="check"><input v-model="type" type="radio" value="radial" />径向渐变</label>
       <label v-if="type === 'linear'" class="ctrl-inline">
@@ -60,7 +60,7 @@ function applyPreset(p) {
       </label>
     </div>
 
-    <div class="row" style="margin-bottom: 14px">
+    <div class="row mb-14">
       <label class="ctrl-inline">
         <input v-model="color1" type="color" class="input color-input" />
         <input v-model.number="pos1" type="number" min="0" max="100" class="input pos-input" />
@@ -93,9 +93,9 @@ function applyPreset(p) {
     </div>
   </div>
 
-  <label class="field-label" style="margin-top: 14px">CSS 代码</label>
+  <label class="field-label mt-14">CSS 代码</label>
   <pre class="output">{{ css }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-primary" @click="copy('css', css)">
       {{ copiedKey === 'css' ? '✓ 已复制' : '复制 CSS' }}
     </button>

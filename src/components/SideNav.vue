@@ -9,8 +9,29 @@ const emit = defineEmits(['navigate'])
 
 const route = useRoute()
 const query = ref('')
-// 分类默认全部折叠,仅当前工具所在分类自动展开
-const collapsed = reactive(new Set(CATEGORIES.map((c) => c.id)))
+// 分类默认全部折叠;以"已展开集合"持久化(空集 = 默认态,新增分类自动折叠),
+// 否则每次导航折叠状态重置,收藏/浏览时反复展开收起
+const EXPANDED_KEY = 'toolbox-nav-expanded'
+const CAT_IDS = new Set(CATEGORIES.map((c) => c.id))
+function loadExpanded() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(EXPANDED_KEY))
+    return Array.isArray(arr) ? arr.filter((id) => typeof id === 'string' && CAT_IDS.has(id)) : []
+  } catch {
+    return []
+  }
+}
+const expanded = reactive(new Set(loadExpanded()))
+watch(
+  () => [...expanded],
+  (v) => {
+    try {
+      localStorage.setItem(EXPANDED_KEY, JSON.stringify(v))
+    } catch {
+      /* 隐私模式下忽略 */
+    }
+  },
+)
 const { favorites } = useToolPrefs()
 
 const favTools = computed(() => favorites.value.map((id) => getTool(id)).filter(Boolean))
@@ -21,7 +42,7 @@ const currentTool = computed(() => getTool(route.params.id))
 watch(
   currentTool,
   (tool) => {
-    if (tool) collapsed.delete(tool.category)
+    if (tool) expanded.add(tool.category)
   },
   { immediate: true },
 )
@@ -41,8 +62,8 @@ const filtered = computed(() => {
 const searching = computed(() => query.value.trim().length > 0)
 
 function toggle(catId) {
-  if (collapsed.has(catId)) collapsed.delete(catId)
-  else collapsed.add(catId)
+  if (expanded.has(catId)) expanded.delete(catId)
+  else expanded.add(catId)
 }
 
 function emitNavigate() {
@@ -78,13 +99,13 @@ function emitNavigate() {
       <button
         class="side-cat-head"
         type="button"
-        :aria-expanded="searching || !collapsed.has(cat.id)"
+        :aria-expanded="searching || expanded.has(cat.id)"
         @click="toggle(cat.id)"
       >
         <span class="side-cat-name"><AppIcon :name="cat.icon" :size="15" />{{ cat.name }}</span>
-        <span class="chev">{{ collapsed.has(cat.id) ? '▸' : '▾' }}</span>
+        <span class="chev">{{ expanded.has(cat.id) ? '▾' : '▸' }}</span>
       </button>
-      <div v-show="searching || !collapsed.has(cat.id)" class="side-tools">
+      <div v-show="searching || expanded.has(cat.id)" class="side-tools">
         <router-link
           v-for="tool in cat.tools"
           :key="tool.id"

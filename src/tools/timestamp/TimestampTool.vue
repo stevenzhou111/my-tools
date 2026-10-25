@@ -60,7 +60,7 @@ const parsedDisplay = computed(() => {
 </script>
 
 <template>
-  <p class="tip" style="margin-bottom: 14px">
+  <p class="tip mb-14">
     当前时间戳:<strong class="now">{{ Math.floor(now / 1000) }}</strong> (秒) ·
     {{ now }} (毫秒)
     <button class="btn btn-sm" style="margin-left: 8px" @click="useNow">填入当前时间</button>
@@ -70,8 +70,8 @@ const parsedDisplay = computed(() => {
     <div class="panel">
       <h3>时间戳 → 日期</h3>
       <div class="field">
-        <label class="field-label">Unix 时间戳</label>
-        <input v-model="tsInput" v-draft="'timestamp-ts'" class="input" placeholder="如 1759190400 或 1759190400000" spellcheck="false" />
+        <label class="field-label" for="tsInput">Unix 时间戳</label>
+        <input id="tsInput" v-model="tsInput" v-draft="'timestamp-ts'" class="input" placeholder="如 1759190400 或 1759190400000" spellcheck="false" />
       </div>
       <template v-if="parsedDisplay">
         <div v-for="row in parsedDisplay" :key="row.key" class="result-row">
@@ -88,8 +88,8 @@ const parsedDisplay = computed(() => {
     <div class="panel">
       <h3>日期 → 时间戳</h3>
       <div class="field">
-        <label class="field-label">日期时间</label>
-        <input v-model="dateValue" type="datetime-local" step="1" class="input" />
+        <label class="field-label" for="dateValue">日期时间</label>
+        <input id="dateValue" v-model="dateValue" type="datetime-local" step="1" class="input" />
       </div>
       <template v-if="reverse">
         <div class="result-row">

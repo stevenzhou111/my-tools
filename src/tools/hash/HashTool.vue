@@ -42,11 +42,11 @@ onUnmounted(() => runDebounced.cancel())
 
 <template>
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-model="text" class="textarea" rows="5" spellcheck="false"></textarea>
+    <label class="field-label" for="text">输入文本</label>
+    <textarea id="text" v-model="text" class="textarea" rows="5" spellcheck="false"></textarea>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
 
   <div v-for="r in results" :key="r.algo" class="panel hash-row">
     <div class="hash-head">
@@ -58,7 +58,7 @@ onUnmounted(() => runDebounced.cancel())
     <pre class="output hash-hex">{{ r.hex }}</pre>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     哈希是单向摘要,无法反推原文;SHA 系列由浏览器 Web Crypto API 在本地计算。
   </p>
 </template>

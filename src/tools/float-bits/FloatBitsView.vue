@@ -34,7 +34,7 @@ const PRESETS = [
 </script>
 
 <template>
-  <p class="tip" style="margin-bottom: 14px">
+  <p class="tip mb-14">
     输入任意数字,看它在 IEEE 754 双精度(64 位,JS 的 number)与单精度(32 位,C 的 float)下实际存储的位型——
     理解 <code>0.1 + 0.2 !== 0.3</code> 的关键就是看尾数那位没算完的 1。
   </p>
@@ -42,7 +42,7 @@ const PRESETS = [
   <div class="field">
     <label class="field-label" for="fb-in">数值(支持科学计数法)</label>
     <input id="fb-in" v-model="raw" class="input" style="font-family: var(--mono); font-size: 17px" spellcheck="false" placeholder="如 0.1 或 1e-300" />
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button v-for="p in PRESETS" :key="p.label" class="btn btn-sm" @click="raw = p.v">{{ p.label }}</button>
     </div>
   </div>
@@ -66,7 +66,7 @@ const PRESETS = [
       </p>
     </div>
 
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="bits-head">
         <span>单精度 float(32 位)</span>
         <button class="btn btn-sm" @click="copy('f32', f32.hex)">{{ copiedKey === 'f32' ? '✓ 已复制' : f32.hex }}</button>
@@ -83,7 +83,7 @@ const PRESETS = [
       </p>
     </div>
 
-    <p class="tip" style="margin-top: 12px">
+    <p class="tip mt-12">
       红色为符号位、黄色为指数位、绿色为尾数位。位型由 DataView 写入后按字节读出,与平台无关;
       数值会同步到地址栏,复制链接即可分享当前位型。
     </p>

@@ -113,9 +113,9 @@ function download() {
     <p><strong>点击选择多张图片</strong> 或拖拽到此处,按列表顺序拼接</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="items.length" class="row" style="margin-top: 14px">
+  <div v-if="items.length" class="row mt-14">
     <label class="check"><input v-model="direction" type="radio" value="vertical" />纵向拼接</label>
     <label class="check"><input v-model="direction" type="radio" value="horizontal" />横向拼接</label>
     <label class="ctrl-inline">间距 <strong>{{ gap }}px</strong> <input v-model.number="gap" type="range" min="0" max="60" /></label>
@@ -130,7 +130,7 @@ function download() {
     </label>
   </div>
 
-  <div v-if="items.length" class="panel" style="margin-top: 14px">
+  <div v-if="items.length" class="panel mt-14">
     <label class="field-label">图片顺序({{ items.length }})</label>
     <div v-for="(it, i) in items" :key="i" class="img-row">
       <span class="file-order">{{ i + 1 }}</span>
@@ -141,11 +141,11 @@ function download() {
     </div>
   </div>
 
-  <div v-if="previewUrl" class="panel" style="margin-top: 14px">
+  <div v-if="previewUrl" class="panel mt-14">
     <div class="preview-wrap">
       <img :src="previewUrl" class="preview" :class="direction" alt="拼接预览" />
     </div>
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-primary" @click="download">⬇️ 下载拼接长图</button>
     </div>
   </div>

@@ -30,29 +30,29 @@ const result = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">Cron 表达式(5 段:分 时 日 月 周)</label>
-    <input v-model="input" class="input" placeholder="如 0 9 * * 1-5" spellcheck="false" />
+    <label class="field-label" for="input">Cron 表达式(5 段:分 时 日 月 周)</label>
+    <input id="input" v-model="input" class="input" placeholder="如 0 9 * * 1-5" spellcheck="false" />
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button v-for="s in SAMPLES" :key="s.expr" class="btn btn-sm" @click="input = s.expr">
       {{ s.desc }}
     </button>
   </div>
 
-  <div v-if="result.error" class="error-box" style="margin-bottom: 12px">✗ {{ result.error }}</div>
+  <div v-if="result.error" class="error-box mb-12">✗ {{ result.error }}</div>
 
   <template v-else-if="result.text">
     <label class="field-label">中文解读</label>
     <pre class="output">{{ result.text }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', result.text)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制解读' }}
       </button>
     </div>
   </template>
 
-  <div class="panel cheat" style="margin-top: 16px">
+  <div class="panel cheat mt-16">
     <label class="field-label">字段速查</label>
     <div class="cheat-grid">
       <span>分</span><code>0-59</code>

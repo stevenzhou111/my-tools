@@ -39,9 +39,9 @@ async function onFile(e) {
 <template>
   <div class="grid-2">
     <div class="field">
-      <label class="field-label">输入 HTML</label>
-      <textarea v-draft="'html-md-input'" v-model="input" class="textarea" rows="12" spellcheck="false" placeholder="粘贴 HTML…"></textarea>
-      <div class="row" style="margin-top: 10px">
+      <label class="field-label" for="input">输入 HTML</label>
+      <textarea id="input" v-draft="'html-md-input'" v-model="input" class="textarea" rows="12" spellcheck="false" placeholder="粘贴 HTML…"></textarea>
+      <div class="row mt-10">
         <label class="btn btn-sm">
           打开 .html 文件
           <input type="file" accept=".html,.htm" class="sr-only" @change="onFile" />
@@ -55,7 +55,7 @@ async function onFile(e) {
       <div v-if="result.error" class="error-box">✗ {{ result.error }}</div>
       <template v-else-if="result.md">
         <pre class="output md-output">{{ result.md }}</pre>
-        <div class="row" style="margin-top: 10px">
+        <div class="row mt-10">
           <button class="btn btn-sm btn-primary" @click="copy('md', result.md)">
             {{ copiedKey === 'md' ? '✓ 已复制' : '复制 Markdown' }}
           </button>

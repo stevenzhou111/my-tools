@@ -74,12 +74,12 @@ async function load(file) {
     <p class="tip">全程本地识别,图片不会上传</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 14px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-14">✗ {{ error }}</div>
 
-  <div v-if="result" class="panel" style="margin-top: 14px">
+  <div v-if="result" class="panel mt-14">
     <label class="field-label">识别结果 <span class="tip">来自 {{ sourceInfo }}</span></label>
     <pre class="output">{{ result }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('out', result)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制内容' }}
       </button>

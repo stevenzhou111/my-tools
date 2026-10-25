@@ -37,7 +37,7 @@ const stats = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button v-for="op in OPS" :key="op.name" class="btn" @click="apply(op.name, op.fn)">
       {{ op.name }}
     </button>
@@ -45,19 +45,19 @@ const stats = computed(() => {
   </div>
 
   <div class="grid-2">
-    <div class="field" style="margin: 0">
-      <label class="field-label">输入({{ stats.before }} 字符)</label>
-      <textarea v-model="input" class="textarea" rows="9" spellcheck="false"></textarea>
+    <div class="field m-0">
+      <label class="field-label" for="input">输入({{ stats.before }} 字符)</label>
+      <textarea id="input" v-model="input" class="textarea" rows="9" spellcheck="false"></textarea>
     </div>
-    <div class="field" style="margin: 0">
-      <label class="field-label">
+    <div class="field m-0">
+      <label class="field-label" for="output">
         输出({{ stats.after }} 字符<template v-if="lastOp">,已执行:{{ lastOp }}</template>)
       </label>
-      <textarea v-model="output" class="textarea" rows="9" spellcheck="false"></textarea>
+      <textarea id="output" v-model="output" class="textarea" rows="9" spellcheck="false"></textarea>
     </div>
   </div>
 
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
     </button>

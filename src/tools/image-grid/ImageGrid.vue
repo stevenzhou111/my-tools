@@ -117,10 +117,10 @@ function dataUrlToBytes(dataUrl) {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 12px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-12">
       <label class="check">
         <input v-model="square" type="checkbox" @change="cut" />
         先居中裁成正方形(微信/微博九宫格标准)

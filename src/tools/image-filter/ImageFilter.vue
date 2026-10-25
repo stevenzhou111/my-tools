@@ -217,9 +217,9 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
+  <div v-if="image" class="panel mt-14">
     <div class="filter-list">
       <button
         v-for="f in [
@@ -236,7 +236,7 @@ function download() {
         {{ f.name }}
       </button>
     </div>
-    <div v-if="!['oil', 'sketch', 'gray', 'contrast', 'invert', 'sepia'].includes(activeFilter)" class="field" style="margin-top: 12px">
+    <div v-if="!['oil', 'sketch', 'gray', 'contrast', 'invert', 'sepia'].includes(activeFilter)" class="field mt-12">
       <label class="field-label">滤镜强度 {{ intensity }}%</label>
       <input :value="intensity" type="range" min="5" max="100" step="5" style="width: 100%" @input="setIntensity($event.target.valueAsNumber)" />
     </div>
@@ -245,7 +245,7 @@ function download() {
     </div>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG</button>
   </div>
 </template>

@@ -32,7 +32,7 @@ const numbered = computed(() => output.value.map((p, i) => `${i + 1}. ${p}`))
     <label class="check"><input v-model="mode" type="radio" value="sep" />按分隔符分割</label>
     <label class="check"><input v-model="mode" type="radio" value="fixed" />按固定长度分割</label>
   </div>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <template v-if="mode === 'sep'">
       <input v-model="sep" class="input sep-input" placeholder="分隔符,如 , 或 |" spellcheck="false" />
       <button class="btn btn-sm" @click="sep = ','">逗号</button>
@@ -48,14 +48,14 @@ const numbered = computed(() => output.value.map((p, i) => `${i + 1}. ${p}`))
   </div>
 
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-model="input" class="textarea" rows="5" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入文本</label>
+    <textarea id="input" v-model="input" class="textarea" rows="5" spellcheck="false"></textarea>
   </div>
 
   <template v-if="output.length">
     <label class="field-label">分割结果({{ output.length }} 段)</label>
     <pre class="output">{{ output.join('\n') }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('plain', output.join('\n'))">
         {{ copiedKey === 'plain' ? '✓ 已复制' : '复制(纯列表)' }}
       </button>

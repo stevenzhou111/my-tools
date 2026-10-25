@@ -108,10 +108,10 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-14">
       <button class="btn" @click="transform('left')">↺ 左转 90°</button>
       <button class="btn" @click="transform('right')">↻ 右转 90°</button>
       <button class="btn" @click="transform('rotate180')">⇅ 旋转 180°</button>
@@ -122,10 +122,10 @@ function download() {
     <div class="preview-wrap">
       <img v-if="previewUrl" :src="previewUrl" class="preview" alt="预览" />
     </div>
-    <p class="tip" style="margin-top: 10px">当前状态:{{ applied }} · 尺寸 {{ output?.width }} × {{ output?.height }}</p>
+    <p class="tip mt-10">当前状态:{{ applied }} · 尺寸 {{ output?.width }} × {{ output?.height }}</p>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG</button>
   </div>
 </template>

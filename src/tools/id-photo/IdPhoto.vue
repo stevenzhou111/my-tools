@@ -159,10 +159,10 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-14">
       <span class="ctrl-inline">
         目标背景
         <button
@@ -185,7 +185,7 @@ function download() {
         <input v-model.number="tolerance" type="range" min="20" max="140" step="5" />
       </label>
     </div>
-    <p class="tip" style="margin-bottom: 12px">
+    <p class="tip mb-12">
       容差越小,替换范围越严格(边缘残留越多);越大,替换越彻底(但可能误伤与背景色接近的衣服/头发)。
     </p>
     <div class="compare" v-if="previewUrl">
@@ -200,7 +200,7 @@ function download() {
     </div>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG</button>
   </div>
 </template>

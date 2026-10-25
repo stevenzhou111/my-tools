@@ -95,30 +95,30 @@ function downloadSql() {
     <p v-else class="tip">📄 {{ fileName }} · 点击可更换</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin: 12px 0">✗ {{ error }}</div>
+  <div v-if="error" class="error-box my-12">✗ {{ error }}</div>
 
   <template v-if="parsed">
     <div class="panel" style="margin: 14px 0">
       <div class="row">
         <label v-if="sheets.length > 1" class="ctrl">
-          <span class="field-label" style="margin: 0">工作表</span>
+          <span class="field-label m-0">工作表</span>
           <select :value="activeSheet" class="select" style="width: 160px" @change="switchSheet($event.target.value)">
             <option v-for="s in sheets" :key="s" :value="s">{{ s }}</option>
           </select>
         </label>
         <label class="ctrl">
-          <span class="field-label" style="margin: 0">目标表名</span>
+          <span class="field-label m-0">目标表名</span>
           <input v-model="table" class="input" style="width: 160px; font-family: var(--mono)" spellcheck="false" />
         </label>
         <div class="ctrl">
-          <span class="field-label" style="margin: 0">数据库方言</span>
+          <span class="field-label m-0">数据库方言</span>
           <div class="row" style="gap: 6px" role="radiogroup" aria-label="方言">
             <button class="btn btn-sm" :class="{ 'btn-primary': dialect === 'mysql' }" role="radio" :aria-checked="dialect === 'mysql'" @click="dialect = 'mysql'">MySQL(反引号)</button>
             <button class="btn btn-sm" :class="{ 'btn-primary': dialect === 'postgres' }" role="radio" :aria-checked="dialect === 'postgres'" @click="dialect = 'postgres'">PostgreSQL(双引号)</button>
           </div>
         </div>
         <div class="ctrl">
-          <span class="field-label" style="margin: 0">语句形式</span>
+          <span class="field-label m-0">语句形式</span>
           <div class="row" style="gap: 6px" role="radiogroup" aria-label="语句形式">
             <button class="btn btn-sm" :class="{ 'btn-primary': mode === 'batch' }" role="radio" :aria-checked="mode === 'batch'" @click="mode = 'batch'">多行合并</button>
             <button class="btn btn-sm" :class="{ 'btn-primary': mode === 'rows' }" role="radio" :aria-checked="mode === 'rows'" @click="mode = 'rows'">每行一条</button>
@@ -129,17 +129,17 @@ function downloadSql() {
           空单元格输出 NULL
         </label>
       </div>
-      <p class="tip" style="margin-top: 10px">
+      <p class="tip mt-10">
         共 {{ parsed.rows.length }} 行 × {{ parsed.headers.length }} 列;日期单元格按 YYYY-MM-DD HH:MM:SS 输出,字符串自动转义单引号。
       </p>
     </div>
 
-    <div v-if="result.error" class="error-box" style="margin-bottom: 14px">✗ {{ result.error }}</div>
+    <div v-if="result.error" class="error-box mb-14">✗ {{ result.error }}</div>
 
     <template v-else-if="result.text">
       <label class="field-label" for="xs-out">SQL(共 {{ result.count }} 行数据)</label>
       <textarea id="xs-out" class="textarea" style="min-height: 260px; font-size: 13px" readonly :value="result.text"></textarea>
-      <div class="row" style="margin-top: 10px">
+      <div class="row mt-10">
         <button class="btn btn-sm btn-primary" @click="copy('xlsxsql', result.text)">
           {{ copiedKey === 'xlsxsql' ? '✓ 已复制' : '复制 SQL' }}
         </button>

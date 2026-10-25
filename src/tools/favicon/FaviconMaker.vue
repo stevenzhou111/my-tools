@@ -112,12 +112,12 @@ function downloadPng(size) {
     <p class="tip">建议 ≥ 256×256 的正方形 PNG/SVG;非正方形会居中裁切</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
   <template v-if="hasSource">
-    <div class="field" style="margin-top: 14px">
-      <label class="field-label">站点标识(用于文件名)</label>
-      <input v-model="siteName" class="input" style="max-width: 280px" spellcheck="false" />
+    <div class="field mt-14">
+      <label class="field-label" for="siteName">站点标识(用于文件名)</label>
+      <input id="siteName" v-model="siteName" class="input" style="max-width: 280px" spellcheck="false" />
     </div>
 
     <div class="row" style="margin: 10px 0 16px">
@@ -134,7 +134,7 @@ function downloadPng(size) {
       </button>
     </div>
 
-    <details class="panel" style="margin-top: 16px">
+    <details class="panel mt-16">
       <summary>📖 用法提示</summary>
       <p class="tip">
         favicon.ico 放到网站根目录;现代浏览器与 PWA 清单建议同时提供 192/512 的 PNG(可在本工具的预览里直接下载)。

@@ -24,11 +24,11 @@ const SAMPLES = ['1234.56', '100000000001', '0.05', '10', '1005']
 
 <template>
   <div class="field">
-    <label class="field-label">数字金额(支持千分位逗号,最多两位小数,上限 9999 亿)</label>
-    <input v-model="input" class="input" placeholder="如 1234.56" spellcheck="false" inputmode="decimal" />
+    <label class="field-label" for="input">数字金额(支持千分位逗号,最多两位小数,上限 9999 亿)</label>
+    <input id="input" v-model="input" class="input" placeholder="如 1234.56" spellcheck="false" inputmode="decimal" />
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <button v-for="s in SAMPLES" :key="s" class="btn btn-sm" @click="input = s">例:{{ s }}</button>
   </div>
 
@@ -37,14 +37,14 @@ const SAMPLES = ['1234.56', '100000000001', '0.05', '10', '1005']
   <template v-else-if="result.text">
     <label class="field-label">中文大写</label>
     <pre class="output" style="font-size: 19px; letter-spacing: 1px">{{ result.text }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" @click="copy('rmb', result.text)">
         {{ copiedKey === 'rmb' ? '✓ 已复制' : '复制大写金额' }}
       </button>
     </div>
   </template>
 
-  <details class="panel" style="margin-top: 16px">
+  <details class="panel mt-16">
     <summary>📖 书写规则说明</summary>
     <p class="tip">
       按《正确填写票据和结算凭证的基本规定》:数字用零壹贰叁肆伍陆柒捌玖,位用拾佰仟万亿;

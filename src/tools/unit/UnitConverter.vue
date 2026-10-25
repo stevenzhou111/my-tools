@@ -236,28 +236,28 @@ function swap() {
 <template>
   <div class="panel">
     <div class="field">
-      <label class="field-label">类别</label>
-      <select v-model="cat" class="select">
+      <label class="field-label" for="cat">类别</label>
+      <select id="cat" v-model="cat" class="select">
         <option v-for="c in CATS" :key="c.id" :value="c.id">{{ c.name }}</option>
       </select>
     </div>
 
     <div class="field">
-      <label class="field-label">数值</label>
-      <input v-model="value" class="input" type="text" placeholder="输入数值" spellcheck="false" />
+      <label class="field-label" for="value">数值</label>
+      <input id="value" v-model="value" class="input" type="text" placeholder="输入数值" spellcheck="false" />
     </div>
 
     <div class="unit-row">
       <div class="field" style="flex: 1; margin: 0">
-        <label class="field-label">从</label>
-        <select v-model="from" class="select">
+        <label class="field-label" for="from">从</label>
+        <select id="from" v-model="from" class="select">
           <option v-for="u in unitOptions" :key="u.id" :value="u.id">{{ u.name }}</option>
         </select>
       </div>
       <button class="btn swap-btn" title="交换单位" @click="swap">⇄</button>
       <div class="field" style="flex: 1; margin: 0">
-        <label class="field-label">到</label>
-        <select v-model="to" class="select">
+        <label class="field-label" for="to">到</label>
+        <select id="to" v-model="to" class="select">
           <option v-for="u in unitOptions" :key="u.id" :value="u.id">{{ u.name }}</option>
         </select>
       </div>
@@ -268,7 +268,7 @@ function swap() {
       <strong class="result-value">{{ result.text }}</strong>
     </div>
 
-    <p v-if="cat === 'data'" class="tip" style="margin-top: 10px">
+    <p v-if="cat === 'data'" class="tip mt-10">
       数据存储按二进制换算 (1 KB = 1024 B)。
     </p>
   </div>

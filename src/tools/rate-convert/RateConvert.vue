@@ -55,14 +55,14 @@ const wanCi = computed(() => {
 </script>
 
 <template>
-  <div class="panel" style="margin-bottom: 16px">
+  <div class="panel mb-16">
     <div class="row">
       <label class="ctrl">
-        <span class="field-label" style="margin: 0">利率数值(%)</span>
+        <span class="field-label m-0">利率数值(%)</span>
         <input v-model.number="value" class="input rate-input" type="number" min="0" step="0.01" />
       </label>
       <div class="ctrl" role="radiogroup" aria-label="利率类型">
-        <span class="field-label" style="margin: 0">类型</span>
+        <span class="field-label m-0">类型</span>
         <div class="row" style="gap: 6px">
           <button
             v-for="f in FROM_ITEMS"
@@ -78,11 +78,11 @@ const wanCi = computed(() => {
         </div>
       </div>
       <label class="ctrl" style="justify-content: flex-end">
-        <span class="field-label" style="margin: 0">计息口径</span>
+        <span class="field-label m-0">计息口径</span>
         <label class="check"><input v-model="compound" type="checkbox" />复利(利滚利)</label>
       </label>
     </div>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <span class="tip">常用:</span>
       <button v-for="q in QUICK" :key="q.label" class="btn btn-sm" @click="value = q.v; from = q.v >= 1 ? 'monthly' : 'daily'">
         {{ q.label }}
@@ -91,7 +91,7 @@ const wanCi = computed(() => {
     </div>
   </div>
 
-  <div v-if="result.error" class="error-box" style="margin-bottom: 14px">✗ {{ result.error }}</div>
+  <div v-if="result.error" class="error-box mb-14">✗ {{ result.error }}</div>
 
   <div v-else-if="result.data" class="stat-grid">
     <div v-for="c in CARDS" :key="c.key" class="panel stat-card" :class="{ active: from === c.key }">
@@ -100,8 +100,8 @@ const wanCi = computed(() => {
     </div>
   </div>
 
-  <div v-if="result.data" class="panel" style="margin-top: 16px">
-    <p class="tip" style="margin: 0">
+  <div v-if="result.data" class="panel mt-16">
+    <p class="tip m-0">
       <template v-if="!compound">
         单利口径:年利率 = 日利率 × 365 = 月利率 × 12。例:日息万 5(0.05%)即年化 18.25%。
       </template>

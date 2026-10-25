@@ -35,8 +35,8 @@ const html = computed(() =>
 <template>
   <div class="grid-2 md-grid">
     <div>
-      <label class="field-label">Markdown 源码</label>
-      <textarea v-draft="'markdown'" v-model="input" class="textarea md-input" spellcheck="false"></textarea>
+      <label class="field-label" for="input">Markdown 源码</label>
+      <textarea id="input" v-draft="'markdown'" v-model="input" class="textarea md-input" spellcheck="false"></textarea>
     </div>
     <div>
       <div class="snippet-head">

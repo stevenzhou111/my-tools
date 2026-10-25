@@ -117,11 +117,11 @@ async function convert() {
     <p class="tip">在 XLSX、XLS、ODS、CSV、HTML 之间互转,多工作表完整保留</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
-  <p v-if="info" class="tip" style="margin-top: 10px">✅ {{ info }}</p>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
+  <p v-if="info" class="tip mt-10">✅ {{ info }}</p>
 
   <template v-if="file">
-    <p class="tip" style="margin: 12px 0">
+    <p class="tip my-12">
       {{ file.name }} · 工作表:{{ sheetNames.join('、') }}
     </p>
     <div class="row">

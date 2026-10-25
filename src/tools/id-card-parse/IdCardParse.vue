@@ -17,7 +17,7 @@ const SAMPLES = [
 </script>
 
 <template>
-  <p class="tip" style="margin-bottom: 14px">
+  <p class="tip mb-14">
     解析 18 位身份证号:省级行政区、出生日期、性别、年龄,并按 GB 11643-1999 校验末位校验码。
     全部在本地计算;身份证号是敏感信息,本工具不把号码写入地址栏,请勿粘贴他人真实号码。
   </p>
@@ -25,7 +25,7 @@ const SAMPLES = [
   <div class="field">
     <label class="field-label" for="id-in">身份证号</label>
     <input id="id-in" v-model="input" class="input" style="font-family: var(--mono); font-size: 17px" spellcheck="false" placeholder="18 位身份证号" />
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button v-for="s in SAMPLES" :key="s.v" class="btn btn-sm" @click="input = s.v">{{ s.label }}</button>
     </div>
   </div>
@@ -52,10 +52,10 @@ const SAMPLES = [
       </div>
     </div>
 
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="row" style="justify-content: space-between">
         <div>
-          <span class="field-label" style="margin: 0">校验</span>
+          <span class="field-label m-0">校验</span>
           <p class="tip" style="margin: 4px 0 0">
             ✅ 校验位正确:第 18 位由前 17 位按 GB 11643-1999 加权取模得出,应为
             <code>{{ checkDigit(input.slice(0, 17)) }}</code>,实际 <code>{{ input.slice(17).toUpperCase() }}</code>。
@@ -69,7 +69,7 @@ const SAMPLES = [
     </div>
   </template>
 
-  <details class="panel" style="margin-top: 14px">
+  <details class="panel mt-14">
     <summary>📖 说明与边界</summary>
     <p class="tip">
       校验位算法:前 17 位分别乘权重 [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2] 求和,模 11 映射到

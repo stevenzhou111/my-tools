@@ -36,7 +36,7 @@ const TAG_CLASS = {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px" role="group" aria-label="按分类筛选">
+  <div class="row mb-14" role="group" aria-label="按分类筛选">
     <button type="button" class="check cat-chip" :class="{ active: cat === 'all' }" :aria-pressed="cat === 'all'" @click="cat = 'all'">
       全部({{ SOFTWARE.length }})
     </button>
@@ -73,9 +73,9 @@ const TAG_CLASS = {
     </div>
   </div>
 
-  <div v-if="!filtered.length" class="tip" style="margin-top: 16px">没有匹配的软件,换个关键词试试。</div>
+  <div v-if="!filtered.length" class="tip mt-16">没有匹配的软件,换个关键词试试。</div>
 
-  <p class="tip" style="margin-top: 16px">
+  <p class="tip mt-16">
     以上为个人长期使用与社区口碑整理的人工精选,与这些软件没有任何推广合作;下载时请认准官网,谨防第三方捆绑。
   </p>
 </template>

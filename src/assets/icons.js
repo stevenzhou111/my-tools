@@ -1,4 +1,4 @@
-// 本文件由 _gen_icons.mjs 生成,请勿手工编辑。
+// 本文件由 gen-icons.mjs 生成,请勿手工编辑。
 // 图标取自 lucide (ISC License) https://lucide.dev — 已裁剪为纯路径数据,
 // 避免为上百个图标引入组件运行时代码。
 

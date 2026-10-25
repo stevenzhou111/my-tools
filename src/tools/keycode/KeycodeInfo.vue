@@ -53,7 +53,7 @@ const MODS = [
 </script>
 
 <template>
-  <p class="tip" style="margin-bottom: 14px">
+  <p class="tip mb-14">
     按下键盘上任意一个键,这里会实时显示它对应的
     <code>event.key</code>、<code>event.code</code> 与旧的 <code>keyCode</code>,写快捷键逻辑或排查键盘问题时用。
     工具只监听不拦截,不会影响你的任何组合键。
@@ -74,7 +74,7 @@ const MODS = [
       </div>
     </div>
 
-    <div class="panel prop-panel" style="margin-top: 14px">
+    <div class="panel prop-panel mt-14">
       <div class="prop-grid">
         <div class="prop-item">
           <span class="prop-label">event.key</span>
@@ -91,9 +91,9 @@ const MODS = [
       </div>
     </div>
 
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="row" style="justify-content: space-between; margin-bottom: 8px">
-        <span class="field-label" style="margin: 0">按键历史(最近 {{ history.length }} 条)</span>
+        <span class="field-label m-0">按键历史(最近 {{ history.length }} 条)</span>
         <button class="btn btn-sm" @click="history = []">清空</button>
       </div>
       <div class="history-list">

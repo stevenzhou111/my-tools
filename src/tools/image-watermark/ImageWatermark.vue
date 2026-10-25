@@ -176,10 +176,10 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 12px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-12">
       <label class="check"><input v-model="type" type="radio" value="text" />文字水印</label>
       <label class="check"><input v-model="type" type="radio" value="image" />图片水印</label>
       <button v-if="type === 'image'" class="btn btn-sm" @click="logoInput.click()">
@@ -188,7 +188,7 @@ function download() {
       <input ref="logoInput" type="file" accept="image/*" class="sr-only" @change="onLogoChange" />
     </div>
 
-    <div class="row" style="margin-bottom: 12px">
+    <div class="row mb-12">
       <template v-if="type === 'text'">
         <label class="ctrl" style="flex: 1; min-width: 180px">
           <span class="field-label">水印文字</span>
@@ -219,7 +219,7 @@ function download() {
       </label>
     </div>
 
-    <div class="row" style="margin-bottom: 12px">
+    <div class="row mb-12">
       <label class="check"><input v-model="layout" type="radio" value="tile" />平铺全图(防盗图)</label>
       <label class="check"><input v-model="layout" type="radio" value="corner" />单个位置</label>
       <div v-if="layout === 'corner'" class="grid9">
@@ -236,7 +236,7 @@ function download() {
     <img v-if="previewUrl" :src="previewUrl" class="preview" alt="水印预览" />
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载加水印的图片</button>
   </div>
 </template>

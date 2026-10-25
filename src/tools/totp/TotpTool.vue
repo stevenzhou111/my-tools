@@ -60,11 +60,11 @@ function formatted(code) {
 <template>
   <div class="totp">
     <div class="field">
-      <label class="field-label">Base32 密钥(2FA 设置页/二维码里给出)</label>
-      <textarea v-model="secret" class="textarea" rows="2" spellcheck="false" placeholder="如 JBSWY3DPEHPK3PXP"></textarea>
+      <label class="field-label" for="secret">Base32 密钥(2FA 设置页/二维码里给出)</label>
+      <textarea id="secret" v-model="secret" class="textarea" rows="2" spellcheck="false" placeholder="如 JBSWY3DPEHPK3PXP"></textarea>
     </div>
 
-    <div class="row" style="margin-bottom: 14px">
+    <div class="row mb-14">
       <label class="check">
         位数
         <select v-model.number="digits" class="select" style="width: 80px">

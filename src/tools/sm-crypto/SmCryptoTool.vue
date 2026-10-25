@@ -115,24 +115,24 @@ function sm2Decrypt() {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px">
+  <div class="row mb-16">
     <button class="btn" :class="{ 'btn-primary': tab === 'sm3' }" @click="tab = 'sm3'">SM3 摘要</button>
     <button class="btn" :class="{ 'btn-primary': tab === 'sm4' }" @click="tab = 'sm4'">SM4 对称加解密</button>
     <button class="btn" :class="{ 'btn-primary': tab === 'sm2' }" @click="tab = 'sm2'">SM2 非对称加解密</button>
   </div>
 
-  <div v-if="sm4Error" class="error-box" style="margin-bottom: 12px">✗ {{ sm4Error }}</div>
-  <div v-if="sm2Error" class="error-box" style="margin-bottom: 12px">✗ {{ sm2Error }}</div>
+  <div v-if="sm4Error" class="error-box mb-12">✗ {{ sm4Error }}</div>
+  <div v-if="sm2Error" class="error-box mb-12">✗ {{ sm2Error }}</div>
 
   <!-- SM3 -->
   <template v-if="tab === 'sm3'">
     <div class="field">
-      <label class="field-label">输入文本</label>
-      <textarea v-model="sm3Input" class="textarea" rows="3" spellcheck="false"></textarea>
+      <label class="field-label" for="sm3Input">输入文本</label>
+      <textarea id="sm3Input" v-model="sm3Input" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
-    <label class="field-label">SM3 摘要(256 位,与 SHA-256 同长度)</label>
+    <label class="field-label" for="sm4Text">SM3 摘要(256 位,与 SHA-256 同长度)</label>
     <pre class="output">{{ sm3Output }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm" @click="copy('sm3', sm3Output)">
         {{ copiedKey === 'sm3' ? '✓ 已复制' : '复制' }}
       </button>
@@ -141,7 +141,7 @@ function sm2Decrypt() {
 
   <!-- SM4 -->
   <template v-if="tab === 'sm4'">
-    <div class="row" style="margin-bottom: 14px">
+    <div class="row mb-14">
       <label class="ctrl">
         <span class="field-label">密钥(32 位 hex,自动生成)</span>
         <div class="row" style="flex-wrap: nowrap">
@@ -170,31 +170,31 @@ function sm2Decrypt() {
 
     <div class="field">
       <label class="field-label">明文</label>
-      <textarea v-model="sm4Text" class="textarea" rows="3" spellcheck="false"></textarea>
+      <textarea id="sm4Text" v-model="sm4Text" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
     <button class="btn btn-primary" @click="sm4Encrypt">🔒 加密</button>
 
-    <div v-if="sm4CipherOut" class="field" style="margin-top: 14px">
-      <label class="field-label">密文(hex)</label>
+    <div v-if="sm4CipherOut" class="field mt-14">
+      <label class="field-label" for="sm4CipherIn">密文(hex)</label>
       <pre class="output">{{ sm4CipherOut }}</pre>
-      <div class="row" style="margin-top: 8px">
+      <div class="row mt-8">
         <button class="btn btn-sm" @click="copy('c', sm4CipherOut)">
           {{ copiedKey === 'c' ? '✓ 已复制' : '复制密文' }}
         </button>
       </div>
     </div>
 
-    <div class="field" style="margin-top: 14px">
+    <div class="field mt-14">
       <label class="field-label">或在此粘贴密文进行解密</label>
-      <textarea v-model="sm4CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
+      <textarea id="sm4CipherIn" v-model="sm4CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
     <button class="btn" @click="sm4Decrypt">🔓 解密</button>
-    <pre v-if="sm4Plain" class="output" style="margin-top: 12px">{{ sm4Plain }}</pre>
+    <pre v-if="sm4Plain" class="output mt-12">{{ sm4Plain }}</pre>
   </template>
 
   <!-- SM2 -->
   <template v-if="tab === 'sm2'">
-    <div class="row" style="margin-bottom: 14px">
+    <div class="row mb-14">
       <button class="btn" @click="genKeyPair">🎲 生成新密钥对</button>
       <button class="btn btn-sm" @click="copy('pub', sm2PublicKey)">
         {{ copiedKey === 'pub' ? '✓ 公钥已复制' : '复制公钥' }}
@@ -204,28 +204,28 @@ function sm2Decrypt() {
       </button>
     </div>
     <div class="field">
-      <label class="field-label">公钥(加密用)</label>
-      <textarea v-model="sm2PublicKey" class="textarea" rows="2" spellcheck="false"></textarea>
+      <label class="field-label" for="sm2PublicKey">公钥(加密用)</label>
+      <textarea id="sm2PublicKey" v-model="sm2PublicKey" class="textarea" rows="2" spellcheck="false"></textarea>
     </div>
     <div class="field">
-      <label class="field-label">私钥(解密用)</label>
-      <textarea v-model="sm2PrivateKey" class="textarea" rows="2" spellcheck="false"></textarea>
+      <label class="field-label" for="sm2PrivateKey">私钥(解密用)</label>
+      <textarea id="sm2PrivateKey" v-model="sm2PrivateKey" class="textarea" rows="2" spellcheck="false"></textarea>
     </div>
     <div class="field">
-      <label class="field-label">明文</label>
-      <textarea v-model="sm2Plain" class="textarea" rows="2" spellcheck="false"></textarea>
+      <label class="field-label" for="sm2Plain">明文</label>
+      <textarea id="sm2Plain" v-model="sm2Plain" class="textarea" rows="2" spellcheck="false"></textarea>
     </div>
     <button class="btn btn-primary" @click="sm2Encrypt">🔒 公钥加密</button>
-    <pre v-if="sm2CipherOut" class="output" style="margin-top: 12px">{{ sm2CipherOut.slice(0, 400) }}{{ sm2CipherOut.length > 400 ? '…' : '' }}</pre>
+    <pre v-if="sm2CipherOut" class="output mt-12">{{ sm2CipherOut.slice(0, 400) }}{{ sm2CipherOut.length > 400 ? '…' : '' }}</pre>
 
-    <div class="field" style="margin-top: 14px">
-      <label class="field-label">或在此粘贴密文(hex)进行解密</label>
-      <textarea v-model="sm2CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
+    <div class="field mt-14">
+      <label class="field-label" for="sm2CipherIn">或在此粘贴密文(hex)进行解密</label>
+      <textarea id="sm2CipherIn" v-model="sm2CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
     <button class="btn" @click="sm2Decrypt">🔓 私钥解密</button>
-    <pre v-if="sm2Decrypted" class="output" style="margin-top: 12px">{{ sm2Decrypted }}</pre>
+    <pre v-if="sm2Decrypted" class="output mt-12">{{ sm2Decrypted }}</pre>
 
-    <p class="tip" style="margin-top: 12px">密文以 04 开头为 C1C3C2 标准模式;加解密均由 sm-crypto 在浏览器本地完成。</p>
+    <p class="tip mt-12">密文以 04 开头为 C1C3C2 标准模式;加解密均由 sm-crypto 在浏览器本地完成。</p>
   </template>
 </template>
 

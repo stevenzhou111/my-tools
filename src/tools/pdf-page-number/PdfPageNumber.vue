@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
+import { rotatedSize, uprightAnchor } from '@/utils/pdfRotate'
 
 const fileInput = ref(null)
 const file = ref(null)
@@ -46,16 +47,19 @@ async function apply() {
     pages.forEach((page, idx) => {
       const num = start + idx
       const label = showTotal.value ? `${num} / ${total}` : `${num}`
-      const { width } = page.getSize()
+      // 在"显示坐标系"里定位,再映射回未旋转空间,扫描件的 /Rotate 不会让页码横躺
+      const { width } = rotatedSize(page)
       const textWidth = font.widthOfTextAtSize(label, fontSize.value)
       const margin = 28
-      const x = position.value === 'left' ? margin : position.value === 'right' ? width - margin - textWidth : (width - textWidth) / 2
+      const xd = position.value === 'left' ? margin : position.value === 'right' ? width - margin - textWidth : (width - textWidth) / 2
+      const anchor = uprightAnchor(page, xd, 18)
       page.drawText(label, {
-        x,
-        y: 18,
+        x: anchor.x,
+        y: anchor.y,
         size: fontSize.value,
         font,
         color: rgb(0.35, 0.35, 0.4),
+        rotate: anchor.rotate,
       })
     })
     downloadBlob(new Blob([await doc.save()], { type: 'application/pdf' }), file.value.name.replace(/\.pdf$/i, '') + '-页码.pdf')
@@ -75,10 +79,10 @@ async function apply() {
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="docRef" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 14px">
+  <div v-if="docRef" class="panel mt-14">
+    <div class="row mb-14">
       <label class="ctrl">
         <span class="field-label">位置</span>
         <select v-model="position" class="select">

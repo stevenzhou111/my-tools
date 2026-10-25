@@ -130,7 +130,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="error" class="error-box" style="margin-bottom: 14px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-14">✗ {{ error }}</div>
 
   <div class="panel rec-panel">
     <div class="rec-status">
@@ -154,18 +154,18 @@ onUnmounted(() => {
     </div>
   </div>
 
-  <div v-if="resultUrl" class="panel" style="margin-top: 14px">
+  <div v-if="resultUrl" class="panel mt-14">
     <label class="field-label">
       录制完成 · 时长 {{ Math.floor(resultDuration / 60) }}分{{ Math.floor(resultDuration % 60) }}秒 · 大小
       {{ (resultSize / 1024 / 1024).toFixed(1) }} MB
     </label>
     <video :src="resultUrl" class="player" controls></video>
-    <div class="row" style="margin-top: 12px">
+    <div class="row mt-12">
       <button class="btn btn-primary" @click="download">⬇️ 下载 WebM</button>
     </div>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     点击开始后,浏览器会弹出共享选择器,可选择整个屏幕、单个窗口或浏览器标签页;录制内容全程只保存在本地。
   </p>
 </template>

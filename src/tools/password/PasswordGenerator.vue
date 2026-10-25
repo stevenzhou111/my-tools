@@ -62,13 +62,13 @@ generate()
 </script>
 
 <template>
-  <div class="panel" style="margin-bottom: 14px">
+  <div class="panel mb-14">
     <div class="field">
-      <label class="field-label">
+      <label class="field-label" for="length">
         密码长度:<strong>{{ length }}</strong>
         <span v-if="strength" class="strength" :class="strength.class">{{ strength.label }}</span>
       </label>
-      <input v-model.number="length" type="range" min="4" max="64" step="1" style="width: 100%" />
+      <input id="length" v-model.number="length" type="range" min="4" max="64" step="1" style="width: 100%" />
     </div>
     <div class="row">
       <label class="check"><input v-model="opts.lower" type="checkbox" />小写字母 a-z</label>
@@ -80,7 +80,7 @@ generate()
         排除易混淆字符 (i l 1 L o 0 O)
       </label>
     </div>
-    <p v-if="!pool" class="error-box" style="margin-top: 10px">请至少选择一种字符类型</p>
+    <p v-if="!pool" class="error-box mt-10">请至少选择一种字符类型</p>
   </div>
 
   <div class="pw-list">
@@ -92,11 +92,11 @@ generate()
     </div>
   </div>
 
-  <div class="row" style="margin-top: 12px">
+  <div class="row mt-12">
     <button class="btn btn-primary" :disabled="!pool" @click="generate">🎲 换一批</button>
   </div>
 
-  <p class="tip" style="margin-top: 12px">
+  <p class="tip mt-12">
     密码由浏览器加密级随机数生成,不会离开你的设备;强度按信息熵估算。
   </p>
 </template>

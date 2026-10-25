@@ -124,15 +124,15 @@ function download() {
     <p v-else class="tip">点击或拖拽可更换图片</p>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
 
-  <div v-if="image" class="panel" style="margin-top: 14px">
-    <div class="row" style="margin-bottom: 12px">
+  <div v-if="image" class="panel mt-14">
+    <div class="row mb-12">
       <label v-for="r in RATIOS" :key="r.id" class="check">
         <input v-model="ratio" type="radio" :value="r.id" />{{ r.name }}
       </label>
     </div>
-    <div class="row" style="margin-bottom: 12px">
+    <div class="row mb-12">
       <label class="ctrl-inline">窗口大小 <strong>{{ zoom }}%</strong>
         <input v-model.number="zoom" type="range" min="20" max="100" />
       </label>
@@ -151,12 +151,12 @@ function download() {
     <div class="preview-wrap">
       <img v-if="previewUrl" :src="previewUrl" class="preview" alt="裁切预览" />
     </div>
-    <p class="tip" style="margin-top: 8px">
+    <p class="tip mt-8">
       裁切区域 {{ cropRect().w }} × {{ cropRect().h }} px(原图 {{ image.naturalWidth }} × {{ image.naturalHeight }})
     </p>
   </div>
 
-  <div v-if="previewUrl" class="row" style="margin-top: 14px">
+  <div v-if="previewUrl" class="row mt-14">
     <button class="btn btn-primary" @click="download">⬇️ 下载裁切结果</button>
   </div>
 </template>

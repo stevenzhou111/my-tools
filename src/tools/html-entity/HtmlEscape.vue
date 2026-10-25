@@ -33,19 +33,19 @@ const output = computed(() => {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="check"><input v-model="mode" type="radio" value="escape" />转义(&lt; → &amp;lt;)</label>
     <label class="check"><input v-model="mode" type="radio" value="unescape" />反转义(&amp;lt; → &lt;)</label>
   </div>
 
   <div class="field">
-    <label class="field-label">输入</label>
-    <textarea v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入</label>
+    <textarea id="input" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出</label>
   <pre class="output">{{ output }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
     </button>

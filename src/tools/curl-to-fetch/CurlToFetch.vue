@@ -42,21 +42,21 @@ const SAMPLES = [
   <div class="field">
     <label class="field-label" for="curl-in">curl 命令(支持多行续行 \ 与引号)</label>
     <textarea id="curl-in" v-model="cmd" class="textarea" style="min-height: 130px" spellcheck="false" placeholder="粘贴 curl 命令…"></textarea>
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button v-for="s in SAMPLES" :key="s.label" class="btn btn-sm" @click="cmd = s.cmd">例:{{ s.label }}</button>
       <button class="btn btn-sm" @click="cmd = ''">清空</button>
     </div>
     <p class="tip" style="margin-top: 6px">命令里常带 Token / 密码,本工具不把命令写入地址栏,也绝不发送任何请求。</p>
   </div>
 
-  <div v-if="!parsed.ok" class="error-box" style="margin-bottom: 14px">✗ {{ parsed.error }}</div>
+  <div v-if="!parsed.ok" class="error-box mb-14">✗ {{ parsed.error }}</div>
 
   <template v-else>
-    <div v-if="parsed.unknown.length" class="error-box" style="margin-bottom: 14px">
+    <div v-if="parsed.unknown.length" class="error-box mb-14">
       ⚠️ 这些旗标没有被识别,已忽略,请手动确认:{{ parsed.unknown.join(' ') }}
     </div>
 
-    <div class="row" style="margin-bottom: 12px" role="tablist">
+    <div class="row mb-12" role="tablist">
       <button class="btn" :class="{ 'btn-primary': lang === 'fetch' }" role="tab" :aria-selected="lang === 'fetch'" @click="lang = 'fetch'">
         JavaScript fetch
       </button>
@@ -66,14 +66,14 @@ const SAMPLES = [
     </div>
 
     <pre class="output code-out">{{ code }}</pre>
-    <div class="row" style="margin-top: 10px">
+    <div class="row mt-10">
       <button class="btn btn-sm btn-primary" @click="copy('code', code)">
         {{ copiedKey === 'code' ? '✓ 已复制' : '复制代码' }}
       </button>
       <span class="tip">{{ parsed.method }} {{ parsed.url }}</span>
     </div>
 
-    <details class="panel" style="margin-top: 14px">
+    <details class="panel mt-14">
       <summary>📖 支持范围</summary>
       <p class="tip">
         解析 -X 方法、-H 请求头、-d / --data* 请求体(多个自动用 &amp; 连接,JSON 体自动补 Content-Type)、

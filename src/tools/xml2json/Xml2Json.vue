@@ -85,7 +85,7 @@ const placeholder = computed(() =>
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 16px" role="tablist">
+  <div class="row mb-16" role="tablist">
     <button
       class="btn"
       :class="{ 'btn-primary': direction === 'x2j' }"
@@ -108,26 +108,26 @@ const placeholder = computed(() =>
 
   <div class="field">
     <div class="row" style="justify-content: space-between; margin-bottom: 7px">
-      <label class="field-label" style="margin: 0" for="xml-in">{{ direction === 'x2j' ? 'XML 输入' : 'JSON 输入' }}</label>
+      <label class="field-label m-0" for="xml-in">{{ direction === 'x2j' ? 'XML 输入' : 'JSON 输入' }}</label>
       <label v-if="direction === 'j2x'" class="check">
         <input v-model="declaration" type="checkbox" />
         <span class="tip">包含 XML 声明(&lt;?xml …?&gt;)</span>
       </label>
     </div>
     <textarea id="xml-in" v-model="input" class="textarea" style="min-height: 180px" :placeholder="placeholder" spellcheck="false"></textarea>
-    <div class="row" style="margin-top: 8px">
+    <div class="row mt-8">
       <button class="btn btn-sm" @click="fillSample">填入示例</button>
       <button class="btn btn-sm" :disabled="!input" @click="input = ''">清空</button>
     </div>
   </div>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 14px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-14">✗ {{ error }}</div>
 
   <template v-if="output">
     <div class="field">
       <label class="field-label" for="xml-out">{{ direction === 'x2j' ? 'JSON 输出' : 'XML 输出' }}</label>
       <textarea id="xml-out" class="textarea" style="min-height: 220px" readonly :value="output"></textarea>
-      <div class="row" style="margin-top: 10px">
+      <div class="row mt-10">
         <button class="btn btn-sm btn-primary" @click="copy('xml2json', output)">
           {{ copiedKey === 'xml2json' ? '✓ 已复制' : '复制结果' }}
         </button>

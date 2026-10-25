@@ -44,39 +44,39 @@ const output = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">输入文本</label>
-    <textarea v-draft="'replace'" v-model="input" class="textarea" rows="5" spellcheck="false"></textarea>
+    <label class="field-label" for="input">输入文本</label>
+    <textarea id="input" v-draft="'replace'" v-model="input" class="textarea" rows="5" spellcheck="false"></textarea>
   </div>
 
-  <div class="grid-2" style="margin-bottom: 12px">
-    <div class="field" style="margin: 0">
-      <label class="field-label">查找内容</label>
-      <input v-model="find" class="input" placeholder="要查找的文本或正则" spellcheck="false" />
+  <div class="grid-2 mb-12">
+    <div class="field m-0">
+      <label class="field-label" for="find">查找内容</label>
+      <input id="find" v-model="find" class="input" placeholder="要查找的文本或正则" spellcheck="false" />
     </div>
-    <div class="field" style="margin: 0">
-      <label class="field-label">替换为</label>
-      <input v-model="replace" class="input" placeholder="替换后的内容(留空即删除)" spellcheck="false" />
+    <div class="field m-0">
+      <label class="field-label" for="replace">替换为</label>
+      <input id="replace" v-model="replace" class="input" placeholder="替换后的内容(留空即删除)" spellcheck="false" />
     </div>
   </div>
 
-  <div class="row" style="margin-bottom: 12px">
+  <div class="row mb-12">
     <label class="check"><input v-model="useRegex" type="checkbox" />使用正则表达式</label>
     <label class="check"><input v-model="ignoreCase" type="checkbox" />忽略大小写</label>
     <span v-if="parsed && !parsed.error" class="tip">共替换 {{ count }} 处</span>
   </div>
 
-  <div v-if="parsed && parsed.error" class="error-box" style="margin-bottom: 12px">✗ 正则无效:{{ parsed.error }}</div>
+  <div v-if="parsed && parsed.error" class="error-box mb-12">✗ 正则无效:{{ parsed.error }}</div>
 
   <label class="field-label">输出结果</label>
   <pre class="output">{{ output }}</pre>
-  <div class="row" style="margin-top: 10px">
+  <div class="row mt-10">
     <button class="btn btn-sm" @click="copy('out', output)">
       {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
     </button>
     <button class="btn btn-sm" @click="input = output">将结果放回输入框</button>
   </div>
 
-  <p v-if="useRegex" class="tip" style="margin-top: 10px">
+  <p v-if="useRegex" class="tip mt-10">
     提示:正则替换支持 $1、$2 引用捕获分组,例如查找 (\d{4})-(\d{2})-(\d{2}) 替换为 $2/$3/$1。
   </p>
 </template>

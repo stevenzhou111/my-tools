@@ -110,17 +110,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <p class="tip" style="margin-bottom: 14px">
+  <p class="tip mb-14">
     开会前先试试摄像头和麦克风是否正常:画面、清晰度(实际分辨率 / 帧率)与收音电平全部本地显示,任何画面与声音都不会被录制或上传。
   </p>
 
-  <div v-if="error" class="error-box" style="margin-bottom: 14px">✗ {{ error }}</div>
+  <div v-if="error" class="error-box mb-14">✗ {{ error }}</div>
 
   <div v-if="!active" class="panel cam-empty">
     <div style="font-size: 44px">📷</div>
     <p><strong>{{ starting ? '正在启动…' : '摄像头未开启' }}</strong></p>
     <p class="tip">点击下方按钮并在浏览器弹窗中允许权限</p>
-    <button class="btn btn-primary" style="margin-top: 14px" :disabled="starting" @click="start">
+    <button class="btn btn-primary mt-14" :disabled="starting" @click="start">
       {{ starting ? '启动中…' : '▶ 开启摄像头与麦克风' }}
     </button>
   </div>
@@ -133,9 +133,9 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="panel" style="margin-top: 14px">
+    <div class="panel mt-14">
       <div class="row" style="justify-content: space-between">
-        <span class="field-label" style="margin: 0">🎤 麦克风电平(对着说话应明显起伏)</span>
+        <span class="field-label m-0">🎤 麦克风电平(对着说话应明显起伏)</span>
         <span class="tip">{{ micLevel < 0 ? '不支持电平检测' : micLevel > 4 ? '有声音' : '安静' }}</span>
       </div>
       <div class="level-track" aria-hidden="true">
@@ -143,13 +143,13 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="row" style="margin-top: 14px">
+    <div class="row mt-14">
       <button class="btn btn-primary" @click="stop">⏹ 关闭设备</button>
       <button class="btn" @click="listDevices">↺ 刷新设备列表</button>
     </div>
   </template>
 
-  <div v-if="devices.length" class="panel" style="margin-top: 14px">
+  <div v-if="devices.length" class="panel mt-14">
     <span class="field-label">检测到的设备({{ devices.length }})</span>
     <div class="dev-list">
       <div v-for="(d, i) in devices" :key="d.deviceId + '-' + i" class="dev-row">
@@ -157,7 +157,7 @@ onUnmounted(() => {
         <span class="dev-label">{{ d.label }}</span>
       </div>
     </div>
-    <p v-if="devices.some((d) => !d.deviceId)" class="tip" style="margin-top: 8px">
+    <p v-if="devices.some((d) => !d.deviceId)" class="tip mt-8">
       部分设备还没有授权,名称与 ID 需要开启摄像头后才能完整显示。
     </p>
   </div>

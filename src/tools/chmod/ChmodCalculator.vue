@@ -67,7 +67,7 @@ const command = computed(() => `chmod ${symbolic.value} file`)
 </script>
 
 <template>
-  <div class="panel" style="margin-bottom: 14px">
+  <div class="panel mb-14">
     <div class="perm-grid">
       <div class="perm-col">
         <div class="perm-head">权限位</div>
@@ -90,7 +90,7 @@ const command = computed(() => `chmod ${symbolic.value} file`)
     </div>
   </div>
 
-  <div class="row" style="margin-bottom: 14px">
+  <div class="row mb-14">
     <label class="ctrl">
       <span class="field-label">直接输入八进制(3~4 位)反推</span>
       <input v-model="octalInput" class="input octal-input" spellcheck="false" @input="applyOctal" />
@@ -100,23 +100,23 @@ const command = computed(() => `chmod ${symbolic.value} file`)
   <div class="result-boxes">
     <div class="panel">
       <div class="result-head">
-        <span class="field-label" style="margin: 0">八进制</span>
+        <span class="field-label m-0">八进制</span>
         <button class="btn btn-sm" @click="copy('oct', octal)">{{ copiedKey === 'oct' ? '✓' : '复制' }}</button>
       </div>
       <code class="big-val">{{ octal }}</code>
     </div>
     <div class="panel">
       <div class="result-head">
-        <span class="field-label" style="margin: 0">符号式</span>
+        <span class="field-label m-0">符号式</span>
         <button class="btn btn-sm" @click="copy('sym', symbolic)">{{ copiedKey === 'sym' ? '✓' : '复制' }}</button>
       </div>
       <code class="big-val">{{ symbolic }}</code>
     </div>
   </div>
 
-  <div class="panel" style="margin-top: 12px">
+  <div class="panel mt-12">
     <div class="result-head">
-      <span class="field-label" style="margin: 0">Shell 命令</span>
+      <span class="field-label m-0">Shell 命令</span>
       <button class="btn btn-sm" @click="copy('cmd', command)">{{ copiedKey === 'cmd' ? '✓ 已复制' : '复制' }}</button>
     </div>
     <code class="cmd">{{ command }}</code>

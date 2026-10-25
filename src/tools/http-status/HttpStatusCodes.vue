@@ -54,8 +54,8 @@ const filtered = computed(() => {
 
 <template>
   <div class="field">
-    <label class="field-label">搜索状态码或关键字</label>
-    <input v-model="query" class="input" placeholder="如 404、重定向、timeout" spellcheck="false" />
+    <label class="field-label" for="query">搜索状态码或关键字</label>
+    <input id="query" v-model="query" class="input" placeholder="如 404、重定向、timeout" spellcheck="false" />
   </div>
 
   <div class="status-grid">
