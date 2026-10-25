@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { drawFrame, framesToGifBlob } from '@/utils/gif'
 import { downloadBlob } from '@/utils/image'
 import AppIcon from '@/components/AppIcon.vue'
@@ -45,10 +45,17 @@ async function addFiles(files) {
 
 function loadImage(f) {
   return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(f)
     const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error('不是有效图片'))
-    img.src = URL.createObjectURL(f)
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('不是有效图片'))
+    }
+    img.src = url
   })
 }
 
@@ -85,21 +92,34 @@ async function generate() {
 }
 
 async function downloadGif() {
-  if (!frames.value.length) return
-  const data = frames.value.map((f) => ({
-    ...drawFrame(f.img, size.value, transparent.value ? null : background.value),
-    delay: f.delay || 300,
-  }))
-  const blob = await framesToGifBlob(data, { transparent: transparent.value })
-  downloadBlob(blob, 'animation.gif')
+  if (!frames.value.length || busy.value) return
+  busy.value = true
+  error.value = ''
+  try {
+    const data = frames.value.map((f) => ({
+      ...drawFrame(f.img, size.value, transparent.value ? null : background.value),
+      delay: f.delay || 300,
+    }))
+    const blob = await framesToGifBlob(data, { transparent: transparent.value })
+    downloadBlob(blob, 'animation.gif')
+  } catch (e) {
+    error.value = '导出失败:' + (e.message || e)
+  } finally {
+    busy.value = false
+  }
 }
+
+onUnmounted(() => {
+  frames.value.forEach((f) => URL.revokeObjectURL(f.url))
+  if (resultUrl.value) URL.revokeObjectURL(resultUrl.value)
+})
 </script>
 
 <template>
   <div class="field">
     <label class="field-label">添加帧图片(可多选,支持反复追加)</label>
     <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="addFiles([...$event.dataTransfer.files])">
-      <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onFiles" />
+      <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFiles" />
       <p><strong>点击选择图片</strong> 或拖拽到此处</p>
       <p class="tip">每张图为一帧,按下方列表顺序播放</p>
     </div>

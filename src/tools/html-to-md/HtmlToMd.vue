@@ -44,7 +44,7 @@ async function onFile(e) {
       <div class="row" style="margin-top: 10px">
         <label class="btn btn-sm">
           打开 .html 文件
-          <input type="file" accept=".html,.htm" hidden @change="onFile" />
+          <input type="file" accept=".html,.htm" class="sr-only" @change="onFile" />
         </label>
         <span class="tip">支持标题/列表/链接/图片/加粗/代码块等常见标签</span>
       </div>

@@ -106,7 +106,7 @@ generate()
   font-weight: 600;
 }
 .strength.weak { color: var(--danger); }
-.strength.good { color: #16a34a; }
+.strength.good { color: var(--success); }
 .strength.great { color: var(--accent); }
 .pw-list {
   display: grid;

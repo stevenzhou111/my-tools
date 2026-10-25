@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import { PDFDocument } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
 
@@ -51,6 +51,10 @@ function clearAll() {
   items.value = []
 }
 
+onUnmounted(() => {
+  items.value.forEach((it) => URL.revokeObjectURL(it.url))
+})
+
 async function convert() {
   error.value = ''
   if (!items.value.length) return (error.value = '请先添加图片')
@@ -88,7 +92,7 @@ async function convert() {
 
 <template>
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
-    <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🖨️</div>
     <p><strong>点击选择图片</strong> 或拖拽多张图片到此处(可多选)</p>
     <p class="tip">每张图片一页,页面尺寸与图片一致,按列表顺序合并</p>
@@ -103,7 +107,7 @@ async function convert() {
       <span class="img-meta">{{ it.w }} × {{ it.h }} px</span>
       <button class="btn btn-sm" :disabled="i === 0" @click="move(i, -1)">↑</button>
       <button class="btn btn-sm" :disabled="i === items.length - 1" @click="move(i, 1)">↓</button>
-      <button class="btn btn-sm" @click="remove(i)">✕</button>
+      <button class="btn btn-sm" aria-label="移除" @click="remove(i)">✕</button>
     </div>
   </div>
 

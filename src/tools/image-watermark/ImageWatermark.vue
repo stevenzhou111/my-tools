@@ -145,7 +145,8 @@ function render() {
   }, 'image/png')
 }
 
-watch([text, fontSize, color, opacity, rotation, layout, corner, logoScale, type], debounce(render, 200))
+const debouncedRender = debounce(render, 200)
+watch([text, fontSize, color, opacity, rotation, layout, corner, logoScale, type], debouncedRender)
 
 onUnmounted(() => {
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
@@ -166,7 +167,7 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!image">
       <div class="dz-icon">💧</div>
       <p><strong>点击选择图片</strong> 或拖拽到此处</p>
@@ -184,7 +185,7 @@ function download() {
       <button v-if="type === 'image'" class="btn btn-sm" @click="logoInput.click()">
         {{ logoImg ? '更换 Logo' : '选择 Logo 图片' }}
       </button>
-      <input ref="logoInput" type="file" accept="image/*" hidden @change="onLogoChange" />
+      <input ref="logoInput" type="file" accept="image/*" class="sr-only" @change="onLogoChange" />
     </div>
 
     <div class="row" style="margin-bottom: 12px">

@@ -6,14 +6,16 @@ import { useToolPrefs } from '@/utils/prefs'
 import { useTheme } from '@/utils/theme'
 import { evalExpression } from '@/utils/calcExpression'
 import { useCopy } from '@/utils/useCopy'
+import { useToast } from '@/utils/toast'
 import AppIcon from '@/components/AppIcon.vue'
 
 const emit = defineEmits(['open-help'])
 
 const router = useRouter()
 const { favorites, recents } = useToolPrefs()
-const { theme, toggleTheme } = useTheme()
+const { toggleTheme } = useTheme()
 const { copy } = useCopy()
+const { showToast } = useToast()
 
 const open = ref(false)
 const query = ref('')
@@ -22,6 +24,10 @@ const inputEl = ref(null)
 const listEl = ref(null)
 
 const catName = computed(() => Object.fromEntries(CATEGORIES.map((c) => [c.id, c.name])))
+const catIcon = computed(() => Object.fromEntries(CATEGORIES.map((c) => [c.id, c.icon])))
+
+// 有查询时最多展示的命中数:超出部分键入更精确的关键词即可,避免长列表淹没高频结果
+const MAX_RESULTS = 40
 
 // 简单打分:名称前缀 > 名称包含 > 关键词/描述包含
 function score(tool, q) {
@@ -81,23 +87,32 @@ const items = computed(() => {
   const actions = matchActions(q).map((a) => ({ kind: 'action', action: a }))
   let tools
   if (!q) {
+    // 空查询只展示收藏 + 最近:全量 120 个条目(约 240 个 SVG)在低端设备上首帧压力大,
+    // 且收藏/最近本来就被淹没;搜索全部工具请输入关键词。
+    // 首次使用(两者皆空)回退展示前 24 个工具,避免打开面板一片空白
     const isFav = (t) => favorites.value.includes(t.id)
     const isRec = (t) => recents.value.includes(t.id)
-    tools = [...TOOLS.filter(isFav), ...TOOLS.filter((t) => isRec(t) && !isFav(t)), ...TOOLS.filter((t) => !isFav(t) && !isRec(t))].map((t) => ({
+    let base = [...new Set([...favorites.value, ...recents.value])]
+      .map((id) => TOOLS.find((t) => t.id === id))
+      .filter(Boolean)
+    const fallback = !base.length
+    if (fallback) base = TOOLS.slice(0, 24)
+    tools = base.map((t) => ({
       kind: 'tool',
       tool: t,
-      tag: isFav(t) ? '收藏' : isRec(t) ? '最近' : catName.value[t.category],
-      tagIcon: isFav(t) ? 'star' : isRec(t) ? 'clock' : CATEGORIES.find((c) => c.id === t.category)?.icon,
+      tag: fallback ? catName.value[t.category] : isFav(t) ? '收藏' : '最近',
+      tagIcon: fallback ? catIcon.value[t.category] : isFav(t) ? 'star' : 'clock',
     }))
   } else {
     tools = TOOLS.map((t) => ({ t, s: score(t, q) }))
       .filter((x) => x.s < Infinity)
       .sort((a, b) => a.s - b.s)
+      .slice(0, MAX_RESULTS)
       .map((x) => ({
         kind: 'tool',
         tool: x.t,
         tag: catName.value[x.t.category],
-        tagIcon: CATEGORIES.find((c) => c.id === x.t.category)?.icon,
+        tagIcon: catIcon.value[x.t.category],
       }))
   }
 
@@ -112,10 +127,13 @@ watch(open, async (v) => {
     lastFocused = document.activeElement
     query.value = ''
     activeIndex.value = 0
+    // 与移动端抽屉一致:全屏弹层打开期间锁定背景滚动
+    document.body.style.overflow = 'hidden'
     await nextTick()
     inputEl.value?.focus()
-  } else if (lastFocused?.focus) {
-    lastFocused.focus()
+  } else {
+    document.body.style.overflow = ''
+    if (lastFocused?.focus) lastFocused.focus()
     lastFocused = null
   }
 })
@@ -130,6 +148,8 @@ function activate(item) {
   if (!item) return
   if (item.kind === 'calc') {
     copy('calc', String(item.value))
+    // 面板随即关闭,copiedKey 用户看不见;成功也走 toast 给出确认
+    showToast('已复制计算结果')
     close()
     return
   }
@@ -238,6 +258,9 @@ defineExpose({ open: () => (open.value = true) })
             </button>
             <div v-if="!items.length" class="palette-empty">没有匹配的工具</div>
           </div>
+          <p class="palette-empty tip" v-if="!query.trim()" style="padding: 8px 18px; margin: 0; border-top: 1px solid var(--border)">
+            输入关键词搜索全部工具
+          </p>
           <div class="palette-foot">↑↓ 选择 · Enter 打开 · Esc 关闭 · 试试输入 1+2</div>
         </div>
       </div>

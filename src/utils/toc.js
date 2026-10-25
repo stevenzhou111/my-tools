@@ -14,10 +14,12 @@ export function githubSlug(text) {
 
 /**
  * 提取标题。返回 [{ level, text, slug }]
+ * slug 按 GitHub 语义去重:重复标题追加 -1/-2 后缀,否则 TOC 链接全部跳到第一个
  * @param {string} markdown
  */
 export function extractHeadings(markdown) {
   const out = []
+  const seen = new Map()
   let inFence = false
   for (const line of String(markdown).split(/\r?\n/)) {
     if (/^\s*(```|~~~)/.test(line)) {
@@ -26,7 +28,12 @@ export function extractHeadings(markdown) {
     }
     if (inFence) continue
     const m = /^(#{1,6})\s+(.+?)\s*#*\s*$/.exec(line)
-    if (m) out.push({ level: m[1].length, text: m[2].trim(), slug: githubSlug(m[2]) })
+    if (m) {
+      const base = githubSlug(m[2])
+      const n = seen.get(base) ?? 0
+      seen.set(base, n + 1)
+      out.push({ level: m[1].length, text: m[2].trim(), slug: n ? `${base}-${n}` : base })
+    }
   }
   return out
 }

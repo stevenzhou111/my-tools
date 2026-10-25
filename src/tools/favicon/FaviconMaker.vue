@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { buildIco } from '@/utils/ico'
 import { downloadBlob, loadImageFromFile } from '@/utils/image'
 import { useUrlState } from '@/utils/urlState'
@@ -34,6 +34,8 @@ async function onDrop(e) {
 
 async function process(f) {
   error.value = ''
+  // 防并发:上一次处理进行中时,cleanup() 会回收它正在使用的预览 URL
+  if (busy.value) return
   if (!/\.(png|jpe?g|webp|gif|bmp|svg)$/i.test(f.name)) {
     error.value = '请选择图片文件(PNG/JPG/WebP/GIF/SVG)'
     return
@@ -73,6 +75,8 @@ function cleanup() {
   previews.value.forEach((p) => URL.revokeObjectURL(p.url))
 }
 
+onUnmounted(cleanup)
+
 async function downloadIco() {
   if (!previews.value.length) return
   busy.value = true
@@ -103,7 +107,7 @@ function downloadPng(size) {
     @dragover.prevent
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFile" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFile" />
     <p><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p class="tip">建议 ≥ 256×256 的正方形 PNG/SVG;非正方形会居中裁切</p>
   </div>

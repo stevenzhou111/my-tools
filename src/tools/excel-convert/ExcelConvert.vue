@@ -82,6 +82,33 @@ function toMarkdown(rows) {
   return lines.join('\n')
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+// sheet_to_html 返回的是完整 HTML 文档,多工作表时会拼出多个 <html> 叠加的非法文档;
+// 改为自行构建表格片段,统一包进一个文档
+function toHtmlTable(rows, name) {
+  const trs = rows.map((row, ri) => {
+    const tag = ri === 0 ? 'th' : 'td'
+    const tds = row.map((c) => `<${tag}>${escapeHtml(c == null ? '' : String(c))}</${tag}>`).join('')
+    return `  <tr>${tds}</tr>`
+  })
+  return `<h2>${escapeHtml(name)}</h2>\n<table>\n${trs.join('\n')}\n</table>`
+}
+
+const HTML_SHELL = (body) => `<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>${escapeHtml(fileName.value || '表格')}</title>
+<style>body{font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:900px;margin:32px auto;padding:0 16px;color:#24292f}table{border-collapse:collapse;width:100%;margin-bottom:24px}td,th{border:1px solid #d0d7de;padding:6px 10px}th{background:#f2f4f8}h2{font-size:16px}</style>
+</head>
+<body>
+${body}
+</body>
+</html>`
+
 const output = computed(() => {
   const wb = workbook.value
   if (!wb) return ''
@@ -104,7 +131,7 @@ const output = computed(() => {
         content = toMarkdown(XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }))
         break
       case 'html':
-        content = XLSX.utils.sheet_to_html(ws)
+        content = toHtmlTable(XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }), name)
         break
     }
     if (sheetNames.value.length > 1 && fmt.id !== 'html') {
@@ -113,7 +140,15 @@ const output = computed(() => {
       parts.push(content)
     }
   }
-  return parts.join('\n\n')
+  const joined = parts.join('\n\n')
+  return fmt.id === 'html' ? HTML_SHELL(joined) : joined
+})
+
+// 大表全量渲染进 <pre> 会冻结页面:预览截断,复制/下载走完整的 output
+const PREVIEW_MAX = 20000
+const previewOutput = computed(() => {
+  const s = output.value
+  return s.length > PREVIEW_MAX ? s.slice(0, PREVIEW_MAX) + '\n…(仅预览前 2 万字符,复制/下载为完整内容)' : s
 })
 
 const rowCount = computed(() => {
@@ -130,7 +165,7 @@ function download() {
 
 <template>
   <div class="dropzone" @click="pick">
-    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv,.txt" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv,.txt" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📗</div>
     <p><strong>点击选择 Excel(.xlsx / .xls)或 CSV 文件</strong></p>
     <p class="tip">转换为 JSON / CSV / Markdown / HTML / TXT,全部本地解析</p>
@@ -150,7 +185,7 @@ function download() {
       </span>
     </div>
 
-    <pre class="output">{{ output }}</pre>
+    <pre class="output">{{ previewOutput }}</pre>
     <div class="row" style="margin-top: 10px">
       <button class="btn btn-sm" @click="copy('out', output)">
         {{ copiedKey === 'out' ? '✓ 已复制' : '复制内容' }}

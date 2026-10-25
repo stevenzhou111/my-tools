@@ -69,7 +69,7 @@ async function apply() {
 
 <template>
   <div class="dropzone" @click="pick">
-    <input ref="fileInput" type="file" accept="application/pdf" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🔢</div>
     <p v-if="!file"><strong>点击选择 PDF 文件</strong></p>
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>

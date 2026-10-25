@@ -346,7 +346,7 @@ onUnmounted(() => {
   color: var(--muted);
 }
 .lap-split.best {
-  color: #16a34a;
+  color: var(--success);
 }
 .lap-split.worst {
   color: var(--danger);

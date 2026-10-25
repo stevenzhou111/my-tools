@@ -80,6 +80,7 @@ export function zoneRows(at) {
     )
     const offset = tzOffsetMin(tz, at)
     const hour = Number(parts.hour) % 24
+    const isWeekend = parts.weekday === 'Sat' || parts.weekday === 'Sun'
     return {
       tz,
       label,
@@ -88,17 +89,24 @@ export function zoneRows(at) {
       weekday: WEEKDAY_ZH[parts.weekday] ?? parts.weekday,
       offsetMin: offset,
       offset: offsetLabel(offset),
-      // 9:00 ~ 18:00 本地视为工作时间,方便挑开会时间
-      isWorkday: hour >= 9 && hour < 18,
+      // 9:00 ~ 18:00 的工作日视为工作时间,方便挑开会时间(周末不算)
+      isWorkday: !isWeekend && hour >= 9 && hour < 18,
     }
   })
 }
 
 /** datetime-local 值 → Date:按指定时区的墙上时间解析 */
 export function wallTimeToInstant(localStr, tz) {
-  // 先按 UTC 字面量解析,再用目标时区偏移修正
+  // 先按 UTC 字面量解析,再用目标时区偏移修正。
+  // 偏移要迭代到不动点:一次采样可能落在切换日旧偏移侧(如纽约春令时当天
+  // 03:00-06:59 用 EST 偏移会整体偏 1 小时),用得到时刻处的偏移再修正一轮
   const naive = new Date(`${localStr}Z`.replace(' ', 'T'))
   if (Number.isNaN(naive.getTime())) return null
-  const offset = tzOffsetMin(tz, naive)
-  return new Date(naive.getTime() - offset * 60000)
+  let instant = naive.getTime() - tzOffsetMin(tz, naive) * 60000
+  for (let i = 0; i < 3; i++) {
+    const next = naive.getTime() - tzOffsetMin(tz, new Date(instant)) * 60000
+    if (next === instant) break
+    instant = next
+  }
+  return new Date(instant)
 }

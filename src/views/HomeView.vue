@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { APP_NAME, APP_TAGLINE } from '@/config'
 import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
 import { useRouter } from 'vue-router'
@@ -18,17 +18,8 @@ const recentTools = computed(() =>
   recents.value.map((id) => getTool(id)).filter(Boolean),
 )
 
-function onKey(e) {
-  if (e.key === '/' && document.activeElement !== searchEl.value) {
-    // 焦点已在任意输入框(含命令面板)时不抢焦点
-    const t = e.target
-    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
-    e.preventDefault()
-    searchEl.value?.focus()
-  }
-}
-onMounted(() => window.addEventListener('keydown', onKey))
-onUnmounted(() => window.removeEventListener('keydown', onKey))
+// "/" 快捷键由 App.vue 统一分发(按当前路由决定聚焦首页搜索还是侧栏搜索),
+// 这里通过 data-hero-search 标记自己的搜索框供其定位,不再重复注册监听
 
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -112,8 +103,10 @@ function openRandom() {
         <input
           ref="searchEl"
           v-model="query"
+          data-hero-search
           class="input search-input"
           type="search"
+          aria-label="搜索工具"
           placeholder="搜索工具,如 JSON、二维码、时间戳…(按 / 快速聚焦)"
         />
       </div>

@@ -161,7 +161,7 @@ onUnmounted(() => clearInterval(timer))
 .phase-row .btn.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .dial-wrap {
   position: relative;
@@ -186,8 +186,8 @@ onUnmounted(() => clearInterval(timer))
   font-variant-numeric: tabular-nums;
   font-family: var(--mono);
 }
-.time.work { color: #ef4444; }
-.time.rest { color: #10b981; }
+.time.work { color: var(--danger); }
+.time.rest { color: var(--success); }
 .phase-label {
   color: var(--muted);
   font-size: 14px;

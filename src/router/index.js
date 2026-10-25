@@ -16,11 +16,12 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 }),
 })
 
-router.afterEach((to) => {
+router.afterEach((to, from) => {
   const tool = to.name === 'tool' ? getTool(to.params.id) : null
   if (tool) {
     document.title = `${tool.name} · ${APP_NAME}`
-    pushRecent(tool.id)
+    // useUrlState 同步参数会触发 replace 导航:同一工具内的参数变化不重复记"最近使用"
+    if (from.name !== 'tool' || from.params.id !== to.params.id) pushRecent(tool.id)
   } else if (to.name === 'home') {
     document.title = `${APP_NAME} - Vue 3 在线工具集`
   } else {

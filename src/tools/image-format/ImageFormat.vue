@@ -60,12 +60,14 @@ async function render() {
 }
 
 // PNG 为无损格式不参与质量参数,纯质量变化时不重渲染
-watch([target, quality], debounce(([t], [oldT]) => {
+const debouncedRender = debounce(([t], [oldT]) => {
   if (t === 'image/png' && oldT === 'image/png') return
   render()
-}, 200))
+}, 200)
+watch([target, quality], debouncedRender)
 
 onUnmounted(() => {
+  debouncedRender.cancel()
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
 })
 
@@ -100,7 +102,7 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🔁</div>
     <p><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p class="tip">PNG / JPG / WebP 互转,支持 HEIC 之外的常见格式,全程本地转换</p>

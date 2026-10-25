@@ -21,6 +21,12 @@ describe('xlsxSql · sqlLiteral', () => {
     expect(sqlLiteral(NaN)).toBe('NULL')
     expect(sqlLiteral(new Date('2026-10-07T08:09:10Z'))).toBe("'2026-10-07 08:09:10'")
   })
+
+  it('MySQL 方言转义反斜杠,postgres 不转义', () => {
+    expect(sqlLiteral('C:\\Users\\张三')).toBe("'C:\\\\Users\\\\张三'")
+    expect(sqlLiteral('D:\\')).toBe("'D:\\\\'")
+    expect(sqlLiteral('C:\\Users\\张三', { dialect: 'postgres' })).toBe("'C:\\Users\\张三'")
+  })
 })
 
 describe('xlsxSql · buildInserts', () => {

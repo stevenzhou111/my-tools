@@ -133,7 +133,8 @@ function pretty(obj) {
   <template v-if="tab === 'parse'">
     <div class="field">
       <label class="field-label">粘贴 JWT Token</label>
-      <textarea v-draft="'jwt'" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+      <!-- 不挂 v-draft:用户粘贴的真实 token 含敏感 claims,不应明文落盘 sessionStorage -->
+      <textarea v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
     </div>
 
     <div v-if="error" class="error-box" style="margin-bottom: 12px">✗ {{ error }}</div>
@@ -243,7 +244,7 @@ function pretty(obj) {
 }
 .badge.ok {
   background: rgba(22, 163, 74, 0.12);
-  color: #16a34a;
+  color: var(--success);
 }
 .badge.bad {
   background: var(--danger-soft);
@@ -280,7 +281,7 @@ function pretty(obj) {
 }
 .verify-box.ok {
   background: rgba(22, 163, 74, 0.12);
-  color: #16a34a;
+  color: var(--success);
 }
 .verify-box.bad {
   background: var(--danger-soft);

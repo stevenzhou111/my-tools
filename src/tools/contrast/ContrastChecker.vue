@@ -134,7 +134,7 @@ const RESULTS = computed(() => {
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
-.score-num.pass { color: #16a34a; }
+.score-num.pass { color: var(--success); }
 .score-num.warn { color: #dc2626; }
 .score-label {
   font-size: 13px;
@@ -155,7 +155,7 @@ const RESULTS = computed(() => {
   border: 1px solid var(--border);
   border-radius: 9px;
 }
-.wcag-badge.pass { color: #16a34a; font-weight: 600; }
+.wcag-badge.pass { color: var(--success); font-weight: 600; }
 .wcag-badge.fail { color: #dc2626; }
 .sample {
   border-radius: 12px;

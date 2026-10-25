@@ -63,6 +63,8 @@ describe('mortgage · 组合贷款', () => {
     expect(combo.firstPayment).toBeCloseTo(4437.413002, 4)
     expect(combo.totalPayment).toBeCloseTo(s1.totalPayment + s2.totalPayment, 6)
     expect(combo.rows).toHaveLength(360)
+    // 贷款总额 = 两笔初始本金之和(不是第 1 期期末的剩余本金)
+    expect(combo.totalPrincipal).toBeCloseTo(1_000_000, 4)
   })
 
   it('期限不同时按最长者合并,缺失期按 0', () => {

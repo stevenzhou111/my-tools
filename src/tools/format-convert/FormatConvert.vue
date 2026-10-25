@@ -111,7 +111,7 @@ async function convert() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept=".xlsx,.xls,.ods,.csv" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept=".xlsx,.xls,.ods,.csv" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🔁</div>
     <p><strong>点击选择表格文件</strong>(.xlsx / .xls / .ods / .csv)或拖拽到此处</p>
     <p class="tip">在 XLSX、XLS、ODS、CSV、HTML 之间互转,多工作表完整保留</p>

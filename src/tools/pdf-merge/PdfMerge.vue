@@ -49,7 +49,7 @@ async function merge() {
 
 <template>
   <div class="dropzone" @click="pick">
-    <input ref="fileInput" type="file" accept="application/pdf" multiple hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="application/pdf" multiple class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🗂️</div>
     <p><strong>点击选择 PDF 文件</strong>(可多选,按列表顺序合并)</p>
     <p class="tip">全部在浏览器本地完成,PDF 不会上传</p>
@@ -65,7 +65,7 @@ async function merge() {
       <span class="tip">{{ (f.size / 1024).toFixed(0) }} KB</span>
       <button class="btn btn-sm" :disabled="i === 0" @click="move(i, -1)">↑</button>
       <button class="btn btn-sm" :disabled="i === files.length - 1" @click="move(i, 1)">↓</button>
-      <button class="btn btn-sm" @click="remove(i)">✕</button>
+      <button class="btn btn-sm" aria-label="移除" @click="remove(i)">✕</button>
     </div>
   </div>
 

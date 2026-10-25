@@ -41,23 +41,47 @@ watch(
   async (v) => {
     if (v) {
       lastFocused = document.activeElement
+      // 与移动端抽屉一致:弹层打开期间锁定背景滚动
+      document.body.style.overflow = 'hidden'
       await nextTick()
       panelEl.value?.focus()
-    } else if (lastFocused?.focus) {
-      lastFocused.focus()
+    } else {
+      document.body.style.overflow = ''
+      if (lastFocused?.focus) lastFocused.focus()
       lastFocused = null
     }
   },
 )
 
+// 焦点陷阱:Tab 在面板内循环,不落到背景页面(与 App 的抽屉实现同款)
+function trapTab(e) {
+  if (e.key !== 'Tab' || !panelEl.value) return
+  const focusables = [...panelEl.value.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+  if (!focusables.length) return
+  const first = focusables[0]
+  const last = focusables[focusables.length - 1]
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
+}
+
 function onKeydown(e) {
   if (e.key === 'Escape' && props.open) {
-    e.stopPropagation()
+    // App.vue 的监听在同一节点上,stopPropagation 拦不住;用 stopImmediatePropagation
+    // 独占本次 Escape,避免帮助与抽屉/面板同时关闭
+    e.stopImmediatePropagation()
     emit('close')
   }
 }
 window.addEventListener('keydown', onKeydown)
-onUnmounted(() => window.removeEventListener('keydown', onKeydown))
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
+  document.body.style.overflow = ''
+})
 </script>
 
 <template>
@@ -71,6 +95,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
           aria-modal="true"
           aria-label="快捷键帮助"
           tabindex="-1"
+          @keydown="trapTab"
         >
           <div class="sc-head">
             <AppIcon name="keyboard" :size="18" />

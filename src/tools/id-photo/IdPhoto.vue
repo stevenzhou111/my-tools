@@ -51,6 +51,7 @@ async function load(file) {
 }
 
 onUnmounted(() => {
+  debouncedRender.cancel()
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   if (originalUrl.value) URL.revokeObjectURL(originalUrl.value)
 })
@@ -131,7 +132,8 @@ function render() {
   }, 'image/png')
 }
 
-watch([tolerance, preset, customColor], debounce(render, 200))
+const debouncedRender = debounce(render, 200)
+watch([tolerance, preset, customColor], debouncedRender)
 
 function download() {
   const canvas = compose()
@@ -148,7 +150,7 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!image">
       <div class="dz-icon">🪪</div>
       <p><strong>点击选择证件照</strong> 或拖拽到此处</p>
@@ -161,22 +163,23 @@ function download() {
 
   <div v-if="image" class="panel" style="margin-top: 14px">
     <div class="row" style="margin-bottom: 14px">
-      <label class="ctrl-inline">
+      <span class="ctrl-inline">
         目标背景
         <button
           v-for="p in PRESETS"
           :key="p.id"
           class="btn btn-sm preset-btn"
           :class="{ active: preset === p.id }"
+          :aria-pressed="preset === p.id"
           @click="preset = p.id"
         >
           <span class="dot" :style="{ background: p.css }"></span>{{ p.name }}
         </button>
-        <label class="ctrl-inline">
-          <input v-model="preset" type="radio" value="custom" class="sr-radio" />自定义
-          <input v-model="customColor" type="color" class="input color-input" @click="preset = 'custom'" />
-        </label>
-      </label>
+        <span class="ctrl-inline">
+          <label class="check"><input v-model="preset" type="radio" value="custom" class="sr-radio" />自定义</label>
+          <input v-model="customColor" type="color" class="input color-input" aria-label="自定义背景色" @click="preset = 'custom'" />
+        </span>
+      </span>
       <label class="ctrl-inline">
         容差 <strong>{{ tolerance }}</strong>
         <input v-model.number="tolerance" type="range" min="20" max="140" step="5" />

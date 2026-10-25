@@ -36,7 +36,12 @@ describe('whitespace · 不可见字符可视化', () => {
 
   it('行尾显示 ␊ 并保留真实换行便于阅读', () => {
     expect(revealInvisible('x\ny')).toBe('x␊\ny')
-    expect(revealInvisible('x\r\ny').startsWith('x␊\n')).toBe(true)
+  })
+
+  it('CRLF 显示 ␍␊ 与 LF 可区分(排查"看着一样却不相等"的关键)', () => {
+    expect(revealInvisible('x\r\ny')).toBe('x␍␊\ny')
+    expect(revealInvisible('x\ry')).toBe('x␍\ny')
+    expect(revealInvisible('x\r\ny')).not.toBe(revealInvisible('x\ny'))
   })
 
   it('全角空格标记为 ␠', () => {

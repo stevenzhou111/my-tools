@@ -64,10 +64,12 @@ function onKeydown(e) {
     e.preventDefault()
     shortcutsOpen.value = true
   }
-  // '/' 聚焦侧栏搜索框;移动端侧栏隐藏,改为打开命令面板
+  // '/' 聚焦搜索框:首页聚焦 hero 搜索框,其余桌面端聚焦侧栏;移动端侧栏隐藏,改为打开命令面板
   if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
     e.preventDefault()
-    if (window.matchMedia('(min-width: 901px)').matches) {
+    if (route.name === 'home') {
+      document.querySelector('[data-hero-search]')?.focus()
+    } else if (window.matchMedia('(min-width: 901px)').matches) {
       document.querySelector('.side-search')?.focus()
     } else {
       paletteRef.value?.open?.()
@@ -168,6 +170,7 @@ onUnmounted(() => {
   top: 0;
   z-index: 100;
   background: color-mix(in srgb, var(--bg) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -272,8 +275,10 @@ onUnmounted(() => {
 .drawer-mask {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  /* 必须盖过 sticky header(z-index:100):否则抽屉顶部 60px(含搜索框)落在头部之下无法点击 */
+  z-index: 110;
   background: rgba(15, 17, 28, 0.5);
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
 }
 .drawer {

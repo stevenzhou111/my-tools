@@ -150,7 +150,7 @@ onMounted(initCanvas)
 .btn.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .ctrl {
   display: flex;

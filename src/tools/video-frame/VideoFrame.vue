@@ -83,7 +83,7 @@ function fmt(t) {
 
 <template>
   <div class="dropzone" @click="pick">
-    <input ref="fileInput" type="file" accept="video/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="video/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📸</div>
     <p><strong>点击选择本地视频</strong>(MP4 / WebM / MOV 等)</p>
     <p class="tip">播放或拖动进度条到想要的位置,点击「截取当前帧」保存画面</p>

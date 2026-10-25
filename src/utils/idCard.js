@@ -53,7 +53,12 @@ export function parseIdCard(id) {
     return { ok: false, error: `校验位不符:末位应为 ${expected},实际是 ${s[17]}`, valid: false }
   }
 
-  const age = Math.floor((Date.now() - date.getTime()) / (365.2425 * 24 * 3600 * 1000))
+  // 按日历比较计算周岁:平均年长(365.2425 天)在无闰日跨度里会少算 1 岁
+  const now = new Date()
+  let age = now.getFullYear() - y
+  const beforeBirthday =
+    now.getMonth() < m - 1 || (now.getMonth() === m - 1 && now.getDate() < d)
+  if (beforeBirthday) age--
   return {
     ok: true,
     province,

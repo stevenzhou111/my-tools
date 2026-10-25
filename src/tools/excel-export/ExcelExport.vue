@@ -72,6 +72,7 @@ function readWorkbook(f) {
 }
 
 const tableTruncated = ref(false)
+// 画布位图上限:8192 见方约 2.5 亿像素,过大会分配失败或卡死
 
 /** 把二维表格数据绘制为一张表格长图 */
 function renderTable(rows) {
@@ -92,10 +93,12 @@ function renderTable(rows) {
   }
   const totalW = widths.reduce((a, b) => a + b, 0) + 2
   const totalH = rows.length * ROW_H + 2
-  // 超出浏览器画布上限的内容会被静默截断,先记下来提醒用户
-  tableTruncated.value = totalW > 12000 || totalH > 12000
-  const width = Math.min(totalW, 12000)
-  const height = Math.min(totalH, 12000)
+  // 8192 见方已是 2.5 亿像素级位图(数百 MB),再大很多机器直接分配失败;
+  // 超出上限的内容会被静默截断,先记下来提醒用户
+  const CANVAS_MAX = 8192
+  tableTruncated.value = totalW > CANVAS_MAX || totalH > CANVAS_MAX
+  const width = Math.min(totalW, CANVAS_MAX)
+  const height = Math.min(totalH, CANVAS_MAX)
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
@@ -139,6 +142,7 @@ async function exportPng() {
       if (!rows.length) continue
       const { canvas } = renderTable(rows)
       const blob = await new Promise((res) => canvas.toBlob(res, 'image/png'))
+      if (!blob) throw new Error('表格过大,内存不足,请减少行列或精简数据后重试')
       if (wb.SheetNames.length === 1) {
         downloadBlob(blob, file.value.name.replace(/\.[^.]+$/, '') + '.png')
         info.value = '已导出 1 张图片'
@@ -183,6 +187,7 @@ async function exportPdf() {
         sliceCanvas.height = sh
         sliceCanvas.getContext('2d').drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh)
         const png = await new Promise((res) => sliceCanvas.toBlob(res, 'image/png'))
+        if (!png) throw new Error('表格过大,内存不足,请减少行列或精简数据后重试')
         const embedded = await out.embedPng(await png.arrayBuffer())
         const page = out.addPage([pageW, pageH])
         const drawH = (sh / canvas.width) * drawW
@@ -208,14 +213,14 @@ async function exportPdf() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📊</div>
     <p><strong>点击选择 Excel / CSV 文件</strong> 或拖拽到此处</p>
     <p class="tip">把表格渲染成图片或 PDF(本地绘制,支持多工作表)</p>
   </div>
 
   <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
-  <p v-if="tableTruncated" class="tip" style="margin-top: 10px">⚠️ 表格超出画布上限(12000px),超出部分的行/列已被截断,建议精简数据后重试。</p>
+  <p v-if="tableTruncated" class="tip" style="margin-top: 10px">⚠️ 表格超出画布上限(8192px),超出部分的行/列已被截断,建议精简数据后重试。</p>
   <p v-if="info" class="tip" style="margin-top: 10px">✅ {{ info }}</p>
 
   <template v-if="file">

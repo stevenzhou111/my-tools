@@ -351,7 +351,7 @@ const cards = computed(() => {
 .pp-save {
   margin-top: 6px;
   font-size: 14px;
-  color: #16a34a;
+  color: var(--success);
   font-weight: 600;
 }
 </style>

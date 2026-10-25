@@ -143,7 +143,7 @@ const MODS = [
 .mod-chip.on {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .prop-grid {
   display: grid;

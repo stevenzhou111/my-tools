@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <div class="panel notfound">
       <h1>404</h1>
       <p>页面走丢了,这里什么都没有。</p>

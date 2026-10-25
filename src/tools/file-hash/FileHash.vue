@@ -81,7 +81,7 @@ function fmtSize(bytes) {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📥</div>
     <p><strong>点击选择任意文件</strong> 或拖拽到此处</p>
     <p class="tip">计算 MD5 / SHA 系列哈希,用于校验下载文件完整性,全程本地处理</p>

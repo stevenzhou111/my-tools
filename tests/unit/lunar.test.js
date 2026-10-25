@@ -97,3 +97,25 @@ describe('lunar · 农历转公历与往返', () => {
     expect(solarToLunar(parse('2101-01-01'))).toBe(null)
   })
 })
+
+describe('lunar · 历史夏令时区间(Asia/Shanghai 1986-1991 实行夏令时)', () => {
+  // 这些日期在带完整 IANA 时区数据的环境里本地午夜比 UTC 口径少 1 小时,
+  // 本地时间差值取整会静默偏移一天,必须用 UTC 口径计算
+  it.each([
+    ['1988-07-01', '五月十八'],
+    ['1987-07-01', '六月初六'],
+    ['1990-07-01', '闰五月初九'],
+    ['1943-07-01', '五月廿九'], // 1943 年属 +9 时区时段
+  ])('%s 为 %s', (iso, text) => {
+    expect(solarToLunar(parse(iso)).text).toContain(text)
+  })
+
+  it('夏令时期间全年逐日往返一致(1988)', () => {
+    const d = parse('1988-01-01')
+    const end = parse('1988-12-31')
+    for (; d <= end; d.setDate(d.getDate() + 1)) {
+      const l = solarToLunar(d)
+      expect(fmt(lunarToSolar({ year: l.year, month: l.month, day: l.day, isLeap: l.isLeap }))).toBe(fmt(d))
+    }
+  })
+})

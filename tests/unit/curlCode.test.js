@@ -12,6 +12,28 @@ describe('curlCode · tokenize', () => {
     expect(tokenize('curl "a b"  c')).toEqual(['curl', 'a b', 'c'])
     // 双引号内的 \" 转义;shell 单引号内不支持转义,不在此处理
     expect(tokenize('curl "say \\"hi\\""')).toEqual(['curl', 'say "hi"'])
+    // POSIX 语义:双引号内 \ 只转义 $ ` " \ 换行,其余原样保留
+    expect(tokenize('curl -d "line1\\nline2"')).toEqual(['curl', '-d', 'line1\\nline2'])
+  })
+
+  it('-u 含非 Latin1 字符(中文账号密码)不抛异常', () => {
+    const p = parseCurl('curl -u 张三:密码123 https://a.b')
+    expect(p.ok).toBe(true)
+    // UTF-8 编码后 base64:张三:密码123
+    expect(p.headers.find((h) => h.name === 'Authorization').value).toBe(
+      'Basic ' + Buffer.from('张三:密码123', 'utf-8').toString('base64'),
+    )
+  })
+
+  it('--data-urlencode 做 URL 编码并补表单 Content-Type', () => {
+    const p = parseCurl('curl https://a.b/search --data-urlencode "q=hello world&x=1"')
+    expect(p.body).toBe('q=hello%20world%26x%3D1')
+    expect(p.headers.some((h) => h.name === 'Content-Type' && h.value === 'application/x-www-form-urlencoded')).toBe(true)
+  })
+
+  it('-u 不再因非 ASCII 抛异常,显式头不重复添加', () => {
+    const p = parseCurl(`curl -u a:b -H 'Authorization: Basic eHg=' https://a.b`)
+    expect(p.headers.filter((h) => h.name === 'Authorization')).toHaveLength(1)
   })
 })
 

@@ -36,9 +36,10 @@ async function process(f) {
   file.value = f
   busy.value = true
   progress.value = 0
+  let doc = null
   try {
     const bytes = await f.arrayBuffer()
-    const doc = await loadPdf(bytes.slice(0))
+    doc = await loadPdf(bytes.slice(0))
     pageCount.value = doc.numPages
     const lines = []
     for (let i = 1; i <= doc.numPages; i++) {
@@ -66,8 +67,11 @@ async function process(f) {
     }
     text.value = lines.join('\n')
   } catch (e) {
-    error.value = '提取失败:' + (e.message || e)
+    if (e?.name === 'PasswordException') error.value = 'PDF 已加密,请先解除密码后重试'
+    else error.value = '提取失败:' + (e.message || e)
   } finally {
+    // pdf.js worker 端会持有已解析文档,不 destroy 反复提取时内存持续累积
+    if (doc) await doc.destroy().catch(() => {})
     busy.value = false
   }
 }
@@ -90,7 +94,7 @@ function buildHtml() {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>${file.value.name.replace(/\.pdf$/i, '')}</title>
+<title>${escapeHtml(file.value.name.replace(/\.pdf$/i, ''))}</title>
 <style>body{font-family:system-ui,sans-serif;max-width:760px;margin:32px auto;padding:0 16px;line-height:1.8;color:#222}h3{color:#555;font-size:14px;border-top:1px solid #ddd;padding-top:14px}p{margin:6px 0}</style>
 </head>
 <body>
@@ -140,7 +144,7 @@ async function downloadWord() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="application/pdf" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📝</div>
     <p><strong>点击选择 PDF 文件</strong> 或拖拽到此处</p>
     <p class="tip">提取全部文字,可导出为 纯文本 / Word(.docx)/ HTML;⚠️ 仅提取文字,不含图片与排版</p>

@@ -1,5 +1,5 @@
 <script setup>
-import { onUnmounted, reactive, ref } from 'vue'
+import { onUnmounted, reactive, ref, watch } from 'vue'
 import { debounce, formatSize } from '@/utils/format'
 import { downloadBlob, downloadUrl } from '@/utils/image'
 import { zipSync } from 'fflate'
@@ -36,6 +36,7 @@ function addFiles(files) {
     return
   }
   error.value = ''
+  const dropped = imgs.length - Math.min(imgs.length, 30)
   for (const f of imgs.slice(0, 30)) {
     const item = reactive({
       id: ++uid,
@@ -51,6 +52,7 @@ function addFiles(files) {
     })
     items.push(item)
   }
+  if (dropped > 0) error.value = `最多同时处理 30 张,已忽略多余的 ${dropped} 张`
   runAll()
 }
 
@@ -113,14 +115,25 @@ async function processItem(item) {
   }
 }
 
+let running = false
 async function runAll() {
-  const pending = items.filter((i) => i.status !== 'done' || !i.blob)
-  if (!pending.length) return
-  busyCount.value = pending.length
-  // 串行处理,避免同时解码大量大图撑爆内存
-  for (const item of pending) {
-    await processItem(item)
-    busyCount.value--
+  // 重入保护:处理中再次拖入文件时不再开第二个循环(会并发处理同一 item,
+  // 后完成者覆盖先完成者的 resultUrl 造成泄漏),改为循环消费直到没有待处理项
+  if (running) return
+  running = true
+  try {
+    while (true) {
+      const pending = items.filter((i) => i.status === 'pending' || i.status === 'error')
+      if (!pending.length) break
+      busyCount.value += pending.length
+      // 串行处理,避免同时解码大量大图撑爆内存
+      for (const item of pending) {
+        await processItem(item)
+        busyCount.value--
+      }
+    }
+  } finally {
+    running = false
   }
 }
 
@@ -128,6 +141,12 @@ const rerunAll = debounce(() => {
   for (const item of items) item.status = 'pending'
   runAll()
 }, 250)
+
+// 参数变化后已有结果项用新参数重跑(此前 rerunAll 无人触发,调参不生效);
+// 未完成项由 runAll 的循环自然接管,无需重置
+watch([quality, format, maxWidth], () => {
+  if (items.length) rerunAll()
+})
 
 function removeItem(item) {
   const idx = items.indexOf(item)
@@ -193,7 +212,7 @@ const totals = () => {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
     <div v-if="!items.length">
       <div class="dz-icon">🖼️</div>
       <p><strong>点击选择图片</strong> 或拖拽图片到此处(可一次多选)</p>

@@ -15,7 +15,7 @@ const { favorites } = useToolPrefs()
 
 const favTools = computed(() => favorites.value.map((id) => getTool(id)).filter(Boolean))
 
-const currentTool = computed(() => TOOLS.find((t) => t.id === route.params.id))
+const currentTool = computed(() => getTool(route.params.id))
 
 // 当前工具所在分类自动展开
 watch(
@@ -35,6 +35,10 @@ const filtered = computed(() => {
     ),
   })).filter((cat) => cat.tools.length > 0)
 })
+
+// 搜索时强制展开所有命中分类:否则结果被折叠态藏住,又因 filtered 非空不显示空态,
+// 搜索看起来"什么都搜不到"
+const searching = computed(() => query.value.trim().length > 0)
 
 function toggle(catId) {
   if (collapsed.has(catId)) collapsed.delete(catId)
@@ -71,11 +75,16 @@ function emitNavigate() {
     </div>
 
     <div v-for="cat in filtered" :key="cat.id" class="side-cat">
-      <button class="side-cat-head" type="button" :aria-expanded="!collapsed.has(cat.id)" @click="toggle(cat.id)">
+      <button
+        class="side-cat-head"
+        type="button"
+        :aria-expanded="searching || !collapsed.has(cat.id)"
+        @click="toggle(cat.id)"
+      >
         <span class="side-cat-name"><AppIcon :name="cat.icon" :size="15" />{{ cat.name }}</span>
         <span class="chev">{{ collapsed.has(cat.id) ? '▸' : '▾' }}</span>
       </button>
-      <div v-show="!collapsed.has(cat.id)" class="side-tools">
+      <div v-show="searching || !collapsed.has(cat.id)" class="side-tools">
         <router-link
           v-for="tool in cat.tools"
           :key="tool.id"

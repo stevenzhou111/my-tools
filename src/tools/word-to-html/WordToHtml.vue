@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import DOMPurify from 'dompurify'
 import mammoth from 'mammoth/mammoth.browser'
 import { downloadBlob } from '@/utils/image'
 
@@ -12,11 +13,17 @@ const html = ref('')
 const messages = ref([])
 const showSource = ref(false)
 
+// mammoth 只做属性转义、不限制链接协议,恶意 docx 可携带 javascript: 超链接;
+// 入库前统一过一遍 DOMPurify,预览/下载/打印三条路径共享同一份安全输出
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
 const STYLED = (body) => `<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>${file.value?.name?.replace(/\.docx$/i, '') || 'document'}</title>
+<title>${escapeHtml(file.value?.name?.replace(/\.docx$/i, '') || 'document')}</title>
 <style>
 body{font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:820px;margin:32px auto;padding:0 20px;line-height:1.8;color:#24292f}
 img{max-width:100%}
@@ -54,7 +61,7 @@ async function process(f) {
   try {
     const arrayBuffer = await f.arrayBuffer()
     const result = await mammoth.convertToHtml({ arrayBuffer })
-    html.value = result.value
+    html.value = DOMPurify.sanitize(result.value)
     messages.value = result.messages.slice(0, 5).map((m) => m.message)
   } catch (e) {
     error.value = '解析失败:' + (e.message || e)
@@ -94,7 +101,7 @@ async function copyHtml() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept=".docx" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept=".docx" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">📃</div>
     <p><strong>点击选择 Word 文档(.docx)</strong> 或拖拽到此处</p>
     <p class="tip">解析为 HTML 预览,可复制 / 下载 / 直接打印存为 PDF;⚠️ 仅支持 .docx,不支持旧版 .doc</p>
@@ -120,6 +127,7 @@ async function copyHtml() {
       :srcdoc="STYLED(html)"
       class="preview-frame"
       title="文档预览"
+      sandbox=""
     ></iframe>
     <pre v-else class="output" style="margin-top: 12px">{{ html.slice(0, 8000) }}{{ html.length > 8000 ? '\n…' : '' }}</pre>
   </template>

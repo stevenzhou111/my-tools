@@ -76,9 +76,13 @@ function monthDays(year, month, isLeap = false) {
  * @returns {null | { year, month, day, isLeap, monthName, dayName, ganzhi, zodiac, text }}
  */
 export function solarToLunar(date) {
-  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-  let offset = Math.floor((d - new Date(MIN_YEAR, 0, 31)) / 86400000)
-  if (offset < 0 || d >= new Date(MAX_YEAR + 1, 0, 1)) return null
+  const y = date.getFullYear()
+  const m = date.getMonth()
+  const d = date.getDate()
+  // 必须用 UTC 口径算天数差:本地时间在历史夏令时期间(如 1986-1991)本地午夜比
+  // 绝对时刻晚 1 小时,floor 后会少算一天,结果静默偏移一天
+  let offset = Math.floor((Date.UTC(y, m, d) - Date.UTC(MIN_YEAR, 0, 31)) / 86400000)
+  if (offset < 0 || Date.UTC(y, m, d) >= Date.UTC(MAX_YEAR + 1, 0, 1)) return null
 
   let year = MIN_YEAR
   let daysInYear = 0

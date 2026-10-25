@@ -17,10 +17,18 @@ const sm3Output = computed(() => {
 })
 
 // ---------- SM4 ----------
+function randomHex32() {
+  const buf = new Uint8Array(16)
+  crypto.getRandomValues(buf)
+  return [...buf].map((b) => b.toString(16).padStart(2, '0')).join('')
+}
+
 const sm4Text = ref('这是一段需要加密的机密内容')
 const sm4Key = ref('0123456789abcdeffedcba9876543210')
-const sm4Mode = ref('ecb')
-const sm4Iv = ref('0123456789abcdeffedcba9876543210')
+// 默认 CBC + 随机 IV:ECB 对结构性数据泄漏明文模式,不应作为默认选项;
+// 固定示例 IV 在同密钥下会让 CBC 退化,故初始 IV 也随机生成
+const sm4Mode = ref('cbc')
+const sm4Iv = ref(randomHex32())
 const sm4CipherOut = ref('') // 加密结果展示
 const sm4CipherIn = ref('') // 解密输入
 const sm4Plain = ref('')
@@ -144,15 +152,21 @@ function sm2Decrypt() {
       <label class="ctrl" style="width: 130px">
         <span class="field-label">模式</span>
         <select v-model="sm4Mode" class="select">
-          <option value="ecb">ECB</option>
           <option value="cbc">CBC(需 IV)</option>
+          <option value="ecb">ECB</option>
         </select>
       </label>
       <label v-if="sm4Mode === 'cbc'" class="ctrl">
         <span class="field-label">IV(32 位 hex)</span>
-        <input v-model="sm4Iv" class="input mono" spellcheck="false" />
+        <span class="row" style="gap: 6px">
+          <input v-model="sm4Iv" class="input mono" spellcheck="false" />
+          <button class="btn" title="生成随机 IV" aria-label="生成随机 IV" @click="sm4Iv = randomHex32()">🎲</button>
+        </span>
       </label>
     </div>
+    <p v-if="sm4Mode === 'ecb'" class="tip" style="margin-top: -6px">
+      ⚠️ ECB 模式不抗模式分析:相同明文分组产生相同密文,除兼容遗留系统外建议改用 CBC。
+    </p>
 
     <div class="field">
       <label class="field-label">明文</label>

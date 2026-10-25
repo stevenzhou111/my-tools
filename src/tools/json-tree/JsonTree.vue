@@ -285,9 +285,9 @@ const TYPE_CLASS = {
   border-radius: 5px;
   flex-shrink: 0;
 }
-.t-string { color: #16a34a; background: rgba(22, 163, 74, 0.1); }
+.t-string { color: var(--success); background: color-mix(in srgb, var(--success) 10%, transparent); }
 .t-number { color: #2563eb; background: rgba(37, 99, 235, 0.1); }
-.t-bool { color: #d97706; background: rgba(217, 119, 6, 0.12); }
+.t-bool { color: var(--warning); background: color-mix(in srgb, var(--warning) 12%, transparent); }
 .t-null { color: var(--muted); background: var(--bg-soft); }
 .t-object, .t-array { color: var(--accent); background: var(--accent-soft); }
 .t-value {
@@ -313,7 +313,8 @@ const TYPE_CLASS = {
   transition: opacity 0.12s;
   flex-shrink: 0;
 }
-.tree-row:hover .path-btn {
+.tree-row:hover .path-btn,
+.tree-row:focus-within .path-btn {
   opacity: 1;
 }
 </style>

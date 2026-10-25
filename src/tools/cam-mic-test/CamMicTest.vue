@@ -12,6 +12,9 @@ const micLevel = ref(0)
 
 let audioCtx = null
 let levelTimer = 0
+// 卸载标志:getUserMedia 等待期间组件可能已销毁,await 恢复后必须据此放弃后续副作用,
+// 否则流与定时器在组件销毁后永久存活(摄像头指示灯常亮)
+let disposed = false
 
 async function listDevices() {
   try {
@@ -34,9 +37,14 @@ async function start() {
   starting.value = true
   try {
     const s = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 } }, audio: true })
+    if (disposed) {
+      s.getTracks().forEach((t) => t.stop())
+      return
+    }
     stream.value = s
     active.value = true
     await listDevices()
+    if (disposed) return
     if (videoEl.value) {
       videoEl.value.srcObject = s
       await videoEl.value.play().catch(() => {})
@@ -96,7 +104,8 @@ async function stop() {
 }
 
 onUnmounted(() => {
-  if (active.value) stop()
+  disposed = true
+  stop()
 })
 </script>
 

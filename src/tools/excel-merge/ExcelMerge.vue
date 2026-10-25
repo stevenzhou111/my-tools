@@ -127,7 +127,7 @@ async function split(f) {
 
   <template v-if="tab === 'merge'">
     <div class="dropzone" @click="pickMerge">
-      <input ref="mergeInput" type="file" accept=".xlsx,.xls,.csv" multiple hidden @change="onMergeChange" />
+      <input ref="mergeInput" type="file" accept=".xlsx,.xls,.csv" multiple class="sr-only" @change="onMergeChange" />
       <div class="dz-icon">📚</div>
       <p><strong>点击选择多个 Excel / CSV 文件</strong></p>
       <p class="tip">所有工作表按顺序合并为一个 xlsx,同名工作表自动加序号</p>
@@ -135,7 +135,7 @@ async function split(f) {
     <div v-if="files.length" class="panel" style="margin-top: 14px">
       <div v-for="(f, i) in files" :key="i" class="file-row">
         <span class="file-name">{{ f.name }}</span>
-        <button class="btn btn-sm" @click="files.splice(i, 1)">✕</button>
+        <button class="btn btn-sm" aria-label="移除" @click="files.splice(i, 1)">✕</button>
       </div>
     </div>
     <div v-if="files.length" class="row" style="margin-top: 14px">
@@ -146,7 +146,7 @@ async function split(f) {
 
   <template v-else>
     <div class="dropzone" @click="pickSplit">
-      <input ref="splitInput" type="file" accept=".xlsx,.xls" hidden @change="onSplitChange" />
+      <input ref="splitInput" type="file" accept=".xlsx,.xls" class="sr-only" @change="onSplitChange" />
       <div class="dz-icon">📂</div>
       <p><strong>点击选择一个多 Sheet 的 Excel 文件</strong></p>
       <p class="tip">每个工作表导出为独立的 xlsx,打包成 ZIP 下载</p>

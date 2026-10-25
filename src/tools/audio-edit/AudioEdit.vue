@@ -189,7 +189,7 @@ onUnmounted(() => {
 
 <template>
   <div class="dropzone" @click="pick">
-    <input ref="fileInput" type="file" accept="audio/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="audio/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🎚️</div>
     <p><strong>点击选择音频文件</strong>(MP3 / WAV / M4A / OGG 等)</p>
     <p class="tip">裁剪片段、倒放、调音量,导出 WAV,全程本地处理</p>

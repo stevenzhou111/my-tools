@@ -84,6 +84,8 @@ function compose() {
 function render() {
   const canvas = compose()
   if (!canvas) {
+    // 清空/超限分支也要回收旧预览,否则卸载时已为空串、永远回收不到
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
     previewUrl.value = ''
     return
   }
@@ -91,7 +93,8 @@ function render() {
   canvas.toBlob((b) => b && (previewUrl.value = URL.createObjectURL(b)), 'image/png')
 }
 
-watch([direction, gap, padding, bgColor, align, () => items.value.length], debounce(render, 150))
+const debouncedRender = debounce(render, 150)
+watch([direction, gap, padding, bgColor, align, () => items.value.length], debouncedRender)
 
 onUnmounted(() => {
   if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
@@ -105,7 +108,7 @@ function download() {
 
 <template>
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
-    <input ref="fileInput" type="file" accept="image/*" multiple hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🧷</div>
     <p><strong>点击选择多张图片</strong> 或拖拽到此处,按列表顺序拼接</p>
   </div>
@@ -134,7 +137,7 @@ function download() {
       <span class="img-meta">{{ it.name }} · {{ it.w }}×{{ it.h }}</span>
       <button class="btn btn-sm" :disabled="i === 0" @click="move(i, -1)">↑</button>
       <button class="btn btn-sm" :disabled="i === items.length - 1" @click="move(i, 1)">↓</button>
-      <button class="btn btn-sm" @click="remove(i)">✕</button>
+      <button class="btn btn-sm" aria-label="移除" @click="remove(i)">✕</button>
     </div>
   </div>
 

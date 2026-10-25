@@ -74,6 +74,7 @@ function randomColor() {
         v-for="c in scale"
         :key="c.step"
         class="swatch"
+        :class="{ 'is-base': c.isBase }"
         :style="{ background: c.hex, color: readableOn(c.hex) }"
         :title="`点击复制 ${c.hex}`"
         @click="copy('sw-' + c.step, c.hex)"
@@ -149,8 +150,10 @@ function randomColor() {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
-.swatch[aria-checked='true'] {
+/* 基准档高亮(此前选择器指向从未设置过的 aria-checked,样式从未生效) */
+.swatch.is-base {
   outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 .sw-step {
   font-size: 14px;

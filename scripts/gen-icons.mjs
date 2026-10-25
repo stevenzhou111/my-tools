@@ -1,4 +1,7 @@
-// 一次性生成脚本:从 lucide-vue-next 提取指定图标的路径数据,写入 src/assets/icons.js
+// 图标提取脚本(emoji 迁移时的一次性工具,保留用于补图标的重建):
+// 从 lucide-vue-next 提取指定图标的路径数据,写入 src/assets/icons.js。
+// ⚠️ 本文件硬编码的 CATS/TOOLS 清单与 src/tools/registry.js 是两份平行数据,
+// 新增工具后需先在这里补对应图标名再运行,否则校验阶段会 exit(1)。
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -21,7 +24,7 @@ const CATS = {
   software: 'hard-drive',
 }
 
-// 86 工具
+// 工具图标(与 registry.js 的 icon 字段平行维护,新增工具需同步)
 const TOOLS = {
   json: 'braces',
   base64: 'type',

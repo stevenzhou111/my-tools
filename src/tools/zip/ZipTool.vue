@@ -101,7 +101,7 @@ function previewText(entry) {
   <!-- 压缩 -->
   <template v-if="tab === 'compress'">
     <div class="dropzone" @click="pickFiles">
-      <input ref="fileInput" type="file" multiple hidden @change="onFilesChange" />
+      <input ref="fileInput" type="file" multiple class="sr-only" @change="onFilesChange" />
       <div class="dz-icon">📦</div>
       <p><strong>点击选择文件</strong>(可多选,按原文件名打包)</p>
     </div>
@@ -109,7 +109,7 @@ function previewText(entry) {
       <div v-for="(f, i) in files" :key="i" class="file-row">
         <span class="file-name">{{ f.name }}</span>
         <span class="tip">{{ (f.size / 1024).toFixed(1) }} KB</span>
-        <button class="btn btn-sm" @click="files.splice(i, 1)">✕</button>
+        <button class="btn btn-sm" aria-label="移除" @click="files.splice(i, 1)">✕</button>
       </div>
     </div>
     <div v-if="files.length" class="row" style="margin-top: 14px">
@@ -123,7 +123,7 @@ function previewText(entry) {
   <!-- 解压 -->
   <template v-else>
     <div class="dropzone" @click="pickZip" @dragover.prevent @drop.prevent="onZipDrop">
-      <input ref="zipInput" type="file" accept=".zip" hidden @change="onZipChange" />
+      <input ref="zipInput" type="file" accept=".zip" class="sr-only" @change="onZipChange" />
       <div class="dz-icon">📂</div>
       <p><strong>点击选择 ZIP 文件</strong> 或拖拽到此处</p>
       <p class="tip">解压在浏览器本地完成,可选择其中文件单独下载</p>

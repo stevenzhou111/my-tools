@@ -127,7 +127,7 @@ function shareText() {
 }
 .tz-badge.work {
   background: rgba(22, 163, 74, 0.12);
-  color: #16a34a;
+  color: var(--success);
 }
 .tz-offset {
   width: 70px;

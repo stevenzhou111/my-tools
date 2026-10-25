@@ -36,24 +36,26 @@ const TAG_CLASS = {
 </script>
 
 <template>
-  <div class="row" style="margin-bottom: 14px">
-    <label class="check cat-chip" :class="{ active: cat === 'all' }" @click="cat = 'all'">
+  <div class="row" style="margin-bottom: 14px" role="group" aria-label="按分类筛选">
+    <button type="button" class="check cat-chip" :class="{ active: cat === 'all' }" :aria-pressed="cat === 'all'" @click="cat = 'all'">
       全部({{ SOFTWARE.length }})
-    </label>
-    <label
+    </button>
+    <button
       v-for="c in SOFT_CATS"
       :key="c.id"
+      type="button"
       class="check cat-chip"
       :class="{ active: cat === c.id }"
+      :aria-pressed="cat === c.id"
       @click="cat = c.id"
     >
       <AppIcon :name="c.icon" :size="14" />{{ c.name }}({{ SOFTWARE.filter((s) => s.cat === c.id).length }})
-    </label>
+    </button>
   </div>
 
   <div class="field">
-    <label class="field-label">搜索软件</label>
-    <input v-model="query" class="input" type="search" placeholder="如 截图、笔记、下载、开源…" />
+    <label class="field-label" for="soft-search">搜索软件</label>
+    <input id="soft-search" v-model="query" class="input" type="search" placeholder="如 截图、笔记、下载、开源…" />
   </div>
 
   <div class="soft-grid">
@@ -85,6 +87,8 @@ const TAG_CLASS = {
   border-radius: 20px;
   cursor: pointer;
   font-size: 14.5px;
+  font-family: inherit;
+  color: inherit;
   background: var(--card);
   transition: all 0.12s;
 }
@@ -95,7 +99,7 @@ const TAG_CLASS = {
 .cat-chip.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .soft-grid {
   display: grid;
@@ -125,8 +129,8 @@ const TAG_CLASS = {
   flex-shrink: 0;
 }
 .tag-free { background: var(--accent-soft); color: var(--accent); }
-.tag-oss { background: rgba(22, 163, 74, 0.12); color: #16a34a; }
-.tag-freemium { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+.tag-oss { background: color-mix(in srgb, var(--success) 12%, transparent); color: var(--success); }
+.tag-freemium { background: color-mix(in srgb, var(--warning) 15%, transparent); color: var(--warning); }
 .tag-os { background: var(--bg-soft); color: var(--muted); }
 .tag-paid { background: var(--danger-soft); color: var(--danger); }
 .soft-desc {

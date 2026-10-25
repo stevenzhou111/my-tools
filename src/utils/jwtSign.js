@@ -46,7 +46,9 @@ export async function signPart(headerB64, payloadB64, secret, algo = 'HS256') {
  * @returns {Promise<{token:string, header:object, payload:object}>}
  */
 export async function createJwt(payload, secret, algo = 'HS256', extraHeader = {}) {
-  const header = { alg: algo, typ: 'JWT', ...extraHeader }
+  // alg 必须与实际签名算法一致,扩展 Header 里传入的 alg 会造成"声称 RS256 实为 HMAC"的误导性 token
+  const { alg: _override, ...rest } = extraHeader || {}
+  const header = { alg: algo, typ: 'JWT', ...rest }
   const headerB64 = b64urlEncode(new TextEncoder().encode(JSON.stringify(header)))
   const payloadB64 = b64urlEncode(new TextEncoder().encode(JSON.stringify(payload)))
   const signature = await signPart(headerB64, payloadB64, secret, algo)

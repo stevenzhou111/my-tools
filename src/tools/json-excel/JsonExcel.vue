@@ -116,7 +116,7 @@ const canExport = computed(() => {
 
   <template v-else>
     <div class="dropzone" @click="pick">
-      <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden @change="onFileChange" />
+      <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
       <div class="dz-icon">📗</div>
       <p><strong>点击选择 Excel / CSV 文件</strong>,转换为 JSON</p>
       <p v-if="fileName" class="tip">已读取:{{ fileName }}<template v-if="sheetNames.length"> · 工作表:{{ sheetNames.join('、') }}</template></p>

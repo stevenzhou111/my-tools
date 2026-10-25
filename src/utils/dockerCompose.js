@@ -4,12 +4,14 @@
  */
 import { dump as yamlDump } from 'js-yaml'
 
-/** 带引号感知的分词(单引号/双引号内空格不切分) */
+/** 带引号感知的分词(单引号/双引号内空格不切分,先合并反斜杠续行) */
 export function tokenize(cmd) {
+  // 多行 docker run(每行行尾 \ 续行)是该工具最典型的输入,不合并会生成完全错乱的 YAML
+  const s = String(cmd ?? '').replace(/\\\r?\n/g, ' ')
   const tokens = []
   let cur = ''
   let quote = null
-  for (const ch of String(cmd ?? '')) {
+  for (const ch of s) {
     if (quote) {
       if (ch === quote) quote = null
       else cur += ch

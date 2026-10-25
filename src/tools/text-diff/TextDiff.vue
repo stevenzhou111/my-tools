@@ -128,8 +128,8 @@ const diffText = computed(() =>
   color: var(--muted);
 }
 .chip.add {
-  background: rgba(22, 163, 74, 0.12);
-  color: #16a34a;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
 }
 .chip.del {
   background: var(--danger-soft);
@@ -149,8 +149,8 @@ const diffText = computed(() =>
   padding: 0 6px;
 }
 .line-add {
-  background: rgba(22, 163, 74, 0.12);
-  color: #16a34a;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
 }
 .line-del {
   background: var(--danger-soft);

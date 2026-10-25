@@ -39,6 +39,11 @@ function process(file) {
     error.value = '请选择图片文件'
     return
   }
+  // Base64 会让体积膨胀约 1/3,且结果要渲染进多个 <pre>,过大的文件会冻结页面
+  if (file.size > 10 * 1024 * 1024) {
+    error.value = '文件超过 10MB,Base64 编码结果过大,请先压缩后再转换'
+    return
+  }
   // 竞态防护:快速连续放入多个文件时,只接受最新一次的结果
   const seq = ++loadSeq
   fileName.value = file.name
@@ -73,7 +78,7 @@ function process(file) {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🌉</div>
     <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
     <p class="tip">图片会被编码为 Data URL,可直接内联到 HTML / CSS 中</p>

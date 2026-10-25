@@ -3,10 +3,11 @@
  * 组件层负责用 SheetJS 解析文件,这里只做纯 SQL 文本生成。
  */
 
-const IDENT_RE = /^[A-Za-z_][A-Za-z0-9_$]*$/
-
 function quoteIdent(name, dialect) {
-  return dialect === 'postgres' ? `"${name}"` : `\`${name}\``
+  // 引号内嵌同种引号按 SQL 规则双写,否则含 ` / " 的表头会直接产生语法错误
+  return dialect === 'postgres'
+    ? `"${name.replace(/"/g, '""')}"`
+    : `\`${name.replace(/`/g, '``')}\``
 }
 
 /** 单个值 → SQL 字面量 */
@@ -17,7 +18,10 @@ export function sqlLiteral(v, { dialect = 'mysql', emptyAsNull = true } = {}) {
   if (v instanceof Date) return `'${v.toISOString().replace('T', ' ').slice(0, 19)}'`
   const s = String(v)
   if (emptyAsNull && s.trim() === '') return 'NULL'
-  return `'${s.replace(/'/g, "''")}'`
+  // MySQL 默认模式下 \ 是转义符,必须双写:Windows 路径类内容不转义会丢字符,
+  // 以 \ 结尾还会转义掉收尾引号使整条语句断裂;postgres 标准串 \ 即字面量
+  const body = dialect === 'mysql' ? s.replace(/\\/g, '\\\\') : s
+  return `'${body.replace(/'/g, "''")}'`
 }
 
 /**

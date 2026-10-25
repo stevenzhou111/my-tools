@@ -12,16 +12,20 @@ function parseField(str, min, max) {
     let step = 1
     let hasStep = false
     if (part.includes('/')) {
-      const [b, s] = part.split('/')
+      const segs = part.split('/')
+      if (segs.length > 2) return { error: `"${part}" 步进不合法` }
+      const [b, s] = segs
       body = b
       step = Number(s)
       hasStep = true
-      if (!Number.isInteger(step) || step < 1) return { error: `步进 "${s}" 不合法` }
+      if (!/^\d+$/.test(s) || step < 1) return { error: `步进 "${s}" 不合法` }
     }
     let lo = min
     let hi = max
     if (body !== '*') {
       const range = body.split('-')
+      // 每段必须为纯数字:否则 "-5"(Number('')===0)、"1-2-3" 这类会被静默接受成别的含义
+      if (range.some((seg) => !/^\d+$/.test(seg))) return { error: `"${part}" 不是数字` }
       lo = Number(range[0])
       if (range.length === 2) hi = Number(range[1])
       else if (range.length > 2) return { error: `"${part}" 不合法` }

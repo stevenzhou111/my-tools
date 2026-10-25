@@ -23,10 +23,13 @@ export const vDraft = {
   mounted(el, binding) {
     const key = binding.value
     if (!key) return
+    el._draftKey = key
     restore(el, key)
     el._draftInput = () => {
+      el._draftDirty = true
       clearTimeout(el._draftTimer)
       el._draftTimer = setTimeout(() => {
+        el._draftDirty = false
         try {
           sessionStorage.setItem(PREFIX + key, el.value)
         } catch {
@@ -37,10 +40,20 @@ export const vDraft = {
     el.addEventListener('input', el._draftInput)
   },
   unmounted(el) {
+    // 防抖窗口内(300ms)切走页面时同步落盘:直接 clear 会丢弃最后一次编辑
+    if (el._draftDirty && el._draftKey) {
+      try {
+        sessionStorage.setItem(PREFIX + el._draftKey, el.value)
+      } catch {
+        /* ignore */
+      }
+    }
     clearTimeout(el._draftTimer)
     el.removeEventListener('input', el._draftInput)
     delete el._draftInput
     delete el._draftTimer
+    delete el._draftDirty
+    delete el._draftKey
   },
 }
 

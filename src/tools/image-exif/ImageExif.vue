@@ -87,7 +87,7 @@ async function load(f) {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🔍</div>
     <p><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p class="tip">查看尺寸、拍摄参数(相机/光圈/ISO)与 GPS 位置;JPG 原图信息最全</p>

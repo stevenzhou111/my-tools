@@ -86,7 +86,7 @@ function downloadSql() {
     class="dropzone"
     @click="pick"
   >
-    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
     <div v-if="!fileName">
       <div class="dz-icon">🗄️</div>
       <p><strong>点击选择 Excel / CSV 文件</strong></p>

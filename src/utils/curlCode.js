@@ -24,9 +24,19 @@ export function tokenize(input) {
       const quote = ch
       i++
       while (i < s.length && s[i] !== quote) {
+        // POSIX 双引号语义:反斜杠只在 $ ` " \ 换行 之前才是转义符,
+        // 一律吞掉会把 -d "a\nb" 之类的字面内容改掉
         if (quote === '"' && s[i] === '\\' && i + 1 < s.length) {
-          cur += s[i + 1]
-          i += 2
+          const next = s[i + 1]
+          if (next === '\n') {
+            i += 2
+          } else if ('"\\$`'.includes(next)) {
+            cur += next
+            i += 2
+          } else {
+            cur += s[i]
+            i++
+          }
         } else {
           cur += s[i]
           i++
@@ -79,7 +89,11 @@ export function parseCurl(cmd) {
     } else if (t === '-d' || t === '--data' || t === '--data-raw' || t === '--data-ascii' || t === '--data-binary') {
       bodyParts.push(tokens[++i] ?? '')
     } else if (t === '--data-urlencode') {
-      bodyParts.push(tokens[++i] ?? '')
+      const raw = tokens[++i] ?? ''
+      // curl 语义:对 = 之后的值做 URL 编码,并隐含表单 Content-Type;
+      // 原样拼进 body 会让生成的代码与 curl 行为不一致
+      const eq = raw.indexOf('=')
+      bodyParts.push(eq === -1 ? encodeURIComponent(raw) : raw.slice(0, eq + 1) + encodeURIComponent(raw.slice(eq + 1)))
       out.hasUrlEncode = true
     } else if (t === '-F' || t === '--form') {
       const raw = tokens[++i]
@@ -107,10 +121,20 @@ export function parseCurl(cmd) {
   if (!out.url) return { ok: false, error: '没有找到请求 URL' }
 
   out.body = bodyParts.join('&')
+  if (out.hasUrlEncode && out.body && !out.headers.some((h) => h.name.toLowerCase() === 'content-type')) {
+    out.headers.push({ name: 'Content-Type', value: 'application/x-www-form-urlencoded' })
+  }
   if (authPair) {
     if (!authPair.includes(':')) return { ok: false, error: '-u 的用户名密码要用冒号分隔' }
-    // 浏览器环境 btoa;测试环境退化到 Buffer
-    const encode = typeof btoa === 'function' ? btoa : (s) => Buffer.from(s, 'binary').toString('base64')
+    // 浏览器环境 btoa;测试环境退化到 Buffer。
+    // btoa 只接受 Latin1,中文账号密码要先按 UTF-8 展开成字节串,否则直接抛异常
+    const encode =
+      typeof btoa === 'function'
+        ? (s) => {
+            const bin = Array.from(new TextEncoder().encode(String(s)), (b) => String.fromCharCode(b)).join('')
+            return btoa(bin)
+          }
+        : (s) => Buffer.from(String(s), 'utf-8').toString('base64')
     out.auth = `Basic ${encode(authPair)}`
     if (!out.headers.some((h) => h.name.toLowerCase() === 'authorization')) {
       out.headers.push({ name: 'Authorization', value: out.auth })
@@ -134,7 +158,7 @@ export function parseCurl(cmd) {
 }
 
 function jsString(s) {
-  return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n') + "'"
+  return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r/g, '\\r').replace(/\n/g, '\\n') + "'"
 }
 
 /** 生成 fetch 代码 */
@@ -165,7 +189,7 @@ export function toFetchCode(p) {
 }
 
 function pyString(s) {
-  return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n') + "'"
+  return "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\r/g, '\\r').replace(/\n/g, '\\n') + "'"
 }
 
 /** 生成 Python requests 代码 */

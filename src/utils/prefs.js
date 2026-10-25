@@ -1,4 +1,5 @@
 import { ref, watch } from 'vue'
+import { TOOLS } from '@/tools/registry'
 
 const FAV_KEY = 'toolbox-favorites'
 const RECENT_KEY = 'toolbox-recents'
@@ -16,6 +17,11 @@ function load(key) {
 // 模块级单例:收藏与最近使用全站共享
 const favorites = ref(load(FAV_KEY))
 const recents = ref(load(RECENT_KEY))
+
+// 清洗已下线工具的残留 id:展示层靠 filter(Boolean) 静默吞掉,storage 里却永久滞留
+const VALID_IDS = new Set(TOOLS.map((t) => t.id))
+favorites.value = favorites.value.filter((id) => VALID_IDS.has(id))
+recents.value = recents.value.filter((id) => VALID_IDS.has(id))
 
 watch(favorites, (v) => {
   try { localStorage.setItem(FAV_KEY, JSON.stringify(v)) } catch { /* 隐私模式忽略 */ }

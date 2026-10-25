@@ -61,3 +61,15 @@ describe('toc · buildToc', () => {
     expect(buildToc(md, { minLevel: 6, maxLevel: 6 })).toBe('')
   })
 })
+
+describe('toc · 重复标题 slug 去重(GitHub 语义)', () => {
+  it('重复标题追加 -1/-2,链接不再全部指向第一个', () => {
+    const heads = extractHeadings(['# 安装', '## 安装', '# 安装'].join('\n'))
+    expect(heads.map((h) => h.slug)).toEqual(['安装', '安装-1', '安装-2'])
+  })
+
+  it('不同写法生成相同 slug 时同样参与去重', () => {
+    const heads = extractHeadings(['# Install!', '# install?'].join('\n'))
+    expect(heads.map((h) => h.slug)).toEqual(['install', 'install-1'])
+  })
+})

@@ -125,7 +125,7 @@ onUnmounted(() => {
       </div>
       <div class="field" style="margin-top: 14px">
         <span class="field-label">中央 Logo(可选)</span>
-        <input ref="logoInput" type="file" accept="image/*" hidden @change="onLogoChange" />
+        <input ref="logoInput" type="file" accept="image/*" class="sr-only" @change="onLogoChange" />
         <div class="row">
           <template v-if="!logoUrl">
             <button class="btn btn-sm" @click="pickLogo">上传 Logo 图片</button>

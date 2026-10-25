@@ -95,3 +95,15 @@ describe('cron · nextRuns', () => {
     expect(nextRuns('99 * * * *', 1, FROM).ok).toBe(false)
   })
 })
+
+describe('cron · 字段解析严格性(拦截被静默误读的写法)', () => {
+  it('负数段被拒绝而非 Number("") 变 0', () => {
+    expect(parseCron('* -5 * * *').ok).toBe(false)
+    expect(parseCron('0-2,5 * * * *').ok).toBe(true)
+  })
+
+  it('多段步进(1/2/3)被拒绝', () => {
+    expect(parseCron('1/2/3 * * * *').ok).toBe(false)
+    expect(parseCron('*/15 * * * *').ok).toBe(true)
+  })
+})

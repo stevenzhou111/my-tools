@@ -24,7 +24,7 @@ const attempts = ref(0)
 const componentKey = computed(() => `${route.params.id}-${attempts.value}`)
 
 function share() {
-  copy('share', route.fullPath.startsWith('http') ? route.fullPath : location.origin + route.fullPath)
+  copy('share', location.origin + route.fullPath)
 }
 </script>
 
@@ -61,6 +61,8 @@ function share() {
       <details v-if="tool.about" class="about panel">
         <summary><AppIcon name="info" :size="15" />关于这个工具</summary>
         <p>{{ tool.about }}</p>
+        <!-- 支持 URL 状态的工具统一拼接分享说明,避免 24 个条目各写一遍 -->
+        <p v-if="tool.urlState">工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。</p>
       </details>
 
       <section v-if="related.length" class="related">
@@ -118,8 +120,8 @@ function share() {
   flex-shrink: 0;
 }
 .fav-btn.starred {
-  border-color: #f59e0b;
-  color: #f59e0b;
+  border-color: var(--warning);
+  color: var(--warning);
 }
 .about {
   margin-top: 22px;

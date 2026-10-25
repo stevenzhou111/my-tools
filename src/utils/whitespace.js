@@ -50,6 +50,8 @@ export function revealInvisible(text) {
     .replace(/\u00a0/g, '⍽')
     .replace(/\u3000/g, '␠')
     .replace(/\t/g, '⇥')
-    .replace(/\r\n|\r|\n/g, '␊\n')
+    // CRLF 与 LF 必须可区分(这正是排查"看着一样却不相等"的关键);
+    // 单次替换完成,避免插入的换行符被后续分支重复标记
+    .replace(/\r\n|\r|\n/g, (m) => (m === '\r\n' ? '␍␊\n' : m === '\r' ? '␍\n' : '␊\n'))
     .replace(/ /g, '·')
 }

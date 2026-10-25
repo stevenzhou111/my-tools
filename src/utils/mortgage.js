@@ -101,7 +101,8 @@ export function combineLoans(schedules) {
     lastPayment: rows[rows.length - 1].payment,
     totalInterest,
     totalPayment,
-    totalPrincipal: rows[0].balance,
+    // 本金合计 = 还款总额 - 利息总额;不能用第 1 期期末余额(那是还完一期后的剩余本金)
+    totalPrincipal: totalPayment - totalInterest,
   }
 }
 

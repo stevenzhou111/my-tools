@@ -94,7 +94,7 @@ const filtered = computed(() => {
   font-size: 17px;
   padding: 1px 9px;
   border-radius: 7px;
-  color: #fff;
+  color: #1f2430;
 }
 .g1 { background: #06b6d4; }
 .g2 { background: #10b981; }

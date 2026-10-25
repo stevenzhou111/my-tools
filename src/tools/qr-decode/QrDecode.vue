@@ -68,7 +68,7 @@ async function load(file) {
     @drop.prevent="onDrop"
     @paste="onPaste"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🔍</div>
     <p><strong>点击选择二维码图片</strong>,拖拽到此处,或直接 Ctrl+V 粘贴截图</p>
     <p class="tip">全程本地识别,图片不会上传</p>

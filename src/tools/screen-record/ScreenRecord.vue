@@ -16,6 +16,9 @@ let stream = null
 let timer = null
 let chunks = []
 let startedAt = 0
+// 卸载标志:共享选择器弹出期间组件可能已销毁,await 恢复后必须据此放弃启动,
+// 否则会在用户看不见的情况下继续录屏
+let disposed = false
 
 const supported =
   typeof navigator !== 'undefined' &&
@@ -42,6 +45,11 @@ async function start() {
     if (e.name !== 'NotAllowedError') error.value = '无法开始录屏:' + e.message
     return
   }
+  if (disposed) {
+    stream.getTracks().forEach((t) => t.stop())
+    stream = null
+    return
+  }
   // 用户点击浏览器自带的"停止共享"时结束录制
   stream.getVideoTracks()[0].addEventListener('ended', stop)
   const mimeType = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'].find((t) =>
@@ -62,6 +70,12 @@ async function start() {
     if (e.data.size) chunks.push(e.data)
   }
   recorder.onstop = () => {
+    // 卸载后触发的 stop 不再产出结果(也避免无人回收的 ObjectURL)
+    if (disposed) {
+      stream?.getTracks().forEach((t) => t.stop())
+      stream = null
+      return
+    }
     const blob = new Blob(chunks, { type: mimeType || 'video/webm' })
     resultSize.value = blob.size
     resultDuration.value = elapsed.value
@@ -109,6 +123,7 @@ function download() {
 }
 
 onUnmounted(() => {
+  disposed = true
   stop()
   if (resultUrl.value) URL.revokeObjectURL(resultUrl.value)
 })

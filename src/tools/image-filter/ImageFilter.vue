@@ -208,7 +208,7 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="image/*" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!image">
       <div class="dz-icon">🎞️</div>
       <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
@@ -279,7 +279,7 @@ function download() {
 .filter-btn.active {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
 }
 .preview-wrap {
   display: flex;

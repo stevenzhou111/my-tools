@@ -41,9 +41,10 @@ async function process(f) {
   busy.value = true
   progress.value = 0
   const started = Date.now()
+  let doc = null
   try {
     const bytes = await f.arrayBuffer()
-    const doc = await loadPdf(bytes.slice(0))
+    doc = await loadPdf(bytes.slice(0))
     const out = await PDFDocument.create()
     for (let i = 1; i <= doc.numPages; i++) {
       const page = await doc.getPage(i)
@@ -66,8 +67,11 @@ async function process(f) {
     resultSize.value = resultBlob.value.size
     totalTime.value = ((Date.now() - started) / 1000).toFixed(1)
   } catch (e) {
-    error.value = '压缩失败:' + (e.message || e)
+    if (e?.name === 'PasswordException') error.value = 'PDF 已加密,请先解除密码后重试'
+    else error.value = '压缩失败:' + (e.message || e)
   } finally {
+    // pdf.js worker 端会持有已解析文档,不 destroy 反复压缩时内存持续累积
+    if (doc) await doc.destroy().catch(() => {})
     busy.value = false
   }
 }
@@ -86,7 +90,7 @@ function download() {
     @dragleave.prevent="dragging = false"
     @drop.prevent="onDrop"
   >
-    <input ref="fileInput" type="file" accept="application/pdf" hidden @change="onFileChange" />
+    <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
     <div class="dz-icon">🗜️</div>
     <p><strong>点击选择 PDF 文件</strong> 或拖拽到此处</p>
     <p class="tip">通过重采样页面图片的方式压缩体积;⚠️ 文字将变为图片,不可选中/搜索</p>

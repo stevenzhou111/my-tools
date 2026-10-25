@@ -5,6 +5,7 @@ import { BarChart, LineChart, PieChart, RadarChart, ScatterChart, FunnelChart, G
 import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import { downloadUrl } from '@/utils/image'
+import { useTheme } from '@/utils/theme'
 
 echarts.use([
   BarChart, LineChart, PieChart, RadarChart, ScatterChart, FunnelChart, GaugeChart,
@@ -63,13 +64,35 @@ const parsed = computed(() => {
 
 const PALETTE = ['#6366f1', '#f59e0b', '#10b981', '#ec4899', '#06b6d4', '#8b5cf6', '#ef4444', '#84cc16']
 
+// ECharts 的颜色是 JS 常量,不吃 CSS 变量;必须每次渲染时从当前主题取值,
+// 否则暗色主题下写死的亮色文字(#1f2430)几乎不可见
+function cssVar(name, fallback) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
+}
+function chartTheme() {
+  return {
+    text: cssVar('--text', '#1f2430'),
+    muted: cssVar('--muted', '#6b7280'),
+    border: cssVar('--border', '#e2e8f0'),
+    card: cssVar('--card', '#ffffff'),
+  }
+}
+function axisStyle(th) {
+  return {
+    axisLabel: { color: th.muted },
+    axisLine: { lineStyle: { color: th.border } },
+    splitLine: { lineStyle: { color: th.border } },
+  }
+}
+
 function buildOption() {
   const { labels, series } = parsed.value
   const t = title.value
+  const th = chartTheme()
   const common = {
-    title: { text: t || undefined, left: 'center', top: 8, textStyle: { fontSize: 16, color: '#1f2430' } },
+    title: { text: t || undefined, left: 'center', top: 8, textStyle: { fontSize: 16, color: th.text } },
     tooltip: { trigger: 'axis' },
-    legend: series.length > 1 ? { bottom: 6, textStyle: { color: '#4b5563' } } : undefined,
+    legend: series.length > 1 ? { bottom: 6, textStyle: { color: th.muted } } : undefined,
     color: PALETTE,
     animation: false,
   }
@@ -80,8 +103,8 @@ function buildOption() {
       return {
         ...common,
         grid: { top: 56, left: 60, right: 30, bottom: 56 },
-        [vertical ? 'yAxis' : 'xAxis']: { type: 'category', data: labels },
-        [vertical ? 'xAxis' : 'yAxis']: { type: 'value' },
+        [vertical ? 'yAxis' : 'xAxis']: { type: 'category', data: labels, ...axisStyle(th) },
+        [vertical ? 'xAxis' : 'yAxis']: { type: 'value', ...axisStyle(th) },
         series: series.map((s) => ({ name: s.name, type: 'bar', data: s.values, barMaxWidth: 42 })),
       }
     }
@@ -90,8 +113,8 @@ function buildOption() {
       return {
         ...common,
         grid: { top: 56, left: 60, right: 30, bottom: 56 },
-        xAxis: { type: 'category', data: labels },
-        yAxis: { type: 'value' },
+        xAxis: { type: 'category', data: labels, ...axisStyle(th) },
+        yAxis: { type: 'value', ...axisStyle(th) },
         series: series.map((s) => ({
           name: s.name, type: 'line', data: s.values, smooth: true,
           areaStyle: chartType.value === 'area' ? { opacity: 0.25 } : undefined,
@@ -107,7 +130,7 @@ function buildOption() {
           radius: chartType.value === 'ring' ? ['42%', '68%'] : '68%',
           center: ['50%', '54%'],
           data: labels.map((l, i) => ({ name: l, value: series[0]?.values[i] ?? 0 })),
-          label: { formatter: '{b}: {d}%' },
+          label: { formatter: '{b}: {d}%', color: th.text },
         }],
       }
     case 'radar': {
@@ -120,6 +143,9 @@ function buildOption() {
           indicator: labels.map((l, i) => ({ name: l, max: Math.ceil(maxByRow[i] * 1.3) })),
           radius: '58%',
           center: ['50%', '54%'],
+          axisName: { color: th.muted },
+          splitLine: { lineStyle: { color: th.border } },
+          splitArea: { show: false },
         },
         series: [{ type: 'radar', data: series.map((s) => ({ name: s.name, value: s.values })) }],
       }
@@ -128,8 +154,8 @@ function buildOption() {
       return {
         ...common,
         grid: { top: 56, left: 60, right: 30, bottom: 56 },
-        xAxis: { type: 'value', name: labels[0] },
-        yAxis: { type: 'value' },
+        xAxis: { type: 'value', name: labels[0], ...axisStyle(th) },
+        yAxis: { type: 'value', ...axisStyle(th) },
         series: series.map((s) => ({
           name: s.name, type: 'scatter', data: s.values.map((y, i) => [i + 1, y]), symbolSize: 14,
         })),
@@ -141,7 +167,7 @@ function buildOption() {
         series: [{
           type: 'funnel', left: '15%', width: '70%', top: 56, bottom: 20,
           data: labels.map((l, i) => ({ name: l, value: series[0]?.values[i] ?? 0 })).sort((a, b) => b.value - a.value),
-          label: { formatter: '{b} {c}' },
+          label: { formatter: '{b} {c}', color: th.text },
         }],
       }
     case 'gauge':
@@ -151,7 +177,9 @@ function buildOption() {
           type: 'gauge', center: ['50%', '60%'],
           min: 0,
           max: Math.max(100, Math.ceil((series[0]?.values[0] ?? 100) * 1.2)),
-          detail: { formatter: '{value}', fontSize: 28, offsetCenter: [0, '62%'] },
+          axisLabel: { color: th.muted },
+          axisLine: { lineStyle: { color: [[1, th.border]] } },
+          detail: { formatter: '{value}', fontSize: 28, offsetCenter: [0, '62%'], color: th.text },
           data: [{ value: series[0]?.values[0] ?? 0, name: labels[0] || '' }],
         }],
       }
@@ -166,10 +194,14 @@ function render() {
     chart = echarts.init(chartEl.value, null, { renderer: 'canvas' })
   }
   chart.setOption(buildOption(), true)
-  canvasDataUrl = chart.getDataURL({ pixelRatio: 2, backgroundColor: '#ffffff' })
+  // 导出底色跟随主题卡片色,避免暗色下预览是深色图、导出却是白底
+  canvasDataUrl = chart.getDataURL({ pixelRatio: 2, backgroundColor: cssVar('--card', '#ffffff') })
 }
 
 watch([title, chartType, parsed], () => render(), { deep: true })
+
+const { theme } = useTheme()
+watch(theme, () => render())
 
 onMounted(() => render())
 
