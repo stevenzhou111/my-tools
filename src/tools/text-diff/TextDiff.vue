@@ -25,6 +25,39 @@ const syncInput = debounce((l, r) => {
 watch([left, right], (v) => syncInput(...v), { immediate: true })
 onUnmounted(() => syncInput.cancel())
 
+// 直接载入两个文本文件对比(如两份配置、两版日志),替代手动粘贴
+const fileInput = ref(null)
+const fileSide = ref('left')
+const fileNames = ref({ left: '', right: '' })
+const fileError = ref('')
+
+function loadFile(side) {
+  fileSide.value = side
+  fileInput.value?.click()
+}
+async function onFileChange(e) {
+  const f = e.target.files?.[0]
+  e.target.value = ''
+  if (!f) return
+  fileError.value = ''
+  if (f.size > 2 * 1024 * 1024) {
+    fileError.value = '文件超过 2MB,请先截取需要的片段再对比'
+    return
+  }
+  try {
+    const text = await f.text()
+    if (fileSide.value === 'left') {
+      left.value = text
+      fileNames.value.left = f.name
+    } else {
+      right.value = text
+      fileNames.value.right = f.name
+    }
+  } catch {
+    fileError.value = '文件读取失败'
+  }
+}
+
 // 经典 LCS 动态规划求行级差异
 function diffLines(aText, bText) {
   const A = aText.split('\n')
@@ -90,12 +123,22 @@ const diffText = computed(() =>
     <div class="field m-0">
       <label class="field-label" for="left">原文本</label>
       <textarea id="left" v-draft="'diff-left'" v-model="left" class="textarea" rows="9" spellcheck="false"></textarea>
+      <div class="row mt-8">
+        <button class="btn btn-sm" @click="loadFile('left')">📂 载入文件</button>
+        <span class="tip" v-if="fileNames.left">{{ fileNames.left }}</span>
+      </div>
     </div>
     <div class="field m-0">
       <label class="field-label" for="right">新文本</label>
       <textarea id="right" v-draft="'diff-right'" v-model="right" class="textarea" rows="9" spellcheck="false"></textarea>
+      <div class="row mt-8">
+        <button class="btn btn-sm" @click="loadFile('right')">📂 载入文件</button>
+        <span class="tip" v-if="fileNames.right">{{ fileNames.right }}</span>
+      </div>
     </div>
+    <input ref="fileInput" type="file" class="sr-only" aria-label="选择要对比的文本文件" @change="onFileChange" />
   </div>
+  <div v-if="fileError" class="error-box" style="margin-top: -8px">✗ {{ fileError }}</div>
 
   <div v-if="stats" class="row stats-row mb-12">
     <span class="chip add">+ 新增 {{ stats.added }} 行</span>

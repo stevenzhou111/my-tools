@@ -265,6 +265,21 @@ label { user-select: none; }
 .my-12 { margin-top: 12px !important; margin-bottom: 12px !important; }
 .m-0 { margin: 0 !important; }
 .gap-8 { gap: 8px !important; }
+
+/* ---------- 分类色相 ----------
+   工具卡图标按所属分类着色,提升整版扫读性;深浅主题各保证可读(取中明度色) */
+.cat-tint-convert { --cat-color: #6366f1; }
+.cat-tint-dev { --cat-color: #0ea5e9; }
+.cat-tint-text { --cat-color: #10b981; }
+.cat-tint-image { --cat-color: #f59e0b; }
+.cat-tint-generate { --cat-color: #ec4899; }
+.cat-tint-calc { --cat-color: #8b5cf6; }
+.cat-tint-doc { --cat-color: #14b8a6; }
+.cat-tint-dconv { --cat-color: #f97316; }
+.cat-tint-av { --cat-color: #ef4444; }
+.cat-tint-chart { --cat-color: #06b6d4; }
+.cat-tint-office { --cat-color: #84cc16; }
+.cat-tint-software { --cat-color: #64748b; }
 .check {
   display: inline-flex;
   align-items: center;

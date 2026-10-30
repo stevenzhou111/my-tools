@@ -98,6 +98,12 @@ function openRandom() {
         <template v-if="query.trim()">匹配到 {{ matchedCount }} 个工具</template>
         <template v-else>共 {{ TOOLS.length }} 个常用工具 · {{ APP_TAGLINE }}</template>
       </p>
+      <div v-if="!query.trim()" class="hero-stats">
+        <span class="hero-chip"><AppIcon name="layout-grid" :size="13" />{{ TOOLS.length }} 个工具</span>
+        <span class="hero-chip"><AppIcon name="folder" :size="13" />{{ CATEGORIES.length }} 大分类</span>
+        <span class="hero-chip"><AppIcon name="shield-check" :size="13" />100% 本地运行</span>
+        <span class="hero-chip"><AppIcon name="wifi-off" :size="13" />离线可用</span>
+      </div>
       <div class="search-wrap">
         <AppIcon class="search-icon" name="search" :size="18" />
         <input
@@ -133,7 +139,7 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :name="tool.icon" :size="22" />
+          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}</span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
@@ -149,7 +155,7 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :name="tool.icon" :size="22" />
+          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}</span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
@@ -165,7 +171,7 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :name="tool.icon" :size="22" />
+          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}</span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
@@ -280,6 +286,24 @@ function openRandom() {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
   box-shadow: var(--shadow-lg);
 }
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 12px;
+}
 .tool-icon {
   display: block;
   width: 34px;
@@ -287,8 +311,8 @@ function openRandom() {
   padding: 6px;
   margin-bottom: 6px;
   border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: color-mix(in srgb, var(--cat-color, var(--accent)) 13%, transparent);
+  color: var(--cat-color, var(--accent));
 }
 .tool-name {
   font-weight: 600;

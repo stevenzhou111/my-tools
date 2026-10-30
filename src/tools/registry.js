@@ -753,6 +753,13 @@ export const TOOLS = [
     component: lazy(() => import('./compound-calc/CompoundCalc.vue')),
   },
   {
+    id: 'sci-calc', name: '科学计算器', category: 'calc', icon: 'sigma',
+    desc: '三角/反三角/对数指数/取整,角度制与弧度制可切',
+    keywords: '科学计算器 计算器 sin cos tan 三角 对数 ln log 开方 幂',
+    about: '递归下降解析:三角与反三角支持角度制/弧度制切换,sqrt/ln/log/exp/abs/round/floor/ceil 一应俱全,常数 pi 与 e 大小写不限,幂运算 ^ 右结合。除零、开负平方根等无意义运算安静地返回空,不弹错误。',
+    component: lazy(() => import('./sci-calc/SciCalc.vue')),
+  },
+  {
     id: 'color-shades', name: '色阶生成器', category: 'calc', icon: 'swatch-book',
     desc: '一个主色生成 50~950 完整色阶,导出 Tailwind / CSS 变量',
     keywords: '色阶 调色板 配色 颜色 tailwind css 变量 设计 主色 shades',
@@ -947,6 +954,13 @@ export const TOOLS = [
     component: lazy(() => import('./metronome/Metronome.vue')),
   },
   {
+    id: 'pixel-test', name: '屏幕坏点检测', category: 'av', icon: 'circle-dot',
+    desc: '全屏循环纯色画面,排查坏点/亮斑/漏光',
+    keywords: '坏点 检测 屏幕 显示器 测试 死像素 漏光 full screen',
+    about: '逐屏显示纯白/纯黑/红/绿/蓝/灰六种纯色,固定不变的亮点或暗点即为坏点;支持全屏、点击或空格切换颜色、色块直达。新机验货、外接显示器排查都适用,全程离线。',
+    component: lazy(() => import('./pixel-test/PixelTest.vue')),
+  },
+  {
     id: 'stopwatch', name: '秒表与倒计时', category: 'office', icon: 'alarm-clock',
     desc: '精确到百分秒的秒表(可计次)与倒计时,后台走时也准确',
     keywords: '秒表 停表 计时 倒计时 计次 stopwatch timer 提醒',
@@ -973,6 +987,13 @@ export const TOOLS = [
     keywords: 'zip 压缩 解压 打包 提取 文件',
     about: '基于 fflate 在浏览器本地完成;解压有单文件 200MB 的安全上限(防压缩炸弹),文本文件可直接预览。',
     component: lazy(() => import('./zip/ZipTool.vue')),
+  },
+  {
+    id: 'random-picker', name: '随机点名/分组', category: 'office', icon: 'dices',
+    desc: '名单随机抽人 + 均衡分组,课堂活动两相宜',
+    keywords: '随机 点名 抽奖 分组 抽签 名单 随机数 课堂',
+    about: '粘贴名单(按换行/逗号/顿号分隔,自动去空去重)后:一键随机抽人,带 1.2 秒滚动动画与最近抽取记录;或按组数均衡分组(轮发分配,人数差不超过 1),结果一键复制。完全本地随机,刷新即重置。',
+    component: lazy(() => import('./random-picker/RandomPicker.vue')),
   },
   {
     id: 'gradient', name: 'CSS 渐变生成', category: 'office', icon: 'aperture',

@@ -33,6 +33,9 @@ function share() {
     <template v-if="tool">
       <div class="tool-head">
         <div class="title-row">
+          <router-link to="/" class="btn btn-sm back-home" title="返回工具首页">
+            <AppIcon name="arrow-left" :size="14" />工具箱
+          </router-link>
           <span class="icon"><AppIcon :name="tool.icon" :size="28" /></span>
           <div>
             <h1>{{ tool.name }}</h1>
@@ -92,6 +95,15 @@ function share() {
   display: flex;
   align-items: center;
   gap: 16px;
+}
+/* 移动端没有侧栏,返回路径只靠 logo 不直观:小屏才显示"← 工具箱" */
+.back-home {
+  display: none;
+}
+@media (max-width: 900px) {
+  .back-home {
+    display: inline-flex;
+  }
 }
 .icon {
   width: 56px;

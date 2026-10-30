@@ -14,8 +14,17 @@ const updateSW = registerSW({
   },
 })
 
-// 页面切回前台 / 每分钟主动检查一次更新,保证已打开的页面尽快升级到新版
+// 新 SW 激活并接管页面(controllerchange)时主动刷新一次:
+// autoUpdate 模式下新 SW 会跳过等待直接接管,但已加载的页面仍跑旧代码,
+// 不刷新的话用户会一直停在旧版本(表现为"部署了却搜不到新工具")。
+let hadController = !!navigator.serviceWorker?.controller
+let reloaded = false
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded) return
+    reloaded = true
+    window.location.reload()
+  })
   setInterval(() => updateSW?.(), 60_000)
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) updateSW?.()
