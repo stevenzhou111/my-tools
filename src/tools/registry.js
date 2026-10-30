@@ -100,6 +100,13 @@ export const TOOLS = [
     component: lazy(() => import('./hash/HashTool.vue')),
   },
   {
+    id: 'hmac', name: 'HMAC 计算器', category: 'dev', icon: 'key-round',
+    desc: 'HMAC-SHA1/256/384/512 签名计算与期望值比对',
+    keywords: 'hmac 签名 webhook api 鉴权 secret sha256 校验',
+    about: '基于浏览器 Web Crypto 本地计算 HMAC,密钥支持文本(UTF-8)或 HEX 字节两种格式,结果同时给出 HEX 与 Base64;粘贴对方给出的签名可一键比对。调试 Webhook 回调签名、API 鉴权时常用;密钥仅在本页内存中参与计算,不写入任何存储。',
+    component: lazy(() => import('./hmac/HmacTool.vue')),
+  },
+  {
     id: 'md5', name: 'MD5 编码', category: 'convert', icon: 'lock',
     desc: '计算文本的 MD5 摘要,支持 32 位 / 16 位、大小写',
     keywords: 'md5 编码 摘要 哈希 校验',
@@ -275,6 +282,13 @@ export const TOOLS = [
     keywords: '文件 哈希 md5 sha256 校验 下载 完整性 checksum',
     about: '拖入任意文件计算 MD5 与 SHA-1/256/384/512。MD5 分块增量计算,SHA 由 Web Crypto 完成;与官方提供的校验值比对即可确认文件未被篡改。',
     component: lazy(() => import('./file-hash/FileHash.vue')),
+  },
+  {
+    id: 'hex-view', name: '文件十六进制查看', category: 'dev', icon: 'file-digit',
+    desc: '十六进制 + ASCII 双栏查看文件原始字节',
+    keywords: 'hex 十六进制 二进制 文件头 magic number 字节 查看',
+    about: '以 512 字节为一页按需读取(blob slice),几 GB 的文件也不会整块载入内存;支持翻页与按十进制偏移跳转,可复制当前页的 xxd 风格转储。排查文件头(Magic Number)、编码问题与二进制格式时很趁手。',
+    component: lazy(() => import('./hex-view/HexView.vue')),
   },
   {
     id: 'keycode', name: '按键检测', category: 'dev', icon: 'keyboard',
@@ -514,6 +528,20 @@ export const TOOLS = [
     component: lazy(() => import('./image-exif/ImageExif.vue')),
   },
   {
+    id: 'image-diff', name: '图片找不同', category: 'image', icon: 'git-compare',
+    desc: '两张同尺寸图片逐像素比较,差异区域标红',
+    keywords: '图片 对比 diff 像素 找不同 截图 变更',
+    about: '上传两张同尺寸图片(如 UI 改版前后的截图),逐像素比较最大通道差,超过阈值(可调)的像素在灰化原图上标红,给出差异占比与差异图下载;超长边自动压到 2048px 防止内存吃紧。全部本地计算,图片不会上传。',
+    component: lazy(() => import('./image-diff/ImageDiff.vue')),
+  },
+  {
+    id: 'ascii-art', name: '图片转字符画', category: 'image', icon: 'type',
+    desc: '按亮度把图片映射为 ASCII 字符画,可复制下载',
+    keywords: '字符画 ascii art 图片 转换 文字画 弹幕 readme',
+    about: '按 BT.601 亮度把像素映射到可选的字符梯度(标准 10 级 / 细致 70 级 / 块状阴影),宽度与反相可调,透明像素按白底处理;行数按字符高宽比自动压缩避免拉长。输出可复制或下载为 .txt。',
+    component: lazy(() => import('./ascii-art/AsciiArt.vue')),
+  },
+  {
     id: 'favicon', name: 'favicon 生成器', category: 'image', icon: 'component',
     desc: '一张图生成全尺寸 favicon.ico 与 PNG',
     keywords: 'favicon ico 图标 网站 生成 站点图标 多尺寸',
@@ -688,6 +716,20 @@ export const TOOLS = [
     about: '商业贷款与公积金贷款可以分别填金额、利率与期限,两笔按月合并成一份月供;等额本息(月供固定)与等额本金(月供递减)两种方式都算一遍,直观对比总利息差与首月压力差。附按年还款明细与提前还款测算:第 N 期后一次性还一笔,同时给出「期限不变减月供」与「月供不变缩期限」两种走法各自的剩余利息与节省金额。计算完全在本地进行,利率请以实际审批为准。',
     urlState: true,
     component: lazy(() => import('./mortgage/MortgageCalc.vue')),
+  },
+  {
+    id: 'income-tax', name: '个税计算器', category: 'calc', icon: 'landmark',
+    desc: '工资个税按月累计预扣 + 年终奖单独计税,逐月看跳档',
+    keywords: '个税 个人所得税 工资 税率 年终奖 到手 五险一金 专项附加扣除',
+    about: '按 2019 年起施行的累计预扣法逐月计算:累计收入减去每月 5000 起征点、个人五险一金与专项附加扣除后套用年度税率表,跳档月份税额一次性升高属正常现象;附全年一次性奖金单独计税(按奖金÷12 套月度税率表,每年只能用一次,注意 36000 等临界点税额跳升)。计算完全在本地进行,结果仅供参考,以单位实际代扣为准。',
+    component: lazy(() => import('./income-tax/IncomeTaxTool.vue')),
+  },
+  {
+    id: 'compound-calc', name: '复利定投计算', category: 'calc', icon: 'trending-up',
+    desc: '本金 + 每月定投的复利终值与按年明细',
+    keywords: '复利 定投 理财 收益 投资 利息 终值 记账',
+    about: '一次性本金按年复利、每月定投按期末普通年金按月复利,给出账户终值、累计收益与逐年明细;名义收益率口径,未计通胀与费用。收益率为假设值,不代表任何真实产品收益,计算全部在本地完成。',
+    component: lazy(() => import('./compound-calc/CompoundCalc.vue')),
   },
   {
     id: 'color-shades', name: '色阶生成器', category: 'calc', icon: 'swatch-book',
@@ -868,6 +910,13 @@ export const TOOLS = [
     keywords: '番茄钟 番茄工作法 专注 计时器 pomodoro',
     about: '基于真实时钟倒计时(后台标签页被浏览器节流也不影响准确性),阶段结束自动衔接并播放提示音。',
     component: lazy(() => import('./pomodoro/Pomodoro.vue')),
+  },
+  {
+    id: 'metronome', name: '节拍器', category: 'av', icon: 'music',
+    desc: '2/4·3/4·4/4 节拍器,强拍高音弱拍低音,支持跟拍测速',
+    keywords: '节拍器 metronome bpm 练琴 节奏 音乐 打拍子',
+    about: '基于 WebAudio 的前瞻式调度(25ms 轮询把拍子排进音频时钟),不受定时器抖动影响;强拍 1400Hz、弱拍 880Hz 短促 click 区分,支持 30–240 BPM、三种拍号与跟拍测速(2 秒内点击取均值)。BPM 与拍号自动记住,声音完全本地合成。',
+    component: lazy(() => import('./metronome/Metronome.vue')),
   },
   {
     id: 'stopwatch', name: '秒表与倒计时', category: 'office', icon: 'alarm-clock',
