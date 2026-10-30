@@ -23,14 +23,23 @@ const CONTENT_TYPES = `${XML_DECL}
 const ROOT_RELS = `${XML_DECL}
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`
 
-function paragraphXml({ text, bold, font = '微软雅黑', sizeHalfPt = 22, afterTwips = 120 }) {
-  const rPr = `<w:rPr><w:rFonts w:ascii="${font}" w:eastAsia="${font}" w:hAnsi="${font}"/>${bold ? '<w:b/>' : ''}<w:sz w:val="${sizeHalfPt}"/><w:szCs w:val="${sizeHalfPt}"/></w:rPr>`
-  return `<w:p><w:pPr>${bold ? '' : `<w:spacing w:after="${afterTwips}"/>`}${bold ? '<w:spacing w:after="120"/>' : ''}</w:pPr><w:r>${rPr}<w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r></w:p>`
+function runXml({ text, bold, italic, code, font = '微软雅黑', sizeHalfPt = 22 }) {
+  const f = code ? 'Consolas' : font
+  const rPr = `<w:rPr><w:rFonts w:ascii="${f}" w:eastAsia="${font}" w:hAnsi="${f}"/>${bold ? '<w:b/>' : ''}${italic ? '<w:i/>' : ''}<w:sz w:val="${sizeHalfPt}"/><w:szCs w:val="${sizeHalfPt}"/></w:rPr>`
+  return `<w:r>${rPr}<w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r>`
+}
+
+function paragraphXml(p) {
+  const { bold, sizeHalfPt = 22, afterTwips = 120 } = p
+  // runs:段内多种格式(粗体/斜体/行内代码);缺省时整段一个 run
+  const runs = p.runs ?? [{ text: p.text ?? '', bold: p.bold, code: p.code, font: p.font, sizeHalfPt }]
+  const spacing = bold || p.heading ? '<w:spacing w:after="120"/>' : `<w:spacing w:after="${afterTwips}"/>`
+  return `<w:p><w:pPr>${p.indent ? '<w:ind w:left="720"/>' : ''}${spacing}</w:pPr>${runs.map(runXml).join('')}</w:p>`
 }
 
 /**
  * 生成 .docx 的 Uint8Array。
- * @param {Array<string|{text:string,bold?:boolean,font?:string,sizeHalfPt?:number,afterTwips?:number}>} paragraphs
+ * @param {Array<string|{text?:string,runs?:{text,bold?,italic?,code?}[],bold?:boolean,heading?:boolean,indent?:boolean,sizeHalfPt?:number,afterTwips?:number}>} paragraphs
  */
 export function buildDocx(paragraphs) {
   const body = paragraphs

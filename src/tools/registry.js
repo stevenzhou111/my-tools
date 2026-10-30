@@ -150,6 +150,13 @@ export const TOOLS = [
     component: lazy(() => import('./json-to-ts/JsonToTs.vue')),
   },
   {
+    id: 'json-diff', name: 'JSON 对比', category: 'dev', icon: 'file-code',
+    desc: '两份 JSON 的路径级结构化差异(新增/删除/变更)',
+    keywords: 'json 对比 diff 比较 差异 结构化 接口',
+    about: '递归展平为路径级差异:数组按下标对齐、类型不同(如 1 与 \"1\"、对象与数组)按整体变更处理,给出新增/删除/变更统计与可复制清单,比逐行文本对比更能看清改了什么。最多展示 500 条。',
+    component: lazy(() => import('./json-diff/JsonDiff.vue')),
+  },
+  {
     id: 'float-bits', name: '浮点数解剖', category: 'dev', icon: 'sigma',
     desc: '看数字在 IEEE 754 双精度/单精度下的实际存储位型',
     keywords: '浮点数 ieee754 精度 位型 二进制 尾数 指数 float double 0.1',
@@ -323,6 +330,13 @@ export const TOOLS = [
     component: lazy(() => import('./regex/RegexTester.vue')),
   },
   {
+    id: 'css-format', name: 'CSS 美化/压缩', category: 'dev', icon: 'paintbrush',
+    desc: 'CSS 格式化与压缩,字符串与 data URI 不被误伤',
+    keywords: 'css 格式化 美化 压缩 minify beautify 样式',
+    about: '单遍扫描 tokenizer:字符串与 url()(含 data URI)内部的分号、花括号、空格按原子保留; 等嵌套规则按 2 空格缩进、一条声明一行;压缩移除注释并可查看节省比例。支持一键贴回输入反复处理。',
+    component: lazy(() => import('./css-format/CssFormat.vue')),
+  },
+  {
     id: 'text-stats', name: '文本统计', category: 'text', icon: 'chart-column',
     desc: '统计字符、词数、行数、UTF-8 字节数与阅读时长',
     keywords: '字数统计 字符 行数 字节 word count 文本',
@@ -349,6 +363,13 @@ export const TOOLS = [
     keywords: '文本替换 查找 替换 replace 正则',
     about: '默认按字面量替换($ 符号不会被解释);勾选正则后可用 $1、$2 引用捕获分组,例如把 2026-09-30 换成 09/30/2026。',
     component: lazy(() => import('./text-replace/TextReplace.vue')),
+  },
+  {
+    id: 'encoding-fix', name: '乱码修复/编码检测', category: 'text', icon: 'languages',
+    desc: '文本文件编码自动检测与 UTF-8 导出,Latin-1 乱码反转修复',
+    keywords: '乱码 编码 gbk utf-8 big5 修复 转换 detection',
+    about: '对文本文件用 UTF-8/GBK/Big5/Shift-JIS/UTF-16LE/Windows-1252 六种编码全矩阵试解并按可读性评分,推荐最佳解读后一键转存 UTF-8;另支持粘贴 ä½ å¥½ 形态的 Latin-1 乱码做反转修复。浏览器无法把字符串重新编码为 GBK,故已产生替换符(Fffd)的有损损坏无法还原——界面会如实说明。',
+    component: lazy(() => import('./encoding-fix/EncodingFix.vue')),
   },
   {
     id: 'text-extract', name: '文本提取', category: 'text', icon: 'magnet',
@@ -843,6 +864,13 @@ export const TOOLS = [
     component: lazy(() => import('./word-to-html/WordToHtml.vue')),
   },
   {
+    id: 'md-to-docx', name: 'Markdown 转 Word', category: 'dconv', icon: 'file-output',
+    desc: 'Markdown 转为 .docx:标题/列表/粗斜体/代码块,本地打包',
+    keywords: 'markdown word docx 转换 周报 文档 导出',
+    about: '把 Markdown 子集(1-6 级标题、粗体/斜体/行内代码、无序与有序列表、引用、代码块、分隔线)转换为 Word 文档,链接渲染为文本+URL。基于内置的极简 OOXML 生成器在浏览器本地打包,无需上传;右侧提供近似排版预览。表格等复杂结构请用专门的表格工具。',
+    component: lazy(() => import('./md-to-docx/MdToDocx.vue')),
+  },
+  {
     id: 'excel-export', name: 'Excel 转图片/PDF', category: 'dconv', icon: 'image-down',
     desc: '把表格渲染成 PNG 长图或 A4 分页 PDF',
     keywords: 'excel 转图片 转pdf 表格 截图 长图 分页',
@@ -952,6 +980,20 @@ export const TOOLS = [
     keywords: '渐变 gradient css 配色 背景 设计',
     about: '支持线性/径向、任意角度与三色停靠点,内置六组精选配色;复制生成的 CSS 可直接使用。',
     component: lazy(() => import('./gradient/GradientGenerator.vue')),
+  },
+  {
+    id: 'code-snap', name: '代码截图', category: 'generate', icon: 'code',
+    desc: '代码生成带语法高亮的分享美图(渐变底/窗口外观)',
+    keywords: '代码 截图 分享 高亮 卡片 code snapshot ray.so',
+    about: '把代码渲染成适合分享的图片:双色渐变底、macOS 风格窗口、行号与轻量语法高亮(JS/TS/JSON/Python 等常见语法的近似高亮),主题与主色可调,2x 分辨率导出 PNG。全部在本地 Canvas 绘制,代码不上传。',
+    component: lazy(() => import('./code-snap/CodeSnap.vue')),
+  },
+  {
+    id: 'color-blind', name: '色盲模拟', category: 'image', icon: 'glasses',
+    desc: '模拟红/绿/蓝黄色盲与全色盲视角,检查配色区分度',
+    keywords: '色盲 色弱 无障碍 配色 对比 可访问性 模拟',
+    about: '用 Machado et al. (2009) 线性 RGB 近似矩阵模拟红色盲/绿色盲/蓝黄色盲/全色盲视角:输入单色立即得到四种色觉下的色值,上传界面截图可整图模拟并下载。与「对比度检查」搭配使用,能覆盖无障碍配色的两个主要维度。',
+    component: lazy(() => import('./color-blind/ColorBlind.vue')),
   },
 
   // ---------- 软件推荐 ----------
