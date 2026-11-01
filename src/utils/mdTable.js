@@ -106,6 +106,72 @@ export const ALIGN_OPTIONS = [
 ]
 
 /**
+ * 反向:Markdown 表格 → 行数组。
+ * 跳过 |---| 对齐行,按未转义的 | 切分(还原 \| 与 <br>);保留原始单元格文本。
+ * @returns {{rows:string[][], error:string}}
+ */
+/** 按未转义的 | 切一行,\| 视作字面竖线 */
+function splitMdRow(line) {
+  const cells = []
+  let cur = ''
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i]
+    if (c === '\\' && line[i + 1] === '|') {
+      cur += '|'
+      i++
+      continue
+    }
+    if (c === '|') {
+      cells.push(cur.trim())
+      cur = ''
+      continue
+    }
+    cur += c
+  }
+  cells.push(cur.trim())
+  return cells
+}
+
+export function fromMarkdownTable(text) {
+  const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n').map((l) => l.trim()).filter((l) => l !== '')
+  const tableLines = lines.filter((l) => l.includes('|'))
+  if (!tableLines.length) return { rows: [], error: '没有找到含 | 的表格行' }
+  const rows = []
+  for (const line of tableLines) {
+    const cells = splitMdRow(line.replace(/^\|/, '').replace(/\|$/, ''))
+    // 跳过 |---|---| 形态的对齐行
+    if (cells.every((c) => /^:?-{2,}:?$/.test(c) || c === '')) continue
+    rows.push(cells.map((c) => c.replace(/<br\s*\/?>/gi, '\n')))
+  }
+  if (rows.length < 1) return { rows: [], error: '没有解析到数据行' }
+  return { rows, error: '' }
+}
+
+/** 行数组 → TSV(粘贴进 Excel 即成表格);单元格内的 Tab/换行替换为空格 */
+export function rowsToTsv(rows) {
+  return rows.map((r) => r.map((c) => c.replace(/[\t\n\r]+/g, ' ')).join('\t')).join('\n')
+}
+
+/** 行数组 → CSV:含逗号/引号/换行的单元格用引号包裹,内部引号翻倍 */
+export function rowsToCsv(rows) {
+  const q = (c) => (/[",\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)
+  return rows.map((r) => r.map(q).join(',')).join('\n')
+}
+
+/** 行数组 → JSON 对象数组(首行作键);不足的列补空串 */
+export function rowsToJson(rows) {
+  if (rows.length < 2) return '[]'
+  const width = Math.max(...rows.map((r) => r.length))
+  const header = rows[0].map((h, i) => h || `列${i + 1}`)
+  const out = rows.slice(1).map((r) => {
+    const cells = [...r]
+    while (cells.length < width) cells.push('')
+    return Object.fromEntries(header.map((h, i) => [h, cells[i]]))
+  })
+  return JSON.stringify(out, null, 2)
+}
+
+/**
  * 渲染 Markdown 表格。
  * @param {string[][]} rows 首行为表头
  * @param {string[]} aligns 每列对齐方式(ALIGN_OPTIONS 的 id)

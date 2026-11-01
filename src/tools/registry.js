@@ -273,6 +273,13 @@ export const TOOLS = [
     component: lazy(() => import('./http-status/HttpStatusCodes.vue')),
   },
   {
+    id: 'http-headers', name: 'HTTP 请求头速查', category: 'dev', icon: 'list', fresh: true,
+    desc: '常用请求/响应头分组速查:认证、缓存、CORS、安全,点击复制',
+    keywords: 'http 请求头 响应头 headers cors 缓存 content-type authorization 速查 hsts',
+    about: '50+ 常用 HTTP 头按用途分组(认证/缓存/内容协商/CORS/安全/连接),标注常见出现方向(请求/响应/双向)与中文速记说明;按方向筛选或搜索头名与说明,点击头名即复制。排查跨域先看预检的 Access-Control-*,完整语义以 MDN 与 RFC 9110 为准。与「HTTP 状态码速查」配套。',
+    component: lazy(() => import('./http-headers/HttpHeaders.vue')),
+  },
+  {
     id: 'html-entities', name: 'HTML 实体速查', category: 'dev', icon: 'code-xml', fresh: true,
     desc: '常用命名实体表:必转义/数学/箭头/希腊/货币,点击复制',
     keywords: 'html 实体 entity nbsp amp 转义 符号 速查 希腊字母 箭头 版权 cheat sheet',
@@ -286,6 +293,13 @@ export const TOOLS = [
     about: '输入 192.168.1.100/24 或 10.0.0.0 255.255.0.0 均可,自动计算网络/广播地址、可用主机区间与数量,并识别私有地址段(10/172.16/192.168/127/169.254/100.64)。非连续掩码会被拒绝。',
     urlState: true,
     component: lazy(() => import('./subnet-calc/SubnetCalc.vue')),
+  },
+  {
+    id: 'port-lookup', name: '常用端口速查', category: 'dev', icon: 'plug', fresh: true,
+    desc: '常见端口号对照:Web/远程/邮件/数据库/中间件/运维,按号或服务名搜',
+    keywords: '端口 port 443 3306 6379 8080 22 端口号 速查 运维 数据库 服务端口',
+    about: '50+ 常用端口按场景分组(Web/远程传输/邮件/数据库中间件/基础设施/运维观测),标注 TCP/UDP、服务名与中文用途;支持按端口号、服务名或用途搜索(如 443、redis、邮件)。附端口分段常识与安全提醒:对外暴露数据库与缓存端口是入侵重灾区。',
+    component: lazy(() => import('./port-lookup/PortLookup.vue')),
   },
   {
     id: 'chmod', name: 'Chmod 计算', category: 'dev', icon: 'key-round',
@@ -824,7 +838,7 @@ export const TOOLS = [
     component: lazy(() => import('./sci-calc/SciCalc.vue')),
   },
   {
-    id: 'margin-calc', name: '毛利率计算器', category: 'calc', icon: 'store', fresh: true,
+    id: 'margin-calc', name: '毛利率计算器', category: 'calc', icon: 'store',
     desc: '成本/售价算毛利率与加价率,按目标毛利率反推定价',
     keywords: '毛利率 加价率 定价 定价反推 利润 成本 售价 markup margin 电商 定价计算器',
     about: '输入成本与售价:同时给出毛利率(毛利÷售价,财务口径)与加价率(毛利÷成本,报价口径)与每件毛利;按目标毛利率反推建议售价,并提示当前定价与建议价的差距。毛利率 20% 对应加价率 25%,两套口径别混用;这里是毛利口径,未扣房租人工推广等费用,净利润需另行计算。',
@@ -832,7 +846,7 @@ export const TOOLS = [
     component: lazy(() => import('./margin-calc/MarginCalc.vue')),
   },
   {
-    id: 'normal-dist', name: '正态分布计算', category: 'calc', icon: 'chart-spline', fresh: true,
+    id: 'normal-dist', name: '正态分布计算', category: 'calc', icon: 'chart-spline',
     desc: 'X↔概率双向换算:z 分数、百分位与置信临界值',
     keywords: '正态分布 高斯 z分数 标准差 概率 百分位 置信区间 统计 显著性 normal distribution',
     about: '双向计算:「X → 概率」输入均值/标准差/X 得到 P(X≤x)、P(X>x) 与标准化 z 分数;「概率 → X」反推指定百分位的临界值(95% 置信区间常用 z=1.96 就来自这里)。erf 与 Acklam 分位数近似误差小于 1e-6,附 68-95-99.7 经验法则与常用临界值速查,适合考试、质量控制与统计入门。',
