@@ -479,6 +479,14 @@ export const TOOLS = [
     component: lazy(() => import('./pangu/PanguFormat.vue')),
   },
   {
+    id: 'translate', name: '文本翻译', category: 'text', icon: 'languages', online: true, fresh: true,
+    desc: '16 种语言互译,MyMemory 免费引擎,结果本机缓存 24 小时',
+    keywords: '翻译 translate 英译中 中译英 多语言 mymemory 译文 翻译器',
+    about: '本站联网工具:16 种语言互译,引擎为 MyMemory 翻译记忆库(免费无密钥);单次上限 500 UTF-8 字节(中文约 166 字,按字节计数并在输入框实时显示),匿名额度约 5000 字节/日;同一文本 24 小时内重复翻译走本机缓存不消耗额度;源语言不支持自动检测,需手动选择;翻译内容不经过本站存储。',
+    urlState: true,
+    component: lazy(() => import('./translate/TranslateTool.vue')),
+  },
+  {
     id: 'sort-lines', name: '文本行整理', category: 'text', icon: 'arrow-down-wide-narrow',
     desc: '多行文本排序、去重、反转、随机打乱、加行号,一键整理',
     keywords: '排序 去重 行 排列 随机 打乱 行号 名单 清单 文本 sort shuffle',
@@ -972,7 +980,7 @@ export const TOOLS = [
     component: lazy(() => import('./rate-convert/RateConvert.vue')),
   },
   {
-    id: 'currency-convert', name: '汇率换算', category: 'calc', icon: 'coins', online: true, fresh: true,
+    id: 'currency-convert', name: '汇率换算', category: 'calc', icon: 'coins', online: true,
     desc: '31 种货币实时汇率换算,欧洲央行数据,本站唯一联网工具',
     keywords: '汇率 换算 美元 人民币 欧元 日元 港币 currency exchange 外汇 牌价',
     about: '本站唯一需要联网的工具:汇率来自欧洲央行参考汇率(frankfurter.app 转发,免费无密钥),覆盖 31 种货币,工作日更新;一次请求缓存全量牌价(1 小时),任意货币对交叉换算,热门货币一键换算与复制;断网时自动回退最近缓存并如实标注。查询记录不存储;大额换汇请以银行实价为准。',
