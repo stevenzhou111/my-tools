@@ -1,11 +1,16 @@
 import { expect, test } from '@playwright/test'
 
-// 收集页面运行期错误:白屏、控制台报错、chunk 加载失败都会在这里冒出来
+// 收集页面运行期错误:白屏、控制台报错、chunk 加载失败都会在这里冒出来。
+// 例外:联网工具(汇率/天气/DNS)在测试环境访问外网失败时,Chromium 会自动往
+// console 打 net::ERR 日志——页面本身已优雅处理并展示错误 UI,这类日志不算运行期错误。
 function watchErrors(page) {
   const errors = []
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
   page.on('console', (m) => {
-    if (m.type() === 'error') errors.push(`console: ${m.text()}`)
+    if (m.type() !== 'error') return
+    const text = m.text()
+    if (/net::ERR_|Failed to load resource|ERR_ABORTED|ERR_TIMED_OUT/i.test(text)) return
+    errors.push(`console: ${text}`)
   })
   return errors
 }
@@ -115,7 +120,7 @@ test.describe('工具页', () => {
         expect(errors, `工具 ${id} 有运行期错误:\n${errors.join('\n')}`).toEqual([])
       })
       .catch((e) => {
-        failed.push(`${id}: ${e.message.split('\n')[0]}`)
+        failed.push(`${id}: ${e.message.split('\n').slice(0, 4).join(' | ')}`)
       })
     }
 

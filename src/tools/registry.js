@@ -295,6 +295,14 @@ export const TOOLS = [
     component: lazy(() => import('./subnet-calc/SubnetCalc.vue')),
   },
   {
+    id: 'dns-lookup', name: 'DNS 记录查询', category: 'dev', icon: 'radio-tower', online: true, fresh: true,
+    desc: 'DoH 加密查询 A/AAAA/MX/TXT 等记录,多解析源自动降级',
+    keywords: 'dns 查询 doh 域名解析 a记录 mx txt cname 域名 dig nslookup 运维',
+    about: '本站联网工具:通过 DNS over HTTPS 加密查询任意域名的 A/AAAA/CNAME/MX/NS/TXT/SOA/CAA 记录;解析源自动降级(阿里 DNS 优先、Google 兜底,6 秒超时切换),结果按域名+类型缓存 5 分钟,断网回退缓存并标注;每条记录可复制,排查 CDN/邮件配置(TXT/SPF、MX)很趁手。',
+    urlState: true,
+    component: lazy(() => import('./dns-lookup/DnsLookup.vue')),
+  },
+  {
     id: 'port-lookup', name: '常用端口速查', category: 'dev', icon: 'plug',
     desc: '常见端口号对照:Web/远程/邮件/数据库/中间件/运维,按号或服务名搜',
     keywords: '端口 port 443 3306 6379 8080 22 端口号 速查 运维 数据库 服务端口',
@@ -1179,6 +1187,14 @@ export const TOOLS = [
     keywords: 'zip 压缩 解压 打包 提取 文件',
     about: '基于 fflate 在浏览器本地完成;解压有单文件 200MB 的安全上限(防压缩炸弹),文本文件可直接预览。',
     component: lazy(() => import('./zip/ZipTool.vue')),
+  },
+  {
+    id: 'weather-lookup', name: '天气查询', category: 'office', icon: 'cloud-sun', online: true, fresh: true,
+    desc: '全球城市实时天气与 5 天预报,Open-Meteo 开放数据',
+    keywords: '天气 查询 天气预报 气温 降雨 城市 weather 出行 实时天气',
+    about: '本站联网工具:城市搜索(中英文)后显示当前气温/体感/湿度/风速与未来 5 天预报,数据来自 Open-Meteo 开放气象服务(免费无密钥);按位置缓存 30 分钟,断网自动回退缓存并如实标注。链接可分享,打开即得该城市天气;预报为模型输出,请以气象台为准。',
+    urlState: true,
+    component: lazy(() => import('./weather-lookup/WeatherLookup.vue')),
   },
   {
     id: 'random-picker', name: '随机点名/分组', category: 'office', icon: 'dices',
