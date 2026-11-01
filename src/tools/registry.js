@@ -190,7 +190,7 @@ export const TOOLS = [
     component: lazy(() => import('./id-card-parse/IdCardParse.vue')),
   },
   {
-    id: 'card-check', name: '银行卡号校验', category: 'dev', icon: 'credit-card', fresh: true,
+    id: 'card-check', name: '银行卡号校验', category: 'dev', icon: 'credit-card',
     desc: 'Luhn 校验 + BIN 卡组织识别,打码展示,本地计算',
     keywords: '银行卡 卡号 校验 luhn bin 识别 卡组织 信用卡 借记卡 验证 打码',
     about: '粘贴或输入卡号:按 ISO/IEC 7812-1 的 Luhn 算法验证校验位,识别卡组织(银联 62、Visa 4、Mastercard 51~55 与 2221~2720、Amex 34/37、JCB、Discover、Diners)并检查位数是否符合规范;自动按 4 位分组显示,提供「前 6 后 4」打码格式一键复制。校验通过只代表格式合法,不代表卡真实存在;全程本页计算,卡号不写入存储、不发送任何请求。',
@@ -273,14 +273,14 @@ export const TOOLS = [
     component: lazy(() => import('./http-status/HttpStatusCodes.vue')),
   },
   {
-    id: 'http-headers', name: 'HTTP 请求头速查', category: 'dev', icon: 'list', fresh: true,
+    id: 'http-headers', name: 'HTTP 请求头速查', category: 'dev', icon: 'list',
     desc: '常用请求/响应头分组速查:认证、缓存、CORS、安全,点击复制',
     keywords: 'http 请求头 响应头 headers cors 缓存 content-type authorization 速查 hsts',
     about: '50+ 常用 HTTP 头按用途分组(认证/缓存/内容协商/CORS/安全/连接),标注常见出现方向(请求/响应/双向)与中文速记说明;按方向筛选或搜索头名与说明,点击头名即复制。排查跨域先看预检的 Access-Control-*,完整语义以 MDN 与 RFC 9110 为准。与「HTTP 状态码速查」配套。',
     component: lazy(() => import('./http-headers/HttpHeaders.vue')),
   },
   {
-    id: 'html-entities', name: 'HTML 实体速查', category: 'dev', icon: 'code-xml', fresh: true,
+    id: 'html-entities', name: 'HTML 实体速查', category: 'dev', icon: 'code-xml',
     desc: '常用命名实体表:必转义/数学/箭头/希腊/货币,点击复制',
     keywords: 'html 实体 entity nbsp amp 转义 符号 速查 希腊字母 箭头 版权 cheat sheet',
     about: '按用途分组的常用 HTML 命名实体速查:必转义的 &lt; &gt; &amp; &quot;、标点排版(破折号/省略号/引号)、数学单位(±×÷°√∞)、箭头、希腊字母、货币与版权符号;支持按名称/实体/字符搜索,点击即复制实体写法或字符本身(可切换),全部为 HTML 标准定义,各浏览器通用。',
@@ -375,6 +375,13 @@ export const TOOLS = [
     about: '支持 g/i/m/s/u 标志,实时高亮全部匹配并展示捕获分组;检测到嵌套量词等灾难性回溯模式时会给出警告。匹配数上限 500 处。',
     urlState: true,
     component: lazy(() => import('./regex/RegexTester.vue')),
+  },
+  {
+    id: 'regex-cheat', name: '正则速查', category: 'text', icon: 'regex', fresh: true,
+    desc: '常用正则模式库(正反例自检)+ 元字符语法速查',
+    keywords: '正则 速查 regex 常用正则 手机号 邮箱 元字符 cheat sheet 模式库',
+    about: '14 条常用正则模式(手机号/邮箱/URL/IPv4/日期时间/强密码/重复单词等)与 5 组语法速查(字符集合/量词/边界/分组引用/环视断言/标志)。每条模式附带正反例样本,页面加载即实时运行自检,单测逐条兜底——抄出去的正则保证可用;配合「正则测试」动手调试。',
+    component: lazy(() => import('./regex-cheat/RegexCheat.vue')),
   },
   {
     id: 'css-format', name: 'CSS 美化/压缩', category: 'dev', icon: 'paintbrush',
