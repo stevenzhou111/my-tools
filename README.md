@@ -3,13 +3,13 @@
 [![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **162 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
+一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **165 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
 
 **所有工具均在浏览器本地运行,数据不上传服务器**——纯静态站点、零后端、零跟踪,可一键部署到 Cloudflare Pages,并支持 PWA 安装后完整离线使用。
 
 布局采用经典的**左侧分类导航 + 右侧内容区**:桌面端侧边栏常驻(当前工具高亮、分类可折叠、支持搜索过滤);移动端自动收起为汉堡按钮唤起的抽屉导航。每个工具底部附有可展开的「关于这个工具」使用说明。
 
-## ✨ 内置工具(162 个 / 12 分类)
+## ✨ 内置工具(165 个 / 12 分类)
 
 | 分类 | 工具 |
 | ---- | ---- |

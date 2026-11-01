@@ -295,7 +295,7 @@ export const TOOLS = [
     component: lazy(() => import('./subnet-calc/SubnetCalc.vue')),
   },
   {
-    id: 'port-lookup', name: '常用端口速查', category: 'dev', icon: 'plug', fresh: true,
+    id: 'port-lookup', name: '常用端口速查', category: 'dev', icon: 'plug',
     desc: '常见端口号对照:Web/远程/邮件/数据库/中间件/运维,按号或服务名搜',
     keywords: '端口 port 443 3306 6379 8080 22 端口号 速查 运维 数据库 服务端口',
     about: '50+ 常用端口按场景分组(Web/远程传输/邮件/数据库中间件/基础设施/运维观测),标注 TCP/UDP、服务名与中文用途;支持按端口号、服务名或用途搜索(如 443、redis、邮件)。附端口分段常识与安全提醒:对外暴露数据库与缓存端口是入侵重灾区。',
@@ -337,7 +337,7 @@ export const TOOLS = [
     component: lazy(() => import('./keycode/KeycodeInfo.vue')),
   },
   {
-    id: 'ascii-table', name: 'ASCII 码表', category: 'dev', icon: 'table-2', fresh: true,
+    id: 'ascii-table', name: 'ASCII 码表', category: 'dev', icon: 'table-2',
     desc: '0~127 全表:十/十六/八/二进制对照,点击复制字符或转义',
     keywords: 'ascii 码表 字符 编码 hex 十六进制 控制字符 转义 速查对照表',
     about: '标准 ASCII 0~127 全量对照:十进制、十六进制、八进制、二进制、字符与控制字符的标准缩写与转义写法(LF/CR/TAB/ESC);按控制/标点/数字/大写/小写分类筛选,支持搜 65、0x41、A 或「换行」;点击行即复制字符(控制字符复制转义写法)。排查编码问题与写解析器时的案头速查。',
@@ -828,7 +828,23 @@ export const TOOLS = [
     desc: '工资个税按月累计预扣 + 年终奖单独计税,逐月看跳档',
     keywords: '个税 个人所得税 工资 税率 年终奖 到手 五险一金 专项附加扣除',
     about: '按 2019 年起施行的累计预扣法逐月计算:累计收入减去每月 5000 起征点、个人五险一金与专项附加扣除后套用年度税率表,跳档月份税额一次性升高属正常现象;附全年一次性奖金单独计税(按奖金÷12 套月度税率表,每年只能用一次,注意 36000 等临界点税额跳升)。计算完全在本地进行,结果仅供参考,以单位实际代扣为准。',
-    component: lazy(() => import('./income-tax/IncomeTaxTool.vue')),
+    component: lazy(() => import('./salary-calc/SalaryCalc.vue')),
+  },
+  {
+    id: 'severance-calc', name: '经济补偿金计算', category: 'calc', icon: 'scale', fresh: true,
+    desc: '劳动解除补偿 N / N+1 / 2N 测算,含社平三倍封顶',
+    keywords: '经济补偿 n n+1 2n 劳动合同 赔偿 辞退 代通知金 离职 补偿金计算器',
+    about: '按《劳动合同法》第 47/87 条口径测算:每满一年补一个月,六个月以上不满一年按一年、不满六个月按半个月;给出 N(经济补偿)、N+1(未提前 30 日通知的代通知金,按上月工资)与 2N(违法解除赔偿)三档金额;月工资高于当地社平三倍时按三倍封顶且年限最多 12 年。协商解除等情形以实际约定与当地裁审口径为准,仅供参考。',
+    urlState: true,
+    component: lazy(() => import('./severance-calc/SeveranceCalc.vue')),
+  },
+  {
+    id: 'salary-calc', name: '税前税后换算', category: 'calc', icon: 'wallet', fresh: true,
+    desc: '税前↔税后工资互算:五险一金明细 + 累计预扣个税,Offer 对比',
+    keywords: '税前 税后 工资 换算 五险一金 公积金 个税 到手 salary offer 谈薪 工资计算器',
+    about: '输入税前月薪:按常用比例算出五险一金个人明细(养老 8%、医疗 2%、失业 0.5%,公积金 5%~12% 可调),个税按累计预扣法(与「个税计算器」同口径)给出第 1 月到手、年末跳档后到手与全年平均月到手;也可从税后反推税前。缴费基数与专项附加扣除可自定义;各地比例略有差异,以当地政策为准。',
+    urlState: true,
+    component: lazy(() => import('./salary-calc/SalaryCalc.vue')),
   },
   {
     id: 'compound-calc', name: '复利定投计算', category: 'calc', icon: 'trending-up',
@@ -859,6 +875,13 @@ export const TOOLS = [
     about: '双向计算:「X → 概率」输入均值/标准差/X 得到 P(X≤x)、P(X>x) 与标准化 z 分数;「概率 → X」反推指定百分位的临界值(95% 置信区间常用 z=1.96 就来自这里)。erf 与 Acklam 分位数近似误差小于 1e-6,附 68-95-99.7 经验法则与常用临界值速查,适合考试、质量控制与统计入门。',
     urlState: true,
     component: lazy(() => import('./normal-dist/NormalDist.vue')),
+  },
+  {
+    id: 'stats-calc', name: '描述统计', category: 'calc', icon: 'chart-column', fresh: true,
+    desc: '一列数字的均值/中位数/四分位/方差/标准差,粘贴即算',
+    keywords: '描述统计 均值 平均数 中位数 方差 标准差 四分位 iqr 统计 计算',
+    about: '粘贴一列数字(空格/逗号/换行/顿号均可):个数、总和、均值、中位数、最值、极差、Q1/Q3/IQR、样本与总体两种口径的方差和标准差;分位数用线性插值法(与 numpy 一致)。无法识别的片段会列出提醒;与「正态分布计算」配套使用。',
+    component: lazy(() => import('./stats-calc/StatsCalc.vue')),
   },
   {
     id: 'bmi-calc', name: 'BMI 健康计算', category: 'calc', icon: 'heart-pulse',
