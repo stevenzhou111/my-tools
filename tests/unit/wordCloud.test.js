@@ -13,9 +13,11 @@ describe('wordCloud · tokenize', () => {
 
   it('中文按单字统计', () => {
     const { items } = tokenize('工具箱里的工具', { mode: 'char' })
-    expect(items[0].text).toBe('工')
-    expect(items[0].count).toBe(2)
+    // 注意:「工具」出现两次,工 与 具 的频次都是 2;断言按字查找,不依赖平局时的排序
+    expect(items.find((i) => i.text === '工')?.count).toBe(2)
+    expect(items.find((i) => i.text === '具')?.count).toBe(2)
     expect(items.find((i) => i.text === '箱')?.count).toBe(1)
+    expect(items).toHaveLength(5)
   })
 
   it('自定义停用词生效', () => {

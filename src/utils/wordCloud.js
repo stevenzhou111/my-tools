@@ -37,7 +37,8 @@ export function tokenize(text, { mode = 'word', stopwords = [], max = 120 } = {}
   }
   const items = [...freq.entries()]
     .map(([w, count]) => ({ text: w, count }))
-    .sort((a, b) => b.count - a.count || a.text.localeCompare(b.text))
+    // 平局按 UTF-16 码点排序:localeCompare 在不同 ICU 环境下顺序不同,会导致跨平台结果漂移
+    .sort((a, b) => b.count - a.count || (a.text < b.text ? -1 : a.text > b.text ? 1 : 0))
     .slice(0, max)
   return { items, total }
 }
