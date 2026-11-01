@@ -122,6 +122,28 @@ function prefetch(tool) {
   tool.component?.prefetch?.()
 }
 
+// ---------- 收藏拖拽排序 ----------
+const { reorderFav } = useToolPrefs()
+const dragFavId = ref(null)
+
+function onFavDragStart(e, tool) {
+  dragFavId.value = tool.id
+  e.dataTransfer.effectAllowed = 'move'
+  // Firefox 需要有数据才真正启动拖拽
+  e.dataTransfer.setData('text/plain', tool.id)
+}
+function onFavDragOver(e, tool) {
+  if (!dragFavId.value || dragFavId.value === tool.id) return
+  e.preventDefault() // 允许放置
+  e.dataTransfer.dropEffect = 'move'
+  // 悬停即实时重排,favorites 顺序驱动卡片跟着走
+  reorderFav(dragFavId.value, favTools.value.findIndex((f) => f.id === tool.id))
+}
+function onFavDrop(e) {
+  e.preventDefault()
+  dragFavId.value = null
+}
+
 // 搜索时按 Enter 直达第一个匹配的工具;Esc 清空回到全量列表
 function onSearchKeydown(e) {
   if (e.key === 'Enter') {
@@ -202,14 +224,23 @@ function onSearchKeydown(e) {
     </section>
 
     <section v-if="favTools.length && !query.trim()" class="cat-section">
-      <h2 class="cat-title"><AppIcon class="cat-icon" name="star" :size="20" />我的收藏</h2>
+      <h2 class="cat-title">
+        <AppIcon class="cat-icon" name="star" :size="20" />我的收藏
+        <span class="count-hint">拖动卡片可排序</span>
+      </h2>
       <div class="tool-grid">
         <router-link
           v-for="tool in favTools"
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="tool-card"
+          :class="{ 'fav-dragging': dragFavId === tool.id }"
+          draggable="true"
           @mouseenter="prefetch(tool)"
+          @dragstart="onFavDragStart($event, tool)"
+          @dragover="onFavDragOver($event, tool)"
+          @drop="onFavDrop($event, tool)"
+          @dragend="dragFavId = null"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
@@ -393,6 +424,10 @@ function onSearchKeydown(e) {
   transform: translateY(-4px);
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
   box-shadow: var(--shadow-lg);
+}
+/* 收藏拖拽排序:被拖起的卡片半透明,其余卡片可承接 */
+.fav-dragging {
+  opacity: 0.45;
 }
 .hero-stats {
   display: flex;

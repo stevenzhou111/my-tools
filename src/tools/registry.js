@@ -190,6 +190,14 @@ export const TOOLS = [
     component: lazy(() => import('./id-card-parse/IdCardParse.vue')),
   },
   {
+    id: 'card-check', name: '银行卡号校验', category: 'dev', icon: 'credit-card', fresh: true,
+    desc: 'Luhn 校验 + BIN 卡组织识别,打码展示,本地计算',
+    keywords: '银行卡 卡号 校验 luhn bin 识别 卡组织 信用卡 借记卡 验证 打码',
+    about: '粘贴或输入卡号:按 ISO/IEC 7812-1 的 Luhn 算法验证校验位,识别卡组织(银联 62、Visa 4、Mastercard 51~55 与 2221~2720、Amex 34/37、JCB、Discover、Diners)并检查位数是否符合规范;自动按 4 位分组显示,提供「前 6 后 4」打码格式一键复制。校验通过只代表格式合法,不代表卡真实存在;全程本页计算,卡号不写入存储、不发送任何请求。',
+    urlState: true,
+    component: lazy(() => import('./card-check/CardCheck.vue')),
+  },
+  {
     id: 'sql-params', name: 'SQL 参数填充', category: 'dev', icon: 'table-2',
     desc: '把 ? / $n 占位符与绑定参数还原成可执行的 SQL',
     keywords: 'sql 参数 占位符 填充 慢查询 日志 预编译 绑定变量 调试',

@@ -21,6 +21,12 @@ export default defineConfig({
         background_color: '#f4f5fb',
         display: 'standalone',
         start_url: '/',
+        // 系统分享目标:在手机上把链接/文本「分享到工具箱」直达二维码生成(?q= 是该工具的文本参数)
+        share_target: {
+          action: '/tool/qrcode',
+          method: 'GET',
+          params: { title: 'q', text: 'q', url: 'q' },
+        },
         // 已安装的 PWA 长按图标弹出快捷入口:选最常用的四个工具
         shortcuts: [
           { name: 'JSON 格式化', url: '/tool/json', icons: [{ src: 'pwa-192.png', sizes: '192x192', type: 'image/png' }] },

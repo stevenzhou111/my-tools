@@ -49,5 +49,13 @@ export function useToolPrefs() {
     if (recents.value.length > MAX_RECENTS) recents.value.length = MAX_RECENTS
   }
 
-  return { favorites, recents, isFav, toggleFav, pushRecent }
+  /** 收藏排序:把 id 移动到目标下标(拖拽排序用),越界静默忽略 */
+  function reorderFav(id, toIndex) {
+    const from = favorites.value.indexOf(id)
+    if (from < 0 || toIndex < 0 || toIndex >= favorites.value.length || from === toIndex) return
+    favorites.value.splice(from, 1)
+    favorites.value.splice(toIndex, 0, id)
+  }
+
+  return { favorites, recents, isFav, toggleFav, pushRecent, reorderFav }
 }
