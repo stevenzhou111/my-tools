@@ -124,6 +124,14 @@ export const TOOLS = [
     component: lazy(() => import('./url-parser/UrlParser.vue')),
   },
   {
+    id: 'link-preview', name: '网页元信息抓取', category: 'dev', icon: 'scan-search', online: true, fresh: true,
+    desc: '抓取任意网页的标题/描述/og:image,核对分享卡片效果',
+    keywords: '网页 抓取 元信息 og title description 分享卡片 链接预览 seo open graph',
+    about: '本站联网工具:输入任意网页地址,经本站 Functions 代理抓取并解析出 title、description、og:image(分享卡片三要素)与最终重定向地址,逐项复制;不携带你的 Cookie、不执行页面脚本、只读前 400KB,内网地址拒绝访问。注意:/api 接口由 Pages Functions 提供,本地纯 vite 环境不可用,需 wrangler pages dev 或线上环境。',
+    urlState: true,
+    component: lazy(() => import('./link-preview/LinkPreview.vue')),
+  },
+  {
     id: 'xml-format', name: 'XML 格式化', category: 'convert', icon: 'code-xml',
     desc: '格式化、压缩、校验 XML,支持 CDATA 与注释',
     keywords: 'xml 格式化 压缩 校验 美化 format soap rss',
@@ -497,7 +505,7 @@ export const TOOLS = [
     component: lazy(() => import('./morse/MorseCode.vue')),
   },
   {
-    id: 'classic-cipher', name: '经典密码(凯撒/维吉尼亚)', category: 'text', icon: 'shield-ellipsis', fresh: true,
+    id: 'classic-cipher', name: '经典密码(凯撒/维吉尼亚)', category: 'text', icon: 'shield-ellipsis',
     desc: '凯撒 / 维吉尼亚 / Atbash 加解密,附 26 位移破译表',
     keywords: '凯撒密码 维吉尼亚 atbash rot13 密码 加密 解密 cipher caesar vigenere 破译',
     about: '三种经典密码一页玩转:凯撒(0~25 位移,附 ROT13 快捷)、维吉尼亚(密钥逐字母位移)、Atbash(字母表镜像,自反);只变换英文字母,汉字数字原样保留。破解辅助:贴入密文列出全部 26 种凯撒位移并按英文词频猜测最可能的 k;「用结果反向」一键续解。仅作学习演示,真保密请用 AES 工具。',
@@ -510,6 +518,14 @@ export const TOOLS = [
     keywords: '文本分割 分隔符 拆分 切分 分段',
     about: '支持自定义分隔符(逗号/空格/竖线/换行)或按固定字符数切分;可复制为纯列表、带序号列表或 JSON 数组。',
     component: lazy(() => import('./text-split/TextSplit.vue')),
+  },
+  {
+    id: 'rss-reader', name: 'RSS 阅读', category: 'text', icon: 'rss', online: true, fresh: true,
+    desc: '粘贴 RSS/Atom 源地址即读:标题/日期/摘要,经 Functions 代理',
+    keywords: 'rss atom 订阅 阅读 feed 博客 新闻 聚合 阅读器',
+    about: '本站联网工具:粘贴 RSS/Atom 源地址,经本站 Functions 代理抓取并转为可读列表(标题/日期/摘要,条目上限 50);支持 RSS 2.0 与 Atom,最近一次源缓存在本机 15 分钟。刻意不做订阅管理与账号体系——数据不留在服务端,换源即走。',
+    urlState: true,
+    component: lazy(() => import('./rss-reader/RssReader.vue')),
   },
   {
     id: 'md-table', name: 'Markdown 表格生成', category: 'text', icon: 'table-properties',
@@ -755,7 +771,7 @@ export const TOOLS = [
     component: lazy(() => import('./timestamp/TimestampTool.vue')),
   },
   {
-    id: 'dms-convert', name: '度分秒坐标转换', category: 'calc', icon: 'map-pin', fresh: true,
+    id: 'dms-convert', name: '度分秒坐标转换', category: 'calc', icon: 'map-pin',
     desc: '十进制度与度分秒(DMS)互转,支持整段粘贴识别',
     keywords: '度分秒 dms 坐标 转换 gps 经纬度 十进制度 dd 导航 测绘 户外',
     about: '十进制度(DD)与度分秒(DMS)双向换算,纬度/经度分别限幅,秒保留 3 位(约 0.1 米);支持 31°13′45.2″N、31 13 45.2 N、北纬31度13分45秒等写法整段粘贴识别,双向一键回填继续换算。配合「图片信息/EXIF」查看照片 GPS 后转换格式很顺手。',

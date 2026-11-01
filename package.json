@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "wrangler pages dev --port 8788 -- npm run dev",
     "build": "vite build && node scripts/gen-sitemap.mjs",
     "preview": "vite preview",
     "deploy": "vite build && wrangler pages deploy dist",
