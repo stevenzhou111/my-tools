@@ -5,6 +5,7 @@ import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
 import { useRoute, useRouter } from 'vue-router'
 import { useToolPrefs } from '@/utils/prefs'
 import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
+import { useToast } from '@/utils/toast'
 import AppIcon from '@/components/AppIcon.vue'
 
 const router = useRouter()
@@ -122,6 +123,36 @@ function prefetch(tool) {
   tool.component?.prefetch?.()
 }
 
+// ---------- 收藏导入导出(换机迁移) ----------
+const { exportPrefs, importPrefs } = useToolPrefs()
+const { showToast } = useToast()
+const importInput = ref(null)
+
+function exportFavs() {
+  const blob = new Blob([exportPrefs()], { type: 'application/json' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = `toolbox-favorites-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
+function onImportFile(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = () => {
+    try {
+      const r = importPrefs(String(reader.result || ''))
+      showToast(`导入完成:新增 ${r.added} 个收藏`)
+    } catch (err) {
+      showToast(err.message || '导入失败')
+    }
+  }
+  reader.readAsText(file)
+  e.target.value = ''
+}
+
 // ---------- 收藏拖拽排序 ----------
 const { reorderFav } = useToolPrefs()
 const dragFavId = ref(null)
@@ -227,6 +258,15 @@ function onSearchKeydown(e) {
       <h2 class="cat-title">
         <AppIcon class="cat-icon" name="star" :size="20" />我的收藏
         <span class="count-hint">拖动卡片可排序</span>
+        <span class="fav-ops">
+          <button class="op-btn" type="button" title="导出收藏(含最近使用)为 JSON 文件" aria-label="导出收藏" @click="exportFavs">
+            <AppIcon name="download" :size="14" />
+          </button>
+          <button class="op-btn" type="button" title="从 JSON 文件导入收藏" aria-label="导入收藏" @click="importInput?.click()">
+            <AppIcon name="upload" :size="14" />
+          </button>
+          <input ref="importInput" type="file" accept=".json,application/json" class="sr-only" @change="onImportFile" />
+        </span>
       </h2>
       <div class="tool-grid">
         <router-link
@@ -428,6 +468,27 @@ function onSearchKeydown(e) {
 /* 收藏拖拽排序:被拖起的卡片半透明,其余卡片可承接 */
 .fav-dragging {
   opacity: 0.45;
+}
+.fav-ops {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.op-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+.op-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 .hero-stats {
   display: flex;

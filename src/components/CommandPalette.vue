@@ -14,7 +14,7 @@ import AppIcon from '@/components/AppIcon.vue'
 const emit = defineEmits(['open-help'])
 
 const router = useRouter()
-const { favorites, recents } = useToolPrefs()
+const { favorites, recents, clearRecents } = useToolPrefs()
 const { toggleTheme } = useTheme()
 const { copy } = useCopy()
 const { showToast } = useToast()
@@ -48,6 +48,25 @@ const ACTIONS = [
     icon: 'moon',
     keywords: 'theme 深色 浅色 暗色 亮色 主题',
     run: () => toggleTheme(),
+  },
+  {
+    id: 'clear-recents',
+    name: '清空最近使用记录(收藏不受影响)',
+    icon: 'eraser',
+    keywords: 'clear 清空 最近 记录 历史 recents 清理',
+    run: () => {
+      if (window.confirm('确定清空最近使用记录吗?收藏不会受影响。')) {
+        clearRecents()
+        showToast('最近使用记录已清空')
+      }
+    },
+  },
+  {
+    id: 'repo',
+    name: '打开项目仓库(GitHub)',
+    icon: 'github',
+    keywords: 'github 仓库 源码 repo 开源 issue',
+    run: () => window.open('https://github.com/stevenzhou111/my-tools', '_blank', 'noopener'),
   },
   {
     id: 'random',

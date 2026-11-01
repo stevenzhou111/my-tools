@@ -57,5 +57,35 @@ export function useToolPrefs() {
     favorites.value.splice(toIndex, 0, id)
   }
 
-  return { favorites, recents, isFav, toggleFav, pushRecent, reorderFav }
+  /** 导出:收藏与最近使用打包成 JSON 文本(换机迁移用) */
+  function exportPrefs() {
+    return JSON.stringify({ app: 'vue-toolbox', version: 1, favorites: favorites.value, recents: recents.value }, null, 2)
+  }
+
+  /**
+   * 导入:解析 JSON 并与现有数据合并(导入的排前面,去重),返回加入的收藏数。
+   * 非法内容抛出可读错误;已下线工具的 id 静默丢弃。
+   */
+  function importPrefs(text) {
+    let data
+    try {
+      data = JSON.parse(String(text || ''))
+    } catch {
+      throw new Error('文件不是合法的 JSON')
+    }
+    if (!data || !Array.isArray(data.favorites)) throw new Error('缺少 favorites 字段,请确认是本站导出的文件')
+    const favs = data.favorites.filter((x) => typeof x === 'string' && VALID_IDS.has(x))
+    const recs = Array.isArray(data.recents) ? data.recents.filter((x) => typeof x === 'string' && VALID_IDS.has(x)) : []
+    const before = favorites.value.length
+    favorites.value = [...new Set([...favs, ...favorites.value])]
+    recents.value = [...new Set([...recs, ...recents.value])].slice(0, MAX_RECENTS)
+    return { added: favorites.value.length - before, importedFavs: favs.length, importedRecents: recs.length }
+  }
+
+  /** 清空最近使用记录(收藏不受影响) */
+  function clearRecents() {
+    recents.value = []
+  }
+
+  return { favorites, recents, isFav, toggleFav, pushRecent, reorderFav, exportPrefs, importPrefs, clearRecents }
 }

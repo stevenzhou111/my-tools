@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import { MAX_RECENTS } from '@/utils/prefs'
+import { TOOLS } from '@/tools/registry'
 
 // prefs 是模块级单例,每个用例都要拿到全新的实例
 async function freshPrefs() {
@@ -110,5 +111,67 @@ describe('prefs · 异常数据', () => {
     await nextTick()
     expect(isFav('json')).toBe(true)
     setItem.mockRestore()
+  })
+})
+describe('prefs · 导出与导入', () => {
+  it('导出包含收藏与最近使用,JSON 可解析', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { toggleFav, pushRecent, exportPrefs } = useToolPrefs()
+    toggleFav('json')
+    toggleFav('qrcode')
+    pushRecent('timestamp')
+    const data = JSON.parse(exportPrefs())
+    expect(data.favorites).toEqual(['qrcode', 'json'])
+    expect(data.recents).toEqual(['timestamp'])
+  })
+
+  it('导入合并到现有数据之前,去重', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { toggleFav, importPrefs, favorites } = useToolPrefs()
+    toggleFav('json') // 现有:json
+    const r = importPrefs(JSON.stringify({ favorites: ['qrcode', 'timestamp', 'json'] }))
+    // 导入的排前面,json 去重只留一份
+    expect(favorites.value).toEqual(['qrcode', 'timestamp', 'json'])
+    expect(r.added).toBe(2)
+  })
+
+  it('已下线工具的 id 被静默丢弃', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { importPrefs, favorites, exportPrefs } = useToolPrefs()
+    const r = importPrefs(JSON.stringify({ favorites: ['json', '__gone__'], recents: ['__gone2__'] }))
+    expect(favorites.value).toEqual(['json'])
+    expect(r.importedFavs).toBe(1)
+    expect(r.importedRecents).toBe(0)
+    // 导出的内容也不再含已下线 id
+    expect(exportPrefs()).not.toContain('__gone__')
+  })
+
+  it('非法内容抛出可读错误', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { importPrefs } = useToolPrefs()
+    expect(() => importPrefs('not-json')).toThrow('JSON')
+    expect(() => importPrefs(JSON.stringify({ foo: 1 }))).toThrow('favorites')
+    expect(() => importPrefs('')).toThrow()
+  })
+
+  it('导入的最近使用与现有合并且封顶', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { importPrefs, recents } = useToolPrefs()
+    const many = TOOLS.slice(0, 12).map((t) => t.id) // 必须是真实存在的工具 id
+    importPrefs(JSON.stringify({ favorites: [], recents: many }))
+    expect(recents.value.length).toBeLessThanOrEqual(8)
+    expect(recents.value[0]).toBe(TOOLS[0].id)
+  })
+})
+
+describe('prefs · 清空最近使用', () => {
+  it('只清最近,收藏保留', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { toggleFav, pushRecent, clearRecents, recents, favorites } = useToolPrefs()
+    toggleFav('json')
+    pushRecent('qrcode')
+    clearRecents()
+    expect(recents.value).toEqual([])
+    expect(favorites.value).toEqual(['json'])
   })
 })
