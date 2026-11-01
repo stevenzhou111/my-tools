@@ -53,7 +53,7 @@ const output = computed(() => {
 <template>
   <div class="field">
     <label class="field-label" for="input">输入文本</label>
-    <textarea id="input" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+    <textarea id="input" v-model="input" v-draft="'case-convert-in'" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <div class="row mb-14">

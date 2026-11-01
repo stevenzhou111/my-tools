@@ -72,7 +72,7 @@ function applyPreset(name) {
 <template>
   <div class="field">
     <label class="field-label" for="sort-in">原文(每行一条)</label>
-    <textarea id="sort-in" v-model="text" class="textarea" style="min-height: 160px" placeholder="粘贴多行文本,如名单、清单、日志…" spellcheck="false"></textarea>
+    <textarea id="sort-in" v-model="text" v-draft="'sort-lines-in'" class="textarea" style="min-height: 160px" placeholder="粘贴多行文本,如名单、清单、日志…" spellcheck="false"></textarea>
     <div class="row mt-8">
       <button class="btn btn-sm" @click="text = SAMPLE">填入示例</button>
       <button class="btn btn-sm" :disabled="!text" @click="text = ''">清空</button>

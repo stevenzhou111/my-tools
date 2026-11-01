@@ -63,7 +63,7 @@ const unknown = computed(() => {
 
   <div class="field">
     <label class="field-label" for="input">{{ mode === 'encode' ? '输入文本' : '输入摩尔斯电码(字母间空格,单词间 / )' }}</label>
-    <textarea id="input" v-model="input" class="textarea" rows="4" spellcheck="false"></textarea>
+    <textarea id="input" v-model="input" v-draft="'morse-in'" class="textarea" rows="4" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出结果</label>

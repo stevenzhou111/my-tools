@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getTool, TOOLS } from '@/tools/registry'
+import { getTool, getCategory, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
 import { useCopy } from '@/utils/useCopy'
 import AppIcon from '@/components/AppIcon.vue'
@@ -38,7 +38,13 @@ function share() {
           </router-link>
           <span class="icon"><AppIcon :name="tool.icon" :size="28" /></span>
           <div>
-            <h1>{{ tool.name }}</h1>
+            <div class="name-row">
+              <h1>{{ tool.name }}</h1>
+              <!-- 分类徽章:点回首页该分类,长列表里迷路时快速归位 -->
+              <router-link :to="`/?cat=${tool.category}`" class="cat-badge" title="回到首页该分类">
+                <AppIcon :name="getCategory(tool.category)?.icon || 'folder'" :size="13" />{{ getCategory(tool.category)?.name }}
+              </router-link>
+            </div>
             <p class="desc">{{ tool.desc }}</p>
           </div>
           <button
@@ -117,10 +123,35 @@ function share() {
   flex-shrink: 0;
   color: var(--accent);
 }
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .title-row h1 {
   font-size: 26px;
   font-weight: 800;
   margin: 0;
+}
+.cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 11px;
+  text-decoration: none;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+  flex-shrink: 0;
+}
+.cat-badge:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
 }
 .desc {
   color: var(--muted);

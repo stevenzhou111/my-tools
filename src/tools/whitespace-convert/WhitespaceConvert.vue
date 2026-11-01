@@ -41,7 +41,7 @@ const output = computed(() => {
 
   <div class="field">
     <label class="field-label" for="input">输入文本</label>
-    <textarea id="input" v-model="input" class="textarea" rows="6" spellcheck="false"></textarea>
+    <textarea id="input" v-model="input" v-draft="'whitespace-in'" class="textarea" rows="6" spellcheck="false"></textarea>
   </div>
 
   <label class="field-label">输出结果</label>

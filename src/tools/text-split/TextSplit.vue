@@ -49,7 +49,7 @@ const numbered = computed(() => output.value.map((p, i) => `${i + 1}. ${p}`))
 
   <div class="field">
     <label class="field-label" for="input">输入文本</label>
-    <textarea id="input" v-model="input" class="textarea" rows="5" spellcheck="false"></textarea>
+    <textarea id="input" v-model="input" v-draft="'text-split-in'" class="textarea" rows="5" spellcheck="false"></textarea>
   </div>
 
   <template v-if="output.length">

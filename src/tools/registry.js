@@ -304,6 +304,14 @@ export const TOOLS = [
     about: '按下键盘上任意一个键,实时显示 event.key、event.code(物理键位)与旧的 keyCode,以及 Ctrl/Alt/Shift/Meta/CapsLock 状态,可一键复制 JSON,适合写快捷键逻辑或排查键盘映射时参考。工具只监听不拦截,不影响你的任何组合键;keyCode 已被标准废弃,仅供兼容旧代码时查用。',
     component: lazy(() => import('./keycode/KeycodeInfo.vue')),
   },
+  {
+    id: 'gitignore-gen', name: '.gitignore 生成', category: 'dev', icon: 'git-branch',
+    desc: '按语言 / IDE / 系统勾选规则,合并生成 .gitignore',
+    keywords: 'gitignore git 忽略 生成 node python java go ide 模板',
+    about: '19 组常用忽略规则模板(Node、Python、Java、Go、Rust、C/C++、C#、Android、iOS、环境变量密钥、日志、覆盖率、JetBrains、VS Code、Vim 与三大操作系统),勾选后自动合并去重,附 Node/Python/通用基础三种一键组合;生成结果可复制或直接下载为 .gitignore。提醒:已被追踪的文件加入忽略不会自动生效,需要 git rm --cached。',
+    urlState: true,
+    component: lazy(() => import('./gitignore-gen/GitignoreGen.vue')),
+  },
 
   // ---------- 文本工具 ----------
   {
@@ -440,6 +448,14 @@ export const TOOLS = [
     keywords: '文本分割 分隔符 拆分 切分 分段',
     about: '支持自定义分隔符(逗号/空格/竖线/换行)或按固定字符数切分;可复制为纯列表、带序号列表或 JSON 数组。',
     component: lazy(() => import('./text-split/TextSplit.vue')),
+  },
+  {
+    id: 'md-table', name: 'Markdown 表格生成', category: 'text', icon: 'table-properties',
+    desc: '粘贴 Excel / CSV 表格一键转 Markdown,可调列对齐',
+    keywords: 'markdown 表格 表格转换 excel csv tsv md table 对齐 生成',
+    about: '把 Excel 复制的表格(TSV)、CSV 或已经是竖线分隔的文本转成 GitHub 风格 Markdown 表格:分隔符自动识别,CSV 引号内的逗号与换行不会切错,单元格内的 | 自动转义、换行转 <br>。每列可循环切换默认/左/中/右对齐,首行可选是否作为表头,支持载入本地 .csv/.tsv 文件。',
+    urlState: true,
+    component: lazy(() => import('./md-table/MdTable.vue')),
   },
 
   // ---------- 图片工具 ----------
@@ -760,6 +776,30 @@ export const TOOLS = [
     component: lazy(() => import('./sci-calc/SciCalc.vue')),
   },
   {
+    id: 'bmi-calc', name: 'BMI 健康计算', category: 'calc', icon: 'heart-pulse',
+    desc: 'BMI 分级 + 基础代谢 BMR + 每日消耗 TDEE 一页算清',
+    keywords: 'bmi bmr tdee 基础代谢 卡路里 热量 健康 计算 体重 肥胖',
+    about: '输入性别、年龄、身高、体重:BMI 按中国标准(WS/T 428-2013,超重切点 24)分级并给出标尺定位与理想体重区间;基础代谢按 Mifflin-St Jeor 公式估算;乘以五档活动系数得到每日总消耗 TDEE,并给出减重/维持/增重的每日热量参考。数值均为统计估算,孕产期、儿童与肌肉量异常人群请以专业评估为准。',
+    urlState: true,
+    component: lazy(() => import('./bmi-calc/BmiCalc.vue')),
+  },
+  {
+    id: 'discount-calc', name: '折扣凑单计算', category: 'calc', icon: 'ticket-percent',
+    desc: '折上折到手价与满减凑单建议,值不值得凑一眼看清',
+    keywords: '折扣 折上折 满减 凑单 双十一 优惠 到手价 购物 计算',
+    about: '两种模式:「折扣计算」支持折上折连乘,给出到手价、共省金额与实际折扣率(85 折再 95 折其实是 8.075 折,不是 8 折);「满减凑单」支持多档满减(每行一档),算出当前可省与实付,并对照下一档门槛给出「值不值得凑」的判断——凑单净收益 = 新档优惠 − 当前优惠 − 垫付金额,只有为正才真的省钱。平台叠加红包店铺券后的判定以结算页为准。',
+    urlState: true,
+    component: lazy(() => import('./discount-calc/DiscountCalc.vue')),
+  },
+  {
+    id: 'retire-calc', name: '延迟退休计算器', category: 'calc', icon: 'calendar-range',
+    desc: '按 2025 新政测算法定退休年龄、时间与弹性区间',
+    keywords: '延迟退休 退休年龄 法定退休 弹性退休 社保 计算器 2025',
+    about: '按全国人大常委会 2024 年决定(2025-01-01 施行)测算:男职工 60→63 岁、原 55 岁退休女职工 55→58 岁(每 4 个月出生延迟 1 个月),原 50 岁退休女职工 50→55 岁(每 2 个月延迟 1 个月),给出改革后的法定退休年龄、对应退休月份与弹性提前/延后(≤3 年,提前不得低于原法定)的边界。按月推算,与官方对照表一致;实际认定以人社部门为准。',
+    urlState: true,
+    component: lazy(() => import('./retire-calc/RetireCalc.vue')),
+  },
+  {
     id: 'color-shades', name: '色阶生成器', category: 'calc', icon: 'swatch-book',
     desc: '一个主色生成 50~950 完整色阶,导出 Tailwind / CSS 变量',
     keywords: '色阶 调色板 配色 颜色 tailwind css 变量 设计 主色 shades',
@@ -908,6 +948,13 @@ export const TOOLS = [
     component: lazy(() => import('./video-frame/VideoFrame.vue')),
   },
   {
+    id: 'video-gif', name: '视频转 GIF', category: 'av', icon: 'film',
+    desc: '截取视频片段转成动图,帧率 / 宽度可调,本地合成',
+    keywords: '视频转gif 动图 表情包 截取 片段 gif 制作 mp4 webm',
+    about: '加载本地视频后选一段区间(默认前 5 秒),按帧率逐帧采样合成 GIF:宽度与帧率可调(上限 640px / 30fps / 240 帧,防止内存吃紧),生成后预览动画效果、一键下载。逐帧 seek 采样与 GIF 编码全部在浏览器本地完成,视频不上传;时长越长、帧率越高,生成越慢、文件也越大。',
+    component: lazy(() => import('./video-gif/VideoGif.vue')),
+  },
+  {
     id: 'audio-edit', name: '音频剪辑', category: 'av', icon: 'sliders-vertical',
     desc: '波形预览,裁剪片段、倒放、调整音量,导出 WAV',
     keywords: '音频 剪切 裁剪 倒放 音量 wav 波形',
@@ -927,6 +974,13 @@ export const TOOLS = [
     keywords: '摄像头 麦克风 测试 会议 视频通话 相机 摄像头检测 麦克风检测 webcam',
     about: '一键开启摄像头与麦克风,本地预览画面并显示实际分辨率 / 帧率,麦克风电平表实时反映收音是否正常,同时列出检测到的全部设备;任何画面与声音都不会被录制或上传。权限被拒、设备被占用等失败情形都有明确的中文提示。需要 https 或 localhost 环境。',
     component: lazy(() => import('./cam-mic-test/CamMicTest.vue')),
+  },
+  {
+    id: 'video-audio', name: '视频提取音频', category: 'av', icon: 'music-2', fresh: true,
+    desc: '把视频里的声音提取为 WAV,可继续剪辑,本地解码',
+    keywords: '视频转音频 提取音频 视频转wav 配音 音轨 分离 mp4 wav 音乐',
+    about: '把有音轨的视频(MP4 / WebM / MOV 等)直接解码出音频并打包为 16bit PCM WAV:无需上传,浏览器 WebAudio 本地解码;提取后可在线试听,或一键跳到「音频剪辑」继续裁剪。无声轨或用了 AC-3/DTS 等浏览器不支持的音频编码时会明确提示。WAV 无压缩体积较大,需要小文件可先用本工具导出再压缩。',
+    component: lazy(() => import('./video-audio/VideoAudio.vue')),
   },
 
   // ---------- 数据图表 ----------
@@ -975,6 +1029,20 @@ export const TOOLS = [
     component: lazy(() => import('./decision/DecisionTool.vue')),
   },
   {
+    id: 'countdown-days', name: '倒数日/纪念日', category: 'office', icon: 'calendar-heart', fresh: true,
+    desc: '生日、交付日、纪念日,还有多少天一眼看清,本机保存',
+    keywords: '倒数日 纪念日 倒计时 天数 生日 提醒 距离 days matter',
+    about: '把重要的日子记下来:单次日期显示「还有/已经多少天」,勾选「每年重复」的生日与纪念日自动滚动到下一个周年,今天到点的条目会高亮。条目按临近程度排序,保存在本机浏览器(localStorage),不上传也不跨设备,清除浏览器数据会丢失,请知悉。',
+    component: lazy(() => import('./countdown-days/CountdownDays.vue')),
+  },
+  {
+    id: 'typing-speed', name: '打字速度测试', category: 'office', icon: 'keyboard-music', fresh: true,
+    desc: '中文/英文打字测速:实时字速、正确率与最佳纪录',
+    keywords: '打字 速度 测试 typing wpm cpm 盲打 练习 字数每分钟',
+    about: '30/60/120 秒计时打字测试:中文按「字/分钟(CPM)」、英文按标准 WPM(5 字符 = 1 词)统计,逐字标出对错,正确率实时反馈;最佳纪录存本机,本页会话内保留最近 8 轮成绩。中文用整句拼段、英文用常用句,每轮随机抽题。想提速先保正确率,这是打字练习的黄金法则。',
+    component: lazy(() => import('./typing-speed/TypingSpeed.vue')),
+  },
+  {
     id: 'drawing-pad', name: '在线画板', category: 'office', icon: 'pen-tool',
     desc: '简单好用的手绘画板,支持画笔、橡皮、撤销与导出',
     keywords: '画板 绘画 涂鸦 白板 drawing sketch 画图',
@@ -1017,6 +1085,45 @@ export const TOOLS = [
     component: lazy(() => import('./color-blind/ColorBlind.vue')),
   },
 
+  {
+    id: 'age-calc', name: '年龄计算器', category: 'calc', icon: 'cake',
+    desc: '周岁/虚岁/生活天数,下个生日倒计时与生肖星座',
+    keywords: '年龄 计算 周岁 虚岁 生日 生肖 星座 生活天数 年龄计算器',
+    about: '选出生日期即可:周岁按公历生日精确推进(法律与证件口径),虚岁按农历年推进;附累计生活天数/周数/小时、下一个生日倒计时与生日当天彩蛋。生肖与干支按农历年取——春节前出生属上一年,与按公历年粗算的工具不同,可直接改「基准日」算孩子入学(8 月 31 日前满 6 周岁)等任意时点年龄。',
+    urlState: true,
+    component: lazy(() => import('./age-calc/AgeCalc.vue')),
+  },
+  {
+    id: 'placeholder-img', name: '占位图生成', category: 'generate', icon: 'image-plus',
+    desc: '自定义尺寸/颜色/文字的占位图,设计稿与开发即用',
+    keywords: '占位图 placeholder 假图 灰图 设计稿 原型 尺寸 og 分享图 生成',
+    about: '在本地 Canvas 绘制占位图:内置 OG 分享图(1200×630)、16:9、1:1 等常用尺寸预设,背景/文字色可选并按对比度提醒,居中十字参考线帮助构图,可加圆角;文字留空时自动显示尺寸标注。输出 PNG / JPG / WebP,完全离线生成,比外链占位图服务更快也更稳。',
+    urlState: true,
+    component: lazy(() => import('./placeholder-img/PlaceholderImg.vue')),
+  },
+  {
+    id: 'exif-strip', name: '图片隐私清理', category: 'image', icon: 'scan-eye',
+    desc: '重绘去除照片 EXIF/GPS 位置与设备信息,清理后可验证',
+    keywords: 'exif gps 隐私 去除 清理 位置信息 拍摄信息 照片 分享 原图',
+    about: '发原图前先过一遍:自动读取照片的 EXIF 元信息,标出是否含 GPS 位置与拍摄设备,再通过「像素重绘 + 重新编码」把元数据全部剥离(画面不变),完成后会重新检查输出文件证明已清零。JPG 输出自动铺白底处理透明区域。与「图片信息/EXIF」是同一件事的两面:那边查看,这边清理。',
+    component: lazy(() => import('./exif-strip/ExifStrip.vue')),
+  },
+  {
+    id: 'audio-record', name: '在线录音', category: 'av', icon: 'audio-lines',
+    desc: '麦克风录音:实时电平、暂停继续、本地下载',
+    keywords: '录音 麦克风 录音机 语音 留言 记录 memo voice recorder 在线录音',
+    about: '一键开始/暂停/继续的网页录音机:实时显示输入电平与计时,自动选择浏览器支持的容器(Chrome/Edge 为 WebM/Opus,Safari 为 MP4/AAC),结束后在线试听、一键下载。默认关闭浏览器降噪与回声消除,保留原始声音,适合录乐器与素材;录音完全在本地进行,不上传。',
+    component: lazy(() => import('./audio-record/AudioRecord.vue')),
+  },
+  {
+    id: 'word-cloud', name: '词云图生成', category: 'chart', icon: 'cloud',
+    desc: '文本一键生成词云图,高频词更大,导出高清 PNG',
+    keywords: '词云 word cloud 词频 标签云 可视化 文本分析 生成 图表',
+    about: '粘贴文本(或载入 .txt/.md)生成词云:英文按单词(自动滤除 the/and 等虚词)、中文可切换逐字统计,高频词字号更大、按频次配色,螺旋布局避免重叠;最多 200 词,画布尺寸与四套配色可调,导出 2x 高清 PNG。布局纯本地计算,与「词频统计」配套:那边看数据,这边看图。',
+    urlState: true,
+    component: lazy(() => import('./word-cloud/WordCloud.vue')),
+  },
+
   // ---------- 软件推荐 ----------
   {
     id: 'software-recommend', name: '系统必备软件推荐', category: 'software', icon: 'app-window',
@@ -1028,7 +1135,12 @@ export const TOOLS = [
 ]
 
 const TOOL_MAP = new Map(TOOLS.map((t) => [t.id, t]))
+const CATEGORY_MAP = new Map(CATEGORIES.map((c) => [c.id, c]))
 
 export function getTool(id) {
   return TOOL_MAP.get(id)
+}
+
+export function getCategory(id) {
+  return CATEGORY_MAP.get(id)
 }

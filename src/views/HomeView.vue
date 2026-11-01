@@ -1,15 +1,31 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { APP_NAME, APP_TAGLINE } from '@/config'
 import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useToolPrefs } from '@/utils/prefs'
 import AppIcon from '@/components/AppIcon.vue'
 
 const router = useRouter()
+const route = useRoute()
 const query = ref('')
 const searchEl = ref(null)
 const { favorites, recents } = useToolPrefs()
+
+// 工具页的分类徽章会带 ?cat= 回首页:滚到对应分类并短暂高亮
+function revealCat(id) {
+  const el = document.getElementById(`cat-${id}`)
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  el.classList.add('cat-flash')
+  setTimeout(() => el.classList.remove('cat-flash'), 1600)
+}
+onMounted(() => {
+  const cat = route.query.cat
+  if (typeof cat === 'string' && CATEGORIES.some((c) => c.id === cat)) {
+    setTimeout(() => revealCat(cat), 60)
+  }
+})
 
 const favTools = computed(() =>
   favorites.value.map((id) => getTool(id)).filter(Boolean),
@@ -17,6 +33,9 @@ const favTools = computed(() =>
 const recentTools = computed(() =>
   recents.value.map((id) => getTool(id)).filter(Boolean),
 )
+
+// registry 里带 fresh 标记的最新一批工具,首页置顶展示;下批新工具上线时把标记挪过去
+const freshTools = computed(() => TOOLS.filter((t) => t.fresh))
 
 // "/" 快捷键由 App.vue 统一分发(按当前路由决定聚焦首页搜索还是侧栏搜索),
 // 这里通过 data-hero-search 标记自己的搜索框供其定位,不再重复注册监听
@@ -62,6 +81,9 @@ function detectContentType(text) {
   }
   if (/^\d{13}$/.test(t)) return { label: '毫秒时间戳', toolId: 'timestamp' }
   if (/^\d{10}$/.test(t)) return { label: '秒级时间戳', toolId: 'timestamp' }
+  // 图片 dataURL(截图/复制的图片以文本形式出现)→ 二维码解析与图片工具都常用,先推荐解析
+  if (/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(t)) return { label: '图片 Data URL', toolId: 'qr-decode' }
+  if (/^(?:\d{1,3}\.){3}\d{1,3}$/.test(t)) return { label: 'IPv4 地址', toolId: 'subnet-calc' }
   return null
 }
 
@@ -79,7 +101,7 @@ async function detectClipboard() {
       const tool = getTool(hit.toolId)
       suggestion.value = { ...hit, tool, preview: text.trim().slice(0, 80) }
     } else {
-      detectError.value = '没有识别出已知类型(支持 JSON / JWT / URL / 颜色 / Base64 / 时间戳)'
+      detectError.value = '没有识别出已知类型(支持 JSON / JWT / URL / 颜色 / Base64 / 时间戳 / IP / 图片链接)'
     }
   } catch {
     detectError.value = '读取剪贴板被拒绝或失败,请手动复制后重试'
@@ -87,6 +109,16 @@ async function detectClipboard() {
 }
 function openRandom() {
   router.push(`/tool/${TOOLS[Math.floor(Math.random() * TOOLS.length)].id}`)
+}
+
+// 搜索时按 Enter 直达第一个匹配的工具;Esc 清空回到全量列表
+function onSearchKeydown(e) {
+  if (e.key === 'Enter') {
+    const first = filtered.value[0]?.tools[0]
+    if (first && query.value.trim()) router.push(`/tool/${first.id}`)
+  } else if (e.key === 'Escape' && query.value) {
+    query.value = ''
+  }
 }
 </script>
 
@@ -113,7 +145,8 @@ function openRandom() {
           class="input search-input"
           type="search"
           aria-label="搜索工具"
-          placeholder="搜索工具,如 JSON、二维码、时间戳…(按 / 快速聚焦)"
+          placeholder="搜索工具,Enter 直达第一个结果(按 / 快速聚焦)"
+          @keydown="onSearchKeydown"
         />
       </div>
       <div v-if="!query.trim()" class="detect-row">
@@ -130,6 +163,32 @@ function openRandom() {
       <p v-if="detectError" class="tip">{{ detectError }}</p>
     </section>
 
+    <!-- 移动端没有侧栏:sticky 分类条快速跳转,桌面端隐藏 -->
+    <nav v-if="!query.trim()" class="mobile-cats" aria-label="分类快捷导航">
+      <button v-for="cat in CATEGORIES" :key="cat.id" class="m-chip" type="button" @click="revealCat(cat.id)">
+        <AppIcon :name="cat.icon" :size="13" />{{ cat.name }}
+      </button>
+    </nav>
+
+    <section v-if="!query.trim() && freshTools.length" class="cat-section">
+      <h2 class="cat-title">
+        <AppIcon class="cat-icon" name="sparkles" :size="20" />最新上线
+        <span class="count-hint">共 {{ freshTools.length }} 个</span>
+      </h2>
+      <div class="tool-grid">
+        <router-link
+          v-for="tool in freshTools"
+          :key="tool.id"
+          :to="`/tool/${tool.id}`"
+          class="tool-card"
+        >
+          <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
+          <span class="tool-name">{{ tool.name }}<span class="new-badge">新</span></span>
+          <span class="tool-desc">{{ tool.desc }}</span>
+        </router-link>
+      </div>
+    </section>
+
     <section v-if="favTools.length && !query.trim()" class="cat-section">
       <h2 class="cat-title"><AppIcon class="cat-icon" name="star" :size="20" />我的收藏</h2>
       <div class="tool-grid">
@@ -139,8 +198,8 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}</span>
+          <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -155,14 +214,14 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}</span>
+          <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
     </section>
 
-    <section v-for="cat in filtered" :key="cat.id" class="cat-section">
+    <section v-for="cat in filtered" :key="cat.id" :id="`cat-${cat.id}`" class="cat-section">
       <h2 class="cat-title"><AppIcon class="cat-icon" :name="cat.icon" :size="20" />{{ cat.name }}</h2>
       <div class="tool-grid">
         <router-link
@@ -171,8 +230,8 @@ function openRandom() {
           :to="`/tool/${tool.id}`"
           class="tool-card"
         >
-          <AppIcon class="tool-icon" :class="`cat-tint-`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}</span>
+          <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -249,6 +308,22 @@ function openRandom() {
 }
 .cat-section {
   margin-bottom: 32px;
+  scroll-margin-top: 76px; /* sticky header 高度,锚点定位不被盖住 */
+}
+/* 从工具页点分类徽章跳回时的高亮反馈 */
+.cat-section.cat-flash {
+  animation: cat-flash 1.6s ease-out;
+}
+@keyframes cat-flash {
+  0%, 40% {
+    background: var(--accent-soft);
+    border-radius: var(--radius);
+    box-shadow: 0 0 0 8px var(--accent-soft);
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
 }
 .cat-title {
   display: flex;
@@ -257,6 +332,24 @@ function openRandom() {
   font-size: 19px;
   font-weight: 700;
   margin-bottom: 14px;
+}
+.count-hint {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+}
+/* 「新」徽章:最新上线的工具在卡片上常显,下批上线后随 fresh 标记消失 */
+.new-badge {
+  display: inline-block;
+  vertical-align: 2px;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--on-accent);
+  background: var(--accent-grad);
+  border-radius: 999px;
+  padding: 3px 8px;
 }
 .cat-icon {
   display: inline-flex;
@@ -292,6 +385,47 @@ function openRandom() {
   flex-wrap: wrap;
   gap: 8px;
   margin: 0 0 18px;
+}
+/* 移动端分类快捷条:窄屏才出现,吸顶横向滚动 */
+.mobile-cats {
+  display: none;
+}
+@media (max-width: 900px) {
+  .mobile-cats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    position: sticky;
+    top: 60px;
+    z-index: 60;
+    padding: 10px 16px;
+    margin: 0 -16px 18px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    scrollbar-width: none;
+  }
+  .mobile-cats::-webkit-scrollbar {
+    display: none;
+  }
+  .m-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .m-chip:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
 }
 .hero-chip {
   display: inline-flex;

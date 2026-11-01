@@ -47,7 +47,7 @@ const stats = computed(() => {
   <div class="grid-2">
     <div class="field m-0">
       <label class="field-label" for="input">输入({{ stats.before }} 字符)</label>
-      <textarea id="input" v-model="input" class="textarea" rows="9" spellcheck="false"></textarea>
+      <textarea id="input" v-model="input" v-draft="'text-clean-in'" class="textarea" rows="9" spellcheck="false"></textarea>
     </div>
     <div class="field m-0">
       <label class="field-label" for="output">

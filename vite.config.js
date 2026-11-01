@@ -21,6 +21,13 @@ export default defineConfig({
         background_color: '#f4f5fb',
         display: 'standalone',
         start_url: '/',
+        // 已安装的 PWA 长按图标弹出快捷入口:选最常用的四个工具
+        shortcuts: [
+          { name: 'JSON 格式化', url: '/tool/json', icons: [{ src: 'pwa-192.png', sizes: '192x192', type: 'image/png' }] },
+          { name: '二维码生成', url: '/tool/qrcode', icons: [{ src: 'pwa-192.png', sizes: '192x192', type: 'image/png' }] },
+          { name: '时间戳转换', url: '/tool/timestamp', icons: [{ src: 'pwa-192.png', sizes: '192x192', type: 'image/png' }] },
+          { name: '图片压缩', url: '/tool/image-compress', icons: [{ src: 'pwa-192.png', sizes: '192x192', type: 'image/png' }] },
+        ],
         icons: [
           { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },

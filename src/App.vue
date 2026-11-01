@@ -81,6 +81,17 @@ onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
   document.body.style.overflow = ''
 })
+
+// ---------- 返回顶部:长页面(工具列表/长输出)滚过一屏后出现 ----------
+const showTop = ref(false)
+function onScroll() {
+  showTop.value = window.scrollY > 480
+}
+function backTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <template>
@@ -155,6 +166,12 @@ onUnmounted(() => {
       <div v-if="toast.visible.value" class="toast" role="status" aria-live="polite">
         {{ toast.message.value }}
       </div>
+    </transition>
+
+    <transition name="fade-up">
+      <button v-if="showTop" class="back-top" type="button" title="返回顶部" aria-label="返回顶部" @click="backTop">
+        <AppIcon name="arrow-up" :size="18" />
+      </button>
     </transition>
   </div>
 </template>
@@ -315,6 +332,36 @@ onUnmounted(() => {
   box-shadow: var(--shadow-lg);
   max-width: min(86vw, 420px);
 }
+.back-top {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.back-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+@media (max-width: 720px) {
+  .back-top {
+    right: 16px;
+    bottom: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}
 .toast-enter-active,
 .toast-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -323,6 +370,15 @@ onUnmounted(() => {
 .toast-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(8px);
+}
+.fade-up-enter-active,
+.fade-up-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fade-up-enter-from,
+.fade-up-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 .fade-enter-active,
 .fade-leave-active {
