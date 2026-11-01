@@ -308,7 +308,23 @@ export const TOOLS = [
     keywords: 'dns 查询 doh 域名解析 a记录 mx txt cname 域名 dig nslookup 运维',
     about: '本站联网工具:通过 DNS over HTTPS 加密查询任意域名的 A/AAAA/CNAME/MX/NS/TXT/SOA/CAA 记录;解析源自动降级(阿里 DNS 优先、Google 兜底,6 秒超时切换),结果按域名+类型缓存 5 分钟,断网回退缓存并标注;每条记录可复制,排查 CDN/邮件配置(TXT/SPF、MX)很趁手。',
     urlState: true,
-    component: lazy(() => import('./dns-lookup/DnsLookup.vue')),
+    component: lazy(() => import('./ip-lookup/IpLookup.vue')),
+  },
+  {
+    id: 'github-repo', name: 'GitHub 仓库信息', category: 'dev', icon: 'github', online: true, fresh: true,
+    desc: '粘贴仓库链接即看 Star/Fork/协议/最新 Release,缓存省额度',
+    keywords: 'github 仓库 star fork release 协议 license repo 查询 开源',
+    about: '本站联网工具:粘贴 owner/repo 或任意 GitHub 链接(会自动截取仓库段),展示 Star/Fork/Issue 数、主语言、协议、默认分支、创建与最近推送时间、最新 Release 与 Topics;GitHub 匿名 API 限额 60 次/小时,结果缓存 30 分钟省额度;私有仓库未登录不可见。',
+    urlState: true,
+    component: lazy(() => import('./github-repo/GithubRepo.vue')),
+  },
+  {
+    id: 'ip-lookup', name: 'IP 归属地查询', category: 'dev', icon: 'map-pin', online: true, fresh: true,
+    desc: '查本机或任意 IP 的归属地/运营商/时区,多查询源自动降级',
+    keywords: 'ip 归属地 查询 公网ip 运营商 地理位置 ip查询 本机ip',
+    about: '本站联网工具:留空查本机公网 IP,或输入任意 IPv4/IPv6 查询归属地、运营商(ASN)、时区与经纬度(附地图链接);查询源自动降级(ipwho.is 优先、ip.sb 兜底),结果缓存 10 分钟。城市级精度仅供大体参考,内网环境显示的是出口网关地址。',
+    urlState: true,
+    component: lazy(() => import('./ip-lookup/IpLookup.vue')),
   },
   {
     id: 'port-lookup', name: '常用端口速查', category: 'dev', icon: 'plug',
@@ -393,7 +409,7 @@ export const TOOLS = [
     component: lazy(() => import('./regex/RegexTester.vue')),
   },
   {
-    id: 'regex-cheat', name: '正则速查', category: 'text', icon: 'regex', fresh: true,
+    id: 'regex-cheat', name: '正则速查', category: 'text', icon: 'regex',
     desc: '常用正则模式库(正反例自检)+ 元字符语法速查',
     keywords: '正则 速查 regex 常用正则 手机号 邮箱 元字符 cheat sheet 模式库',
     about: '14 条常用正则模式(手机号/邮箱/URL/IPv4/日期时间/强密码/重复单词等)与 5 组语法速查(字符集合/量词/边界/分组引用/环视断言/标志)。每条模式附带正反例样本,页面加载即实时运行自检,单测逐条兜底——抄出去的正则保证可用;配合「正则测试」动手调试。',
