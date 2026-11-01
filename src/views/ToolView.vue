@@ -77,7 +77,7 @@ function share() {
       <section v-if="related.length" class="related">
         <h3 class="related-title">同分类工具</h3>
         <div class="related-grid">
-          <router-link v-for="t in related" :key="t.id" :to="`/tool/${t.id}`" class="related-item">
+          <router-link v-for="t in related" :key="t.id" :to="`/tool/${t.id}`" class="related-item" @mouseenter="t.component?.prefetch?.()">
             <AppIcon :name="t.icon" :size="15" />
             <span>{{ t.name }}</span>
           </router-link>

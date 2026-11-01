@@ -111,6 +111,11 @@ function openRandom() {
   router.push(`/tool/${TOOLS[Math.floor(Math.random() * TOOLS.length)].id}`)
 }
 
+// 悬停预热工具 chunk:点击后异步组件几乎零等待;重复悬停靠浏览器缓存,无额外开销
+function prefetch(tool) {
+  tool.component?.prefetch?.()
+}
+
 // 搜索时按 Enter 直达第一个匹配的工具;Esc 清空回到全量列表
 function onSearchKeydown(e) {
   if (e.key === 'Enter') {
@@ -181,6 +186,7 @@ function onSearchKeydown(e) {
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="tool-card"
+          @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span class="new-badge">新</span></span>
@@ -197,6 +203,7 @@ function onSearchKeydown(e) {
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="tool-card"
+          @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
@@ -213,6 +220,7 @@ function onSearchKeydown(e) {
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="tool-card"
+          @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
@@ -229,6 +237,7 @@ function onSearchKeydown(e) {
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="tool-card"
+          @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>

@@ -1,13 +1,16 @@
 import { defineAsyncComponent } from 'vue'
 import ToolLoadError from '@/components/ToolLoadError.vue'
 
-// 异步加载失败时展示可重试的错误组件,避免弱网下白屏
+// 异步加载失败时展示可重试的错误组件,避免弱网下白屏。
+// prefetch 暴露原始 loader:卡片悬停时预热 chunk,点击时几乎零等待(失败静默)。
 export function lazy(loader) {
-  return defineAsyncComponent({
+  const comp = defineAsyncComponent({
     loader,
     errorComponent: ToolLoadError,
     delay: 120,
   })
+  comp.prefetch = () => Promise.resolve(loader()).catch(() => {})
+  return comp
 }
 
 export const CATEGORIES = [
@@ -647,6 +650,13 @@ export const TOOLS = [
     component: lazy(() => import('./random-number/RandomNumber.vue')),
   },
   {
+    id: 'qr-batch', name: '二维码批量生成', category: 'generate', icon: 'qr-code', fresh: true,
+    desc: '每行一个链接/文本,批量生成二维码并打包 ZIP',
+    keywords: '二维码 批量 生成 批量二维码 zip 打包 多个 url 表格 导出',
+    about: '粘贴多行内容(每行一个 URL 或文本)一次性生成全部二维码,自动去空去重、上限 100 行;每张的尺寸、留白与前景色统一可调,支持「内容 | 文件名」自定义命名,预览前 12 张后一键打包 ZIP 下载。适合批量制码贴仓库货架、活动物料与打印物料场景,全部本地生成。',
+    component: lazy(() => import('./qr-batch/QrBatch.vue')),
+  },
+  {
     id: 'number-to-english', name: '数字↔英文', category: 'generate', icon: 'languages',
     desc: '数字与英文读法双向转换,支持负数与小数',
     keywords: '数字 英文 number english 转换 单词',
@@ -782,6 +792,14 @@ export const TOOLS = [
     about: '输入性别、年龄、身高、体重:BMI 按中国标准(WS/T 428-2013,超重切点 24)分级并给出标尺定位与理想体重区间;基础代谢按 Mifflin-St Jeor 公式估算;乘以五档活动系数得到每日总消耗 TDEE,并给出减重/维持/增重的每日热量参考。数值均为统计估算,孕产期、儿童与肌肉量异常人群请以专业评估为准。',
     urlState: true,
     component: lazy(() => import('./bmi-calc/BmiCalc.vue')),
+  },
+  {
+    id: 'due-date', name: '预产期计算', category: 'calc', icon: 'baby', fresh: true,
+    desc: '末次月经推算预产期与孕周,附产检时间节点',
+    keywords: '预产期 孕周 怀孕 孕期 产检 末次月经 naegele 孕周计算器',
+    about: '按临床通用的 Naegele 法则(末次月经第一天 + 280 天)推算预产期,月经周期不等于 28 天时自动修正;显示当前孕周几周几天、孕早/中/晚期、280 天进度条,并列出正在窗口期内与下一个产检节点(NT、唐筛、大排畸、糖耐等)。周期不规律者以孕早期超声核对为准;实际分娩在 37~42 周均属正常,结果仅供参考。',
+    urlState: true,
+    component: lazy(() => import('./due-date/DueDate.vue')),
   },
   {
     id: 'discount-calc', name: '折扣凑单计算', category: 'calc', icon: 'ticket-percent',

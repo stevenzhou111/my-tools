@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# sitemap.xml 在构建时由 scripts/gen-sitemap.mjs 按需生成(需设置 SITEMAP_BASE 环境变量)

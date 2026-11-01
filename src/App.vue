@@ -96,6 +96,8 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 <template>
   <div class="app">
+    <!-- 键盘用户的第一站:Tab 一下直达内容区,视觉隐藏、聚焦即现 -->
+    <a href="#main" class="skip-link">跳到主内容</a>
     <header class="site-header">
       <div class="header-inner">
         <button
@@ -144,7 +146,7 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
         </div>
       </transition>
 
-      <main class="site-main">
+      <main id="main" class="site-main">
         <div class="main-container">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
@@ -181,6 +183,23 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+.skip-link {
+  position: fixed;
+  top: -48px;
+  left: 16px;
+  z-index: 300;
+  padding: 10px 18px;
+  background: var(--accent-strong);
+  color: var(--on-accent);
+  border-radius: 0 0 10px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus-visible {
+  top: 0;
 }
 .site-header {
   position: sticky;
