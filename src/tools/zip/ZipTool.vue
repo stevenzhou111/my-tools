@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { zipSync, unzipSync } from 'fflate'
 import { downloadBlob } from '@/utils/image'
@@ -92,8 +93,8 @@ function previewText(entry) {
 
 <template>
   <div class="row mb-16">
-    <button class="btn" :class="{ 'btn-primary': tab === 'compress' }" @click="tab = 'compress'">📦 压缩为 ZIP</button>
-    <button class="btn" :class="{ 'btn-primary': tab === 'extract' }" @click="tab = 'extract'">📂 解压 ZIP</button>
+    <button class="btn" :class="{ 'btn-primary': tab === 'compress' }" @click="tab = 'compress'"><AppIcon name="package" :size="15" /> 压缩为 ZIP</button>
+    <button class="btn" :class="{ 'btn-primary': tab === 'extract' }" @click="tab = 'extract'"><AppIcon name="folder-open" :size="15" /> 解压 ZIP</button>
   </div>
 
   <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
@@ -102,7 +103,7 @@ function previewText(entry) {
   <template v-if="tab === 'compress'">
     <div class="dropzone" @click="pickFiles">
       <input ref="fileInput" type="file" multiple class="sr-only" @change="onFilesChange" />
-      <div class="dz-icon">📦</div>
+      <div class="dz-icon"><AppIcon name="package" :size="30" /></div>
       <p><strong>点击选择文件</strong>(可多选,按原文件名打包)</p>
     </div>
     <div v-if="files.length" class="panel mt-14">
@@ -114,7 +115,7 @@ function previewText(entry) {
     </div>
     <div v-if="files.length" class="row mt-14">
       <button class="btn btn-primary" :disabled="busy" @click="compress">
-        {{ busy ? '压缩中…' : `📦 打包 ${files.length} 个文件` }}
+        {{ busy ? '压缩中…' : `<AppIcon name="package" :size="15" /> 打包 ${files.length} 个文件` }}
       </button>
       <button class="btn" @click="files = []">清空</button>
     </div>
@@ -124,7 +125,7 @@ function previewText(entry) {
   <template v-else>
     <div class="dropzone" @click="pickZip" @dragover.prevent @drop.prevent="onZipDrop">
       <input ref="zipInput" type="file" accept=".zip" class="sr-only" @change="onZipChange" />
-      <div class="dz-icon">📂</div>
+      <div class="dz-icon"><AppIcon name="folder-open" :size="30" /></div>
       <p><strong>点击选择 ZIP 文件</strong> 或拖拽到此处</p>
       <p class="tip">解压在浏览器本地完成,可选择其中文件单独下载</p>
     </div>

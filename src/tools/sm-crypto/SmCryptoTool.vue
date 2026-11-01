@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { sm2, sm3, sm4 } from 'sm-crypto'
 import { useCopy } from '@/utils/useCopy'
@@ -146,7 +147,7 @@ function sm2Decrypt() {
         <span class="field-label">密钥(32 位 hex,自动生成)</span>
         <div class="row" style="flex-wrap: nowrap">
           <input v-model="sm4Key" class="input mono" spellcheck="false" />
-          <button class="btn" @click="randomKey">🎲</button>
+          <button class="btn" @click="randomKey"><AppIcon name="dice-5" :size="15" /></button>
         </div>
       </label>
       <label class="ctrl" style="width: 130px">
@@ -160,7 +161,7 @@ function sm2Decrypt() {
         <span class="field-label">IV(32 位 hex)</span>
         <span class="row" style="gap: 6px">
           <input v-model="sm4Iv" class="input mono" spellcheck="false" />
-          <button class="btn" title="生成随机 IV" aria-label="生成随机 IV" @click="sm4Iv = randomHex32()">🎲</button>
+          <button class="btn" title="生成随机 IV" aria-label="生成随机 IV" @click="sm4Iv = randomHex32()"><AppIcon name="dice-5" :size="15" /></button>
         </span>
       </label>
     </div>
@@ -172,7 +173,7 @@ function sm2Decrypt() {
       <label class="field-label">明文</label>
       <textarea id="sm4Text" v-model="sm4Text" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
-    <button class="btn btn-primary" @click="sm4Encrypt">🔒 加密</button>
+    <button class="btn btn-primary" @click="sm4Encrypt"><AppIcon name="lock" :size="15" /> 加密</button>
 
     <div v-if="sm4CipherOut" class="field mt-14">
       <label class="field-label" for="sm4CipherIn">密文(hex)</label>
@@ -188,14 +189,14 @@ function sm2Decrypt() {
       <label class="field-label">或在此粘贴密文进行解密</label>
       <textarea id="sm4CipherIn" v-model="sm4CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
-    <button class="btn" @click="sm4Decrypt">🔓 解密</button>
+    <button class="btn" @click="sm4Decrypt"><AppIcon name="lock-open" :size="15" /> 解密</button>
     <pre v-if="sm4Plain" class="output mt-12">{{ sm4Plain }}</pre>
   </template>
 
   <!-- SM2 -->
   <template v-if="tab === 'sm2'">
     <div class="row mb-14">
-      <button class="btn" @click="genKeyPair">🎲 生成新密钥对</button>
+      <button class="btn" @click="genKeyPair"><AppIcon name="dice-5" :size="15" /> 生成新密钥对</button>
       <button class="btn btn-sm" @click="copy('pub', sm2PublicKey)">
         {{ copiedKey === 'pub' ? '✓ 公钥已复制' : '复制公钥' }}
       </button>
@@ -215,14 +216,14 @@ function sm2Decrypt() {
       <label class="field-label" for="sm2Plain">明文</label>
       <textarea id="sm2Plain" v-model="sm2Plain" class="textarea" rows="2" spellcheck="false"></textarea>
     </div>
-    <button class="btn btn-primary" @click="sm2Encrypt">🔒 公钥加密</button>
+    <button class="btn btn-primary" @click="sm2Encrypt"><AppIcon name="lock" :size="15" /> 公钥加密</button>
     <pre v-if="sm2CipherOut" class="output mt-12">{{ sm2CipherOut.slice(0, 400) }}{{ sm2CipherOut.length > 400 ? '…' : '' }}</pre>
 
     <div class="field mt-14">
       <label class="field-label" for="sm2CipherIn">或在此粘贴密文(hex)进行解密</label>
       <textarea id="sm2CipherIn" v-model="sm2CipherIn" class="textarea" rows="3" spellcheck="false"></textarea>
     </div>
-    <button class="btn" @click="sm2Decrypt">🔓 私钥解密</button>
+    <button class="btn" @click="sm2Decrypt"><AppIcon name="lock-open" :size="15" /> 私钥解密</button>
     <pre v-if="sm2Decrypted" class="output mt-12">{{ sm2Decrypted }}</pre>
 
     <p class="tip mt-12">密文以 04 开头为 C1C3C2 标准模式;加解密均由 sm-crypto 在浏览器本地完成。</p>

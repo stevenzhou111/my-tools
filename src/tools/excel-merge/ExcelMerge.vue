@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { zipSync } from 'fflate'
@@ -118,17 +119,17 @@ async function split(f) {
 
 <template>
   <div class="row mb-16">
-    <button class="btn" :class="{ 'btn-primary': tab === 'merge' }" @click="tab = 'merge'">📗 合并多个 Excel</button>
-    <button class="btn" :class="{ 'btn-primary': tab === 'split' }" @click="tab = 'split'">📂 拆分多 Sheet 为多文件</button>
+    <button class="btn" :class="{ 'btn-primary': tab === 'merge' }" @click="tab = 'merge'"><AppIcon name="book" :size="15" /> 合并多个 Excel</button>
+    <button class="btn" :class="{ 'btn-primary': tab === 'split' }" @click="tab = 'split'"><AppIcon name="folder-open" :size="15" /> 拆分多 Sheet 为多文件</button>
   </div>
 
   <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>
-  <p v-if="info" class="tip mb-12">✅ {{ info }}</p>
+  <p v-if="info" class="tip mb-12"><AppIcon name="circle-check" :size="15" /> {{ info }}</p>
 
   <template v-if="tab === 'merge'">
     <div class="dropzone" @click="pickMerge">
       <input ref="mergeInput" type="file" accept=".xlsx,.xls,.csv" multiple class="sr-only" @change="onMergeChange" />
-      <div class="dz-icon">📚</div>
+      <div class="dz-icon"><AppIcon name="library" :size="30" /></div>
       <p><strong>点击选择多个 Excel / CSV 文件</strong></p>
       <p class="tip">所有工作表按顺序合并为一个 xlsx,同名工作表自动加序号</p>
     </div>
@@ -139,7 +140,7 @@ async function split(f) {
       </div>
     </div>
     <div v-if="files.length" class="row mt-14">
-      <button class="btn btn-primary" :disabled="busy" @click="merge">{{ busy ? '合并中…' : `📚 合并 ${files.length} 个文件` }}</button>
+      <button class="btn btn-primary" :disabled="busy" @click="merge">{{ busy ? '合并中…' : `<AppIcon name="library" :size="15" /> 合并 ${files.length} 个文件` }}</button>
       <button class="btn" @click="files = []">清空</button>
     </div>
   </template>
@@ -147,12 +148,12 @@ async function split(f) {
   <template v-else>
     <div class="dropzone" @click="pickSplit">
       <input ref="splitInput" type="file" accept=".xlsx,.xls" class="sr-only" @change="onSplitChange" />
-      <div class="dz-icon">📂</div>
+      <div class="dz-icon"><AppIcon name="folder-open" :size="30" /></div>
       <p><strong>点击选择一个多 Sheet 的 Excel 文件</strong></p>
       <p class="tip">每个工作表导出为独立的 xlsx,打包成 ZIP 下载</p>
     </div>
     <div class="row mt-14">
-      <button class="btn btn-primary" :disabled="busy" @click="split">{{ busy ? '处理中…' : '📂 选择文件并拆分' }}</button>
+      <button class="btn btn-primary" :disabled="busy" @click="split">{{ busy ? '处理中…' : '<AppIcon name="folder-open" :size="15" /> 选择文件并拆分' }}</button>
     </div>
   </template>
 </template>

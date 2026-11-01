@@ -454,6 +454,14 @@ export const TOOLS = [
     component: lazy(() => import('./morse/MorseCode.vue')),
   },
   {
+    id: 'classic-cipher', name: '经典密码(凯撒/维吉尼亚)', category: 'text', icon: 'shield-ellipsis', fresh: true,
+    desc: '凯撒 / 维吉尼亚 / Atbash 加解密,附 26 位移破译表',
+    keywords: '凯撒密码 维吉尼亚 atbash rot13 密码 加密 解密 cipher caesar vigenere 破译',
+    about: '三种经典密码一页玩转:凯撒(0~25 位移,附 ROT13 快捷)、维吉尼亚(密钥逐字母位移)、Atbash(字母表镜像,自反);只变换英文字母,汉字数字原样保留。破解辅助:贴入密文列出全部 26 种凯撒位移并按英文词频猜测最可能的 k;「用结果反向」一键续解。仅作学习演示,真保密请用 AES 工具。',
+    urlState: true,
+    component: lazy(() => import('./classic-cipher/ClassicCipher.vue')),
+  },
+  {
     id: 'text-split', name: '文本分割', category: 'text', icon: 'scissors',
     desc: '按分隔符或固定长度把文本拆分成列表',
     keywords: '文本分割 分隔符 拆分 切分 分段',
@@ -658,7 +666,7 @@ export const TOOLS = [
     component: lazy(() => import('./random-number/RandomNumber.vue')),
   },
   {
-    id: 'qr-batch', name: '二维码批量生成', category: 'generate', icon: 'qr-code', fresh: true,
+    id: 'qr-batch', name: '二维码批量生成', category: 'generate', icon: 'qr-code',
     desc: '每行一个链接/文本,批量生成二维码并打包 ZIP',
     keywords: '二维码 批量 生成 批量二维码 zip 打包 多个 url 表格 导出',
     about: '粘贴多行内容(每行一个 URL 或文本)一次性生成全部二维码,自动去空去重、上限 100 行;每张的尺寸、留白与前景色统一可调,支持「内容 | 文件名」自定义命名,预览前 12 张后一键打包 ZIP 下载。适合批量制码贴仓库货架、活动物料与打印物料场景,全部本地生成。',
@@ -702,6 +710,14 @@ export const TOOLS = [
     about: '输入 10 位自动按秒、13 位按毫秒处理;双向实时联动,顶部常驻当前时间戳。',
     urlState: true,
     component: lazy(() => import('./timestamp/TimestampTool.vue')),
+  },
+  {
+    id: 'dms-convert', name: '度分秒坐标转换', category: 'calc', icon: 'map-pin', fresh: true,
+    desc: '十进制度与度分秒(DMS)互转,支持整段粘贴识别',
+    keywords: '度分秒 dms 坐标 转换 gps 经纬度 十进制度 dd 导航 测绘 户外',
+    about: '十进制度(DD)与度分秒(DMS)双向换算,纬度/经度分别限幅,秒保留 3 位(约 0.1 米);支持 31°13′45.2″N、31 13 45.2 N、北纬31度13分45秒等写法整段粘贴识别,双向一键回填继续换算。配合「图片信息/EXIF」查看照片 GPS 后转换格式很顺手。',
+    urlState: true,
+    component: lazy(() => import('./dms-convert/DmsConvert.vue')),
   },
   {
     id: 'color', name: '颜色转换', category: 'calc', icon: 'palette',
@@ -818,7 +834,7 @@ export const TOOLS = [
     component: lazy(() => import('./bmi-calc/BmiCalc.vue')),
   },
   {
-    id: 'due-date', name: '预产期计算', category: 'calc', icon: 'baby', fresh: true,
+    id: 'due-date', name: '预产期计算', category: 'calc', icon: 'baby',
     desc: '末次月经推算预产期与孕周,附产检时间节点',
     keywords: '预产期 孕周 怀孕 孕期 产检 末次月经 naegele 孕周计算器',
     about: '按临床通用的 Naegele 法则(末次月经第一天 + 280 天)推算预产期,月经周期不等于 28 天时自动修正;显示当前孕周几周几天、孕早/中/晚期、280 天进度条,并列出正在窗口期内与下一个产检节点(NT、唐筛、大排畸、糖耐等)。周期不规律者以孕早期超声核对为准;实际分娩在 37~42 周均属正常,结果仅供参考。',

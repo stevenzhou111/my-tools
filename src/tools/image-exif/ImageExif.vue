@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import exifr from 'exifr'
 import { formatSize } from '@/utils/format'
@@ -88,7 +89,7 @@ async function load(f) {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔍</div>
+    <div class="dz-icon"><AppIcon name="search" :size="30" /></div>
     <p><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p class="tip">查看尺寸、拍摄参数(相机/光圈/ISO)与 GPS 位置;JPG 原图信息最全</p>
   </div>
@@ -115,7 +116,7 @@ async function load(f) {
     </div>
 
     <div v-if="gps" class="panel mt-12">
-      <label class="field-label">📍 拍摄位置</label>
+      <label class="field-label"><AppIcon name="map-pin" :size="15" /> 拍摄位置</label>
       <div class="exif-row">
         <span class="exif-label">经纬度</span>
         <code>{{ gps.lat }}, {{ gps.lon }}</code>

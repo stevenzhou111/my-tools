@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { buildToc } from '@/utils/toc'
 import { useCopy } from '@/utils/useCopy'
@@ -81,7 +82,7 @@ const LEVELS = [1, 2, 3, 4, 5, 6]
   </div>
 
   <details class="panel">
-    <summary>📖 锚点规则</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 锚点规则</summary>
     <p class="tip">
       锚点与 GitHub 一致:小写化、剔除字母/数字/汉字/空格/连字符/下划线以外的字符、空格转
       <code>-</code>(连续连字符不合并)。代码块内的 # 行不会当作标题。粘贴到

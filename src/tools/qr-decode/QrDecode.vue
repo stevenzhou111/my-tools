@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import jsQR from 'jsqr'
 import { loadImageFromFile } from '@/utils/image'
@@ -69,7 +70,7 @@ async function load(file) {
     @paste="onPaste"
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔍</div>
+    <div class="dz-icon"><AppIcon name="search" :size="30" /></div>
     <p><strong>点击选择二维码图片</strong>,拖拽到此处,或直接 Ctrl+V 粘贴截图</p>
     <p class="tip">全程本地识别,图片不会上传</p>
   </div>
@@ -90,7 +91,7 @@ async function load(file) {
         rel="noopener noreferrer"
         class="btn btn-sm"
       >
-        🔗 打开链接
+        <AppIcon name="link" :size="15" /> 打开链接
       </a>
     </div>
   </div>

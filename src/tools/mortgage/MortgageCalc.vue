@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { combineLoans, loanSchedule, prepayOptions, yearlySummary } from '@/utils/mortgage'
 import { useUrlState } from '@/utils/urlState'
@@ -117,7 +118,7 @@ const cards = computed(() => {
 
   <div class="grid-2">
     <div class="panel loan-panel">
-      <h3 style="font-size: 16px">💳 商业贷款</h3>
+      <h3 style="font-size: 16px"><AppIcon name="credit-card" :size="15" /> 商业贷款</h3>
       <div class="field">
         <label class="field-label" for="m-a1">贷款金额(万)</label>
         <input id="m-a1" v-model.number="amount1" class="input" type="number" min="1" max="100000" step="1" />
@@ -135,7 +136,7 @@ const cards = computed(() => {
     <div class="panel loan-panel" :class="{ dim: !useFund }">
       <label class="check mb-12">
         <input v-model="useFund" type="checkbox" />
-        <h3 style="font-size: 16px; user-select: none">🏛️ 公积金贷款(可选)</h3>
+        <h3 style="font-size: 16px; user-select: none"><AppIcon name="landmark" :size="15" /> 公积金贷款(可选)</h3>
       </label>
       <template v-if="useFund">
         <div class="field">
@@ -182,7 +183,7 @@ const cards = computed(() => {
     </p>
 
     <details class="panel mt-14">
-      <summary>📅 按年还款明细({{ years.length }} 年)</summary>
+      <summary><AppIcon name="calendar-days" :size="15" /> 按年还款明细({{ years.length }} 年)</summary>
       <div class="table-wrap">
         <table class="year-table">
           <thead>
@@ -232,7 +233,7 @@ const cards = computed(() => {
             {{ fmt(prepayExtra) }} 万后,两种走法:
           </p>
           <div v-if="prepay.data.settled" class="tip mt-8">
-            🎉 该金额已覆盖全部剩余本金,贷款一次结清,共节省利息
+            <AppIcon name="party-popper" :size="15" /> 该金额已覆盖全部剩余本金,贷款一次结清,共节省利息
             <strong>{{ fmt(prepay.data.savedInterest) }}</strong> 元。
           </div>
           <div v-else class="grid-2 mt-8">

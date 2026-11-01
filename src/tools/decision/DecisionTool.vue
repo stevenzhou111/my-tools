@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 
 const mode = ref('custom')
@@ -58,14 +59,14 @@ onUnmounted(() => clearInterval(timer))
   </div>
 
   <div class="panel result-panel">
-    <div class="result" :class="{ spinning }">{{ answer || '🤔' }}</div>
+    <div class="result" :class="{ spinning }">{{ answer || '<AppIcon name="circle-question-mark" :size="15" />' }}</div>
     <button
       v-if="mode === 'yesno'"
       class="btn btn-primary"
       :disabled="spinning"
       @click="yesNo"
     >
-      🎲 帮我决定!
+      <AppIcon name="dice-5" :size="15" /> 帮我决定!
     </button>
     <button
       v-else
@@ -73,7 +74,7 @@ onUnmounted(() => clearInterval(timer))
       :disabled="spinning || !options().length"
       @click="spin"
     >
-      🎲 随机挑选
+      <AppIcon name="dice-5" :size="15" /> 随机挑选
     </button>
   </div>
 

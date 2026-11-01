@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { CANDIDATES, decodeWith, detectEncoding, repairLatin1 } from '@/utils/encodingDetect'
 import { downloadBlob } from '@/utils/image'
@@ -51,7 +52,7 @@ function repairPaste() {
 
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
     <input type="file" class="sr-only" aria-label="选择文本文件" @change="onFileChange" />
-    <div class="dz-icon">🔤</div>
+    <div class="dz-icon"><AppIcon name="type" :size="30" /></div>
     <p v-if="!fileName"><strong>点击选择文本文件</strong> 或拖拽到此处(取前 256KB 检测)</p>
     <p v-else>{{ fileName }}</p>
   </div>

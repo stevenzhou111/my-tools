@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, reactive, ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -93,7 +94,7 @@ generate()
   </div>
 
   <div class="row mt-12">
-    <button class="btn btn-primary" :disabled="!pool" @click="generate">🎲 换一批</button>
+    <button class="btn btn-primary" :disabled="!pool" @click="generate"><AppIcon name="dice-5" :size="15" /> 换一批</button>
   </div>
 
   <p class="tip mt-12">

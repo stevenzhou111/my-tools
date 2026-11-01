@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { lunarToSolar, solarToLunar } from '@/utils/lunar'
 import { useUrlState } from '@/utils/urlState'
@@ -53,7 +54,7 @@ function setToday() {
 
   <div class="grid-2" style="align-items: start">
     <div class="panel">
-      <h3 style="font-size: 15.5px; margin-bottom: 12px">📅 公历 → 农历</h3>
+      <h3 style="font-size: 15.5px; margin-bottom: 12px"><AppIcon name="calendar-days" :size="15" /> 公历 → 农历</h3>
       <div class="field">
         <label class="field-label" for="lc-date">公历日期</label>
         <input id="lc-date" v-model="date" type="date" class="input" />
@@ -71,7 +72,7 @@ function setToday() {
     </div>
 
     <div class="panel">
-      <h3 style="font-size: 15.5px; margin-bottom: 12px">🌙 农历 → 公历</h3>
+      <h3 style="font-size: 15.5px; margin-bottom: 12px"><AppIcon name="moon" :size="15" /> 农历 → 公历</h3>
       <div class="row mb-12">
         <label class="ctrl">
           <span class="field-label m-0">农历年份</span>

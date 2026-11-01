@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -92,7 +93,7 @@ generate()
       数量
       <input v-model.number="count" type="number" min="1" max="200" class="input num-input" @input="generate" />
     </label>
-    <button class="btn btn-primary" @click="generate">🎲 重新生成</button>
+    <button class="btn btn-primary" @click="generate"><AppIcon name="dice-5" :size="15" /> 重新生成</button>
   </div>
 
   <div v-if="!rows.length" class="tip">请至少勾选一种字段。</div>

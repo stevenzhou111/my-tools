@@ -65,7 +65,7 @@ const TAG_CLASS = {
         <span class="tag" :class="TAG_CLASS[s.tag] || 'tag-os'">{{ s.tag }}</span>
       </div>
       <p class="soft-desc">{{ s.desc }}</p>
-      <span v-if="s.aud" class="soft-aud">👥 适合:{{ s.aud }}</span>
+      <span v-if="s.aud" class="soft-aud"><AppIcon name="users" :size="15" /> 适合:{{ s.aud }}</span>
       <div class="soft-foot">
         <span class="tip">{{ catIcon(s.cat) }} {{ catName(s.cat) }} · {{ s.platform }}</span>
         <a :href="s.site" target="_blank" rel="noopener noreferrer" class="btn btn-sm">官网 ↗</a>

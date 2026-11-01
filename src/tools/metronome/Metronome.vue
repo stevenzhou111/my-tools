@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 
 const STORAGE_KEY = 'toolbox-metronome'
@@ -152,7 +153,7 @@ onUnmounted(() => {
         </select>
       </label>
       <button class="btn btn-primary" @click="running ? stop() : start()">{{ running ? '⏹ 停止' : '▶ 开始' }}</button>
-      <button class="btn" @click="tap()">👆 跟拍测速</button>
+      <button class="btn" @click="tap()"><AppIcon name="mouse-pointer-2" :size="15" /> 跟拍测速</button>
     </div>
 
     <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>

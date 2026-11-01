@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 import { debounce } from '@/utils/format'
@@ -124,7 +125,7 @@ const diffText = computed(() =>
       <label class="field-label" for="left">原文本</label>
       <textarea id="left" v-draft="'diff-left'" v-model="left" class="textarea" rows="9" spellcheck="false"></textarea>
       <div class="row mt-8">
-        <button class="btn btn-sm" @click="loadFile('left')">📂 载入文件</button>
+        <button class="btn btn-sm" @click="loadFile('left')"><AppIcon name="folder-open" :size="15" /> 载入文件</button>
         <span class="tip" v-if="fileNames.left">{{ fileNames.left }}</span>
       </div>
     </div>
@@ -132,7 +133,7 @@ const diffText = computed(() =>
       <label class="field-label" for="right">新文本</label>
       <textarea id="right" v-draft="'diff-right'" v-model="right" class="textarea" rows="9" spellcheck="false"></textarea>
       <div class="row mt-8">
-        <button class="btn btn-sm" @click="loadFile('right')">📂 载入文件</button>
+        <button class="btn btn-sm" @click="loadFile('right')"><AppIcon name="folder-open" :size="15" /> 载入文件</button>
         <span class="tip" v-if="fileNames.right">{{ fileNames.right }}</span>
       </div>
     </div>

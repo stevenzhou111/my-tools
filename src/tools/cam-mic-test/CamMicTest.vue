@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 
 const active = ref(false)
@@ -117,7 +118,7 @@ onUnmounted(() => {
   <div v-if="error" class="error-box mb-14">✗ {{ error }}</div>
 
   <div v-if="!active" class="panel cam-empty">
-    <div style="font-size: 44px">📷</div>
+    <div style="font-size: 44px"><AppIcon name="camera" :size="15" /></div>
     <p><strong>{{ starting ? '正在启动…' : '摄像头未开启' }}</strong></p>
     <p class="tip">点击下方按钮并在浏览器弹窗中允许权限</p>
     <button class="btn btn-primary mt-14" :disabled="starting" @click="start">
@@ -135,7 +136,7 @@ onUnmounted(() => {
 
     <div class="panel mt-14">
       <div class="row" style="justify-content: space-between">
-        <span class="field-label m-0">🎤 麦克风电平(对着说话应明显起伏)</span>
+        <span class="field-label m-0"><AppIcon name="mic" :size="15" /> 麦克风电平(对着说话应明显起伏)</span>
         <span class="tip">{{ micLevel < 0 ? '不支持电平检测' : micLevel > 4 ? '有声音' : '安静' }}</span>
       </div>
       <div class="level-track" aria-hidden="true">
@@ -153,7 +154,7 @@ onUnmounted(() => {
     <span class="field-label">检测到的设备({{ devices.length }})</span>
     <div class="dev-list">
       <div v-for="(d, i) in devices" :key="d.deviceId + '-' + i" class="dev-row">
-        <span class="dev-kind">{{ d.kind === 'videoinput' ? '📷 摄像头' : d.kind === 'audioinput' ? '🎤 麦克风' : '🔊 扬声器' }}</span>
+        <span class="dev-kind">{{ d.kind === 'videoinput' ? '<AppIcon name="camera" :size="15" /> 摄像头' : d.kind === 'audioinput' ? '<AppIcon name="mic" :size="15" /> 麦克风' : '<AppIcon name="volume-2" :size="15" /> 扬声器' }}</span>
         <span class="dev-label">{{ d.label }}</span>
       </div>
     </div>

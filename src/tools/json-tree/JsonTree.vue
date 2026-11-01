@@ -171,7 +171,7 @@ const TYPE_CLASS = {
         v-model="filter"
         class="input"
         type="search"
-        placeholder="🔍 输入关键字过滤:匹配键名或值,仅显示命中节点及其上级"
+        placeholder="输入关键字过滤:匹配键名或值,仅显示命中节点及其上级"
         aria-label="按关键字过滤节点"
         spellcheck="false"
       />

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import DOMPurify from 'dompurify'
 import mammoth from 'mammoth/mammoth.browser'
@@ -102,7 +103,7 @@ async function copyHtml() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept=".docx" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📃</div>
+    <div class="dz-icon"><AppIcon name="file-text" :size="30" /></div>
     <p><strong>点击选择 Word 文档(.docx)</strong> 或拖拽到此处</p>
     <p class="tip">解析为 HTML 预览,可复制 / 下载 / 直接打印存为 PDF;⚠️ 仅支持 .docx,不支持旧版 .doc</p>
   </div>
@@ -111,11 +112,11 @@ async function copyHtml() {
 
   <template v-if="html">
     <div class="row mt-14">
-      <button class="btn btn-sm" :class="{ 'btn-primary': !showSource }" @click="showSource = false">👁 预览</button>
+      <button class="btn btn-sm" :class="{ 'btn-primary': !showSource }" @click="showSource = false"><AppIcon name="eye" :size="15" /> 预览</button>
       <button class="btn btn-sm" :class="{ 'btn-primary': showSource }" @click="showSource = true">&lt;/&gt; 源码</button>
-      <button class="btn btn-sm" @click="copyHtml">📋 复制 HTML</button>
+      <button class="btn btn-sm" @click="copyHtml"><AppIcon name="clipboard" :size="15" /> 复制 HTML</button>
       <button class="btn btn-sm" @click="downloadHtml">⬇️ 下载 .html</button>
-      <button class="btn btn-sm btn-primary" @click="printHtml">🖨️ 打印 / 存为 PDF</button>
+      <button class="btn btn-sm btn-primary" @click="printHtml"><AppIcon name="printer" :size="15" /> 打印 / 存为 PDF</button>
     </div>
 
     <p v-if="messages.length" class="tip mt-10">

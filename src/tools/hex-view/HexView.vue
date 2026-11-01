@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -90,7 +91,7 @@ const dump = computed(() => rows.value.map((r) => `${r.addr.toString(16).padStar
 
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
     <input type="file" class="sr-only" @change="onFileChange" aria-label="选择要查看的文件" />
-    <div class="dz-icon">🔢</div>
+    <div class="dz-icon"><AppIcon name="hash" :size="30" /></div>
     <p v-if="!file"><strong>点击选择任意文件</strong> 或拖拽到此处</p>
     <p v-else>{{ file.name }} · {{ file.size.toLocaleString() }} 字节 · 共 {{ pageCount }} 页</p>
   </div>

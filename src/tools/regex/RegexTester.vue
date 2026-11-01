@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState, shortString } from '@/utils/urlState'
@@ -114,7 +115,7 @@ const result = computed(() => {
     </div>
 
     <details class="panel mt-12">
-      <summary>📋 常用正则速查(点击填入)</summary>
+      <summary><AppIcon name="clipboard" :size="15" /> 常用正则速查(点击填入)</summary>
       <div class="row preset-row">
         <button v-for="p in PRESETS" :key="p.label" class="btn btn-sm" :title="p.re" @click="usePreset(p)">
           {{ p.label }}

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -104,7 +105,7 @@ function swap() {
     <label class="field-label" for="output">密码(PBKDF2 派生 AES-256-GCM 密钥)</label>
     <div class="row" style="flex-wrap: nowrap">
       <input v-model="password" type="password" class="input" placeholder="输入密码" />
-      <button class="btn btn-primary" :disabled="busy" @click="run">{{ mode === 'encrypt' ? '🔒 加密' : '🔓 解密' }}</button>
+      <button class="btn btn-primary" :disabled="busy" @click="run">{{ mode === 'encrypt' ? '<AppIcon name="lock" :size="15" /> 加密' : '<AppIcon name="lock-open" :size="15" /> 解密' }}</button>
     </div>
   </div>
 

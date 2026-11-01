@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref, watch } from 'vue'
 import { downloadCanvas, loadImageFromFile } from '@/utils/image'
 import { debounce } from '@/utils/format'
@@ -169,7 +170,7 @@ function download() {
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!image">
-      <div class="dz-icon">💧</div>
+      <div class="dz-icon"><AppIcon name="droplet" :size="30" /></div>
       <p><strong>点击选择图片</strong> 或拖拽到此处</p>
       <p class="tip">支持文字水印(可平铺防盗图)与 Logo 图片水印</p>
     </div>

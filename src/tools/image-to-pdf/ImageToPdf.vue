@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 import { PDFDocument } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
@@ -93,7 +94,7 @@ async function convert() {
 <template>
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
     <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🖨️</div>
+    <div class="dz-icon"><AppIcon name="printer" :size="30" /></div>
     <p><strong>点击选择图片</strong> 或拖拽多张图片到此处(可多选)</p>
     <p class="tip">每张图片一页,页面尺寸与图片一致,按列表顺序合并</p>
   </div>
@@ -113,7 +114,7 @@ async function convert() {
 
   <div v-if="items.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="convert">
-      {{ busy ? '转换中…' : `🖨️ 转换为 PDF(${items.length} 张图)` }}
+      {{ busy ? '转换中…' : `<AppIcon name="printer" :size="15" /> 转换为 PDF(${items.length} 张图)` }}
     </button>
     <button class="btn" @click="clearAll">清空</button>
   </div>

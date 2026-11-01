@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { convertLineEndings, countZeroWidth, detectLineEndings, revealInvisible, stripZeroWidth } from '@/utils/whitespace'
 import { useCopy } from '@/utils/useCopy'
@@ -39,7 +40,7 @@ function applyStrip() {
     <div class="row">
       <button class="btn btn-sm" :disabled="!endings.dominant || endings.dominant === 'lf'" @click="applyConvert('lf')">统一为 LF(Unix / Mac)</button>
       <button class="btn btn-sm" :disabled="!endings.dominant || endings.dominant === 'crlf'" @click="applyConvert('crlf')">统一为 CRLF(Windows)</button>
-      <button class="btn btn-sm" :disabled="!zeroWidthTotal" @click="applyStrip">🧹 清除零宽字符</button>
+      <button class="btn btn-sm" :disabled="!zeroWidthTotal" @click="applyStrip"><AppIcon name="eraser" :size="15" /> 清除零宽字符</button>
       <label class="check"><input v-model="showInvisible" type="checkbox" />显示不可见字符</label>
     </div>
   </div>

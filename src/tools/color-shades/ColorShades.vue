@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { buildScale, hexToHsl, readableOn, toCssVars, toTailwind } from '@/utils/colorScale'
 import { contrastRatio } from '@/utils/contrast'
@@ -60,7 +61,7 @@ function randomColor() {
         <span class="field-label m-0">变量名(导出用)</span>
         <input v-model="varName" class="input name-input" spellcheck="false" aria-label="导出变量名" />
       </label>
-      <button class="btn" style="align-self: flex-end" @click="randomColor">🎲 随机主色</button>
+      <button class="btn" style="align-self: flex-end" @click="randomColor"><AppIcon name="dice-5" :size="15" /> 随机主色</button>
     </div>
     <p v-if="!scale" class="error-box mt-12">✗ HEX 格式不合法,请输入 #rgb 或 #rrggbb</p>
     <p v-else-if="baseHsl" class="tip mt-10">

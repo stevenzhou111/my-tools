@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, reactive, ref, watch } from 'vue'
 import { debounce, formatSize } from '@/utils/format'
 import { downloadBlob, downloadUrl } from '@/utils/image'
@@ -214,7 +215,7 @@ const totals = () => {
   >
     <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
     <div v-if="!items.length">
-      <div class="dz-icon">🖼️</div>
+      <div class="dz-icon"><AppIcon name="image" :size="30" /></div>
       <p><strong>点击选择图片</strong> 或拖拽图片到此处(可一次多选)</p>
       <p class="tip">支持 JPG / PNG / WebP / GIF 等,最多 30 张,全程本地处理</p>
     </div>

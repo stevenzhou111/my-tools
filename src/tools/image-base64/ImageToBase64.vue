@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { formatSize } from '@/utils/format'
 import { useCopy } from '@/utils/useCopy'
@@ -79,7 +80,7 @@ function process(file) {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🌉</div>
+    <div class="dz-icon"><AppIcon name="moon" :size="30" /></div>
     <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
     <p class="tip">图片会被编码为 Data URL,可直接内联到 HTML / CSS 中</p>
   </div>

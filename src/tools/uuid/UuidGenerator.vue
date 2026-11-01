@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onMounted, ref } from 'vue'
 import { nanoId, ulid } from '@/utils/shortId'
 import { useCopy } from '@/utils/useCopy'
@@ -70,7 +71,7 @@ onMounted(generate)
       <label class="check"><input v-model="upper" type="checkbox" @change="generate" />大写</label>
       <label class="check"><input v-model="noHyphen" type="checkbox" @change="generate" />去掉连字符</label>
     </template>
-    <button class="btn btn-primary" @click="generate">🎲 生成</button>
+    <button class="btn btn-primary" @click="generate"><AppIcon name="dice-5" :size="15" /> 生成</button>
   </div>
 
   <pre class="output">{{ list.join('\n') }}</pre>

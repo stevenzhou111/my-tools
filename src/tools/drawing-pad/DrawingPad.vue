@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onMounted, ref } from 'vue'
 import { downloadCanvas } from '@/utils/image'
 
@@ -101,14 +102,14 @@ onMounted(initCanvas)
         @click="color = c; erasing = false"
       ></button>
       <button class="btn btn-sm" :class="{ active: erasing }" @click="erasing = !erasing">
-        🧽 橡皮擦
+        <AppIcon name="eraser" :size="15" /> 橡皮擦
       </button>
       <label class="ctrl">
         <span class="field-label">粗细 {{ size }}</span>
         <input v-model.number="size" type="range" min="1" max="40" />
       </label>
       <button class="btn btn-sm" :disabled="!canUndo" @click="undo">↩️ 撤销</button>
-      <button class="btn btn-sm" @click="clearAll">🗑️ 清空</button>
+      <button class="btn btn-sm" @click="clearAll"><AppIcon name="trash-2" :size="15" /> 清空</button>
       <button
         class="btn btn-sm btn-primary"
         @click="downloadCanvas(canvasEl, 'drawing-' + Date.now() + '.png', 'image/png')"

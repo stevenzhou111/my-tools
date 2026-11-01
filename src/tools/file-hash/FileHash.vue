@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import SparkMD5 from 'spark-md5'
 import { useCopy } from '@/utils/useCopy'
@@ -82,7 +83,7 @@ function fmtSize(bytes) {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📥</div>
+    <div class="dz-icon"><AppIcon name="download" :size="30" /></div>
     <p><strong>点击选择任意文件</strong> 或拖拽到此处</p>
     <p class="tip">计算 MD5 / SHA 系列哈希,用于校验下载文件完整性,全程本地处理</p>
   </div>

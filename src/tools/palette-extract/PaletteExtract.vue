@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 import { extractPalette } from '@/utils/palette'
 import { loadImageFromFile } from '@/utils/image'
@@ -84,7 +85,7 @@ const SAMPLE = '支持 JPG / PNG / WebP,纯本地统计'
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!previewUrl">
-      <div class="dz-icon">🎨</div>
+      <div class="dz-icon"><AppIcon name="palette" :size="30" /></div>
       <p><strong>点击选择图片</strong> 或拖拽图片到此处</p>
       <p class="tip">{{ SAMPLE }}</p>
     </div>

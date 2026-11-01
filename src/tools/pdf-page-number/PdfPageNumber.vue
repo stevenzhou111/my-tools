@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
@@ -74,7 +75,7 @@ async function apply() {
 <template>
   <div class="dropzone" @click="pick">
     <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔢</div>
+    <div class="dz-icon"><AppIcon name="hash" :size="30" /></div>
     <p v-if="!file"><strong>点击选择 PDF 文件</strong></p>
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>
   </div>
@@ -104,7 +105,7 @@ async function apply() {
       </label>
     </div>
     <button class="btn btn-primary" :disabled="busy" @click="apply">
-      {{ busy ? '处理中…' : '🔢 添加页码并下载' }}
+      {{ busy ? '处理中…' : '<AppIcon name="hash" :size="15" /> 添加页码并下载' }}
     </button>
   </div>
 </template>

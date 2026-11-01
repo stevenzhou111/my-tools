@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { buildInserts } from '@/utils/xlsxSql'
@@ -88,11 +89,11 @@ function downloadSql() {
   >
     <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
     <div v-if="!fileName">
-      <div class="dz-icon">🗄️</div>
+      <div class="dz-icon"><AppIcon name="database" :size="30" /></div>
       <p><strong>点击选择 Excel / CSV 文件</strong></p>
       <p class="tip">首行为表头,生成 INSERT INTO 语句;全程本地处理</p>
     </div>
-    <p v-else class="tip">📄 {{ fileName }} · 点击可更换</p>
+    <p v-else class="tip"><AppIcon name="file-text" :size="15" /> {{ fileName }} · 点击可更换</p>
   </div>
 
   <div v-if="error" class="error-box my-12">✗ {{ error }}</div>

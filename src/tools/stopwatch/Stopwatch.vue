@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -221,7 +222,7 @@ onUnmounted(() => {
           {{ swElapsed > 0 ? '▶ 继续' : '▶ 开始' }}
         </button>
         <button v-else class="btn btn-primary" @click="swPause">⏸ 暂停</button>
-        <button class="btn" :disabled="!swRunning" @click="swLap">🏁 计次</button>
+        <button class="btn" :disabled="!swRunning" @click="swLap"><AppIcon name="flag" :size="15" /> 计次</button>
         <button class="btn" :disabled="swElapsed === 0" @click="swReset">↺ 重置</button>
       </div>
       <p class="tip mt-12">快捷键:空格 开始/暂停 · L 计次 · R 重置(输入框内不生效)</p>
@@ -231,7 +232,7 @@ onUnmounted(() => {
       <div class="row" style="justify-content: space-between">
         <span class="field-label m-0">计次({{ laps.length }})</span>
         <span class="row" style="gap: 10px">
-          <span class="tip">🟢 最快 · 🔴 最慢</span>
+          <span class="tip"><AppIcon name="circle-dot" :size="15" /> 最快 · <AppIcon name="circle" :size="15" /> 最慢</span>
           <button class="btn btn-sm" @click="copy('laps', lapsCsv)">
             {{ copiedKey === 'laps' ? '✓ 已复制' : '复制 CSV' }}
           </button>

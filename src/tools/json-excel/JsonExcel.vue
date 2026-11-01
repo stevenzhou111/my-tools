@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { downloadBlob } from '@/utils/image'
@@ -117,7 +118,7 @@ const canExport = computed(() => {
   <template v-else>
     <div class="dropzone" @click="pick">
       <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
-      <div class="dz-icon">📗</div>
+      <div class="dz-icon"><AppIcon name="book" :size="30" /></div>
       <p><strong>点击选择 Excel / CSV 文件</strong>,转换为 JSON</p>
       <p v-if="fileName" class="tip">已读取:{{ fileName }}<template v-if="sheetNames.length"> · 工作表:{{ sheetNames.join('、') }}</template></p>
     </div>

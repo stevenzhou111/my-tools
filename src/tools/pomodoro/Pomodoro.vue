@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref } from 'vue'
 
 const workMin = ref(25)
@@ -99,12 +100,12 @@ onUnmounted(() => clearInterval(timer))
 <template>
   <div class="panel pomodoro">
     <div class="phase-row">
-      <button class="btn btn-sm" :class="{ active: phase === 'work' }" @click="setPhase('work')">🍅 专注</button>
+      <button class="btn btn-sm" :class="{ active: phase === 'work' }" @click="setPhase('work')"><AppIcon name="timer" :size="15" /> 专注</button>
       <button class="btn btn-sm" :class="{ active: phase === 'rest' }" @click="setPhase('rest')">☕ 休息</button>
-      <span class="tip" style="margin-left: auto">已完成 {{ completed }} 个番茄 🍅</span>
+      <span class="tip" style="margin-left: auto">已完成 {{ completed }} 个番茄 <AppIcon name="timer" :size="15" /></span>
     </div>
 
-    <p v-if="soundBlocked" class="tip" role="status">🔇 提示音被浏览器拦截(自动播放策略):与页面交互一次(比如点一下按钮)后即可正常响铃。</p>
+    <p v-if="soundBlocked" class="tip" role="status"><AppIcon name="volume-x" :size="15" /> 提示音被浏览器拦截(自动播放策略):与页面交互一次(比如点一下按钮)后即可正常响铃。</p>
 
     <div class="dial-wrap">
       <svg viewBox="0 0 200 200" class="dial">

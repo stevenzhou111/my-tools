@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { loadPdf } from '@/utils/pdfjs'
 import { docxBlob } from '@/utils/docx'
@@ -145,7 +146,7 @@ async function downloadWord() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📝</div>
+    <div class="dz-icon"><AppIcon name="pen-line" :size="30" /></div>
     <p><strong>点击选择 PDF 文件</strong> 或拖拽到此处</p>
     <p class="tip">提取全部文字,可导出为 纯文本 / Word(.docx)/ HTML;⚠️ 仅提取文字,不含图片与排版</p>
   </div>
@@ -155,7 +156,7 @@ async function downloadWord() {
   <div v-if="file" class="row mt-14">
     <span class="tip">{{ file.name }} · {{ pageCount }} 页 · 提取出 {{ text.split('\n').filter((l) => l.trim()).length }} 行文字</span>
     <button class="btn btn-primary" :disabled="busy" @click="process(file)">
-      {{ busy ? `提取中 ${progress}%` : '📝 重新提取' }}
+      {{ busy ? `提取中 ${progress}%` : '<AppIcon name="pen-line" :size="15" /> 重新提取' }}
     </button>
   </div>
 
@@ -172,7 +173,7 @@ async function downloadWord() {
       <button class="btn btn-sm" @click="downloadTxt">⬇️ 纯文本 .txt</button>
       <button class="btn btn-sm" @click="downloadWord">⬇️ Word .docx</button>
       <button class="btn btn-sm" @click="downloadHtml">⬇️ HTML</button>
-      <button class="btn btn-sm" @click="printHtml">🖨️ 打印 / 存为 PDF</button>
+      <button class="btn btn-sm" @click="printHtml"><AppIcon name="printer" :size="15" /> 打印 / 存为 PDF</button>
     </div>
   </template>
 </template>

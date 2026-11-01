@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 import { downloadCanvas } from '@/utils/image'
 
@@ -84,7 +85,7 @@ function fmt(t) {
 <template>
   <div class="dropzone" @click="pick">
     <input ref="fileInput" type="file" accept="video/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📸</div>
+    <div class="dz-icon"><AppIcon name="camera" :size="30" /></div>
     <p><strong>点击选择本地视频</strong>(MP4 / WebM / MOV 等)</p>
     <p class="tip">播放或拖动进度条到想要的位置,点击「截取当前帧」保存画面</p>
   </div>
@@ -105,7 +106,7 @@ function fmt(t) {
       <div class="row mt-12">
         <span class="tip">时间 {{ fmt(currentTime) }} / {{ fmt(duration) }} · 原始分辨率 {{ videoEl?.videoWidth }}×{{ videoEl?.videoHeight }}</span>
         <button class="btn" @click="seek">⏱ 跳转到指定时间</button>
-        <button class="btn btn-primary" @click="capture">📸 截取当前帧</button>
+        <button class="btn btn-primary" @click="capture"><AppIcon name="camera" :size="15" /> 截取当前帧</button>
       </div>
     </div>
 

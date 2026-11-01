@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref, watch } from 'vue'
 import { jsonToXml, xmlToJson } from '@/utils/xmlJson'
 import { useCopy } from '@/utils/useCopy'
@@ -138,7 +139,7 @@ const placeholder = computed(() =>
   </template>
 
   <details class="panel">
-    <summary>📖 转换约定</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 转换约定</summary>
     <p class="tip">
       元素属性转成「@属性名」键,元素内文本转成「#text」键;只有文本的元素直接输出字符串,同名兄弟元素(如多个
       &lt;tag&gt;)合并为数组。反向转换时顶层必须是单键对象(键即根元素名),数组输出为同名重复元素。

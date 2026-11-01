@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { parseCurl, toFetchCode, toPythonCode } from '@/utils/curlCode'
 import { useCopy } from '@/utils/useCopy'
@@ -74,7 +75,7 @@ const SAMPLES = [
     </div>
 
     <details class="panel mt-14">
-      <summary>📖 支持范围</summary>
+      <summary><AppIcon name="book-open" :size="15" /> 支持范围</summary>
       <p class="tip">
         解析 -X 方法、-H 请求头、-d / --data* 请求体(多个自动用 &amp; 连接,JSON 体自动补 Content-Type)、
         -F / --form 表单(含 @文件,生成 FormData / files 代码)、-u 基本认证(现场算出 Authorization 头)、

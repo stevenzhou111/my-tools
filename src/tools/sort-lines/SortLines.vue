@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { numberLines, removeEmpty, sortLines, splitLines, trimLines, uniqueLines } from '@/utils/lines'
 import { useCopy } from '@/utils/useCopy'
@@ -131,7 +132,7 @@ function applyPreset(name) {
   </div>
 
   <details class="panel">
-    <summary>📖 操作说明</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 操作说明</summary>
     <p class="tip">
       字母序对中英文混排按本地化规则排序、忽略大小写;数字序按「行首数字」的数值排(2 排在 10 前面),没有数字的行排到最后;
       随机打乱用加密级随机数,适合抽签定顺序。操作按开关顺序依次执行:去空白 → 去空行 → 排序 → 去重 → 加行号。

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { formatPangu } from '@/utils/pangu'
 import { useCopy } from '@/utils/useCopy'
@@ -86,7 +87,7 @@ const SAMPLE = `这是一段随手粘贴的文本, mixing English and 中文,标
   </div>
 
   <details class="panel">
-    <summary>📖 排版说明</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 排版说明</summary>
     <p class="tip">
       中英文之间加空格(俗称「盘古之白」)是中文社区长期形成的排版惯例,微信公众号排版、技术文档写作都推荐。
       半角标点转全角只处理紧跟在汉字后的 , . : ; ! ?,英文句子与 3.5 这类小数不受影响;

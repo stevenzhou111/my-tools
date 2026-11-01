@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref } from 'vue'
 import { buildIco } from '@/utils/ico'
 import { downloadBlob, loadImageFromFile } from '@/utils/image'
@@ -135,7 +136,7 @@ function downloadPng(size) {
     </div>
 
     <details class="panel mt-16">
-      <summary>📖 用法提示</summary>
+      <summary><AppIcon name="book-open" :size="15" /> 用法提示</summary>
       <p class="tip">
         favicon.ico 放到网站根目录;现代浏览器与 PWA 清单建议同时提供 192/512 的 PNG(可在本工具的预览里直接下载)。
         .ico 文件内嵌的是 PNG 数据(Vista+ 标准),所有主流浏览器均支持。

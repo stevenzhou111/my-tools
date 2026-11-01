@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { downloadBlob } from '@/utils/image'
@@ -112,13 +113,13 @@ async function convert() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept=".xlsx,.xls,.ods,.csv" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔁</div>
+    <div class="dz-icon"><AppIcon name="repeat" :size="30" /></div>
     <p><strong>点击选择表格文件</strong>(.xlsx / .xls / .ods / .csv)或拖拽到此处</p>
     <p class="tip">在 XLSX、XLS、ODS、CSV、HTML 之间互转,多工作表完整保留</p>
   </div>
 
   <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
-  <p v-if="info" class="tip mt-10">✅ {{ info }}</p>
+  <p v-if="info" class="tip mt-10"><AppIcon name="circle-check" :size="15" /> {{ info }}</p>
 
   <template v-if="file">
     <p class="tip my-12">
@@ -132,7 +133,7 @@ async function convert() {
         </select>
       </label>
       <button class="btn btn-primary" style="margin-top: 22px" :disabled="busy" @click="convert">
-        {{ busy ? '转换中…' : '🔁 转换并下载' }}
+        {{ busy ? '转换中…' : '<AppIcon name="repeat" :size="15" /> 转换并下载' }}
       </button>
     </div>
   </template>

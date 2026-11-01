@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { lorem } from '@/utils/lorem'
 import { useCopy } from '@/utils/useCopy'
@@ -68,7 +69,7 @@ watch([unit, count, classicStart, html], generate, { immediate: true })
       <label v-if="unit === 'paragraphs'" class="check"><input v-model="html" type="checkbox" />用 &lt;p&gt; 标签包裹</label>
     </div>
     <div class="row mt-12">
-      <button class="btn btn-primary" @click="generate">🎲 换一批</button>
+      <button class="btn btn-primary" @click="generate"><AppIcon name="dice-5" :size="15" /> 换一批</button>
     </div>
   </div>
 

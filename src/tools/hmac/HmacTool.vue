@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -91,7 +92,7 @@ const matchState = () =>
     <textarea id="hmac-msg" v-model="message" class="textarea" rows="3" spellcheck="false"></textarea>
   </div>
 
-  <button class="btn btn-primary" :disabled="busy" @click="compute">{{ busy ? '计算中…' : '🔒 计算 HMAC' }}</button>
+  <button class="btn btn-primary" :disabled="busy" @click="compute">{{ busy ? '计算中…' : '<AppIcon name="lock" :size="15" /> 计算 HMAC' }}</button>
   <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
 
   <template v-if="outHex">

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { useCopy } from '@/utils/useCopy'
@@ -166,7 +167,7 @@ function download() {
 <template>
   <div class="dropzone" @click="pick">
     <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv,.txt" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📗</div>
+    <div class="dz-icon"><AppIcon name="book" :size="30" /></div>
     <p><strong>点击选择 Excel(.xlsx / .xls)或 CSV 文件</strong></p>
     <p class="tip">转换为 JSON / CSV / Markdown / HTML / TXT,全部本地解析</p>
   </div>

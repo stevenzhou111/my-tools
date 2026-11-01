@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { PDFDocument, degrees } from 'pdf-lib'
 import { zipSync } from 'fflate'
@@ -140,7 +141,7 @@ async function run(op) {
 <template>
   <div class="dropzone" @click="pick">
     <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📑</div>
+    <div class="dz-icon"><AppIcon name="files" :size="30" /></div>
     <p v-if="!file"><strong>点击选择 PDF 文件</strong></p>
     <p v-else><strong>{{ file.name }}</strong> · 共 {{ pageCount }} 页</p>
   </div>
@@ -153,10 +154,10 @@ async function run(op) {
       <input id="rangeText" v-model="rangeText" class="input" spellcheck="false" />
     </div>
     <div class="row">
-      <button class="btn btn-primary" :disabled="busy" @click="run('extract')">📤 提取所选页面</button>
-      <button class="btn" :disabled="busy" @click="run('delete')">🗑️ 删除所选页面</button>
-      <button class="btn" :disabled="busy" @click="run('rotate')">🔄 所选页旋转 90°</button>
-      <button class="btn" :disabled="busy" @click="run('reorder')">🔀 按此页序重排</button>
+      <button class="btn btn-primary" :disabled="busy" @click="run('extract')"><AppIcon name="upload" :size="15" /> 提取所选页面</button>
+      <button class="btn" :disabled="busy" @click="run('delete')"><AppIcon name="trash-2" :size="15" /> 删除所选页面</button>
+      <button class="btn" :disabled="busy" @click="run('rotate')"><AppIcon name="refresh-cw" :size="15" /> 所选页旋转 90°</button>
+      <button class="btn" :disabled="busy" @click="run('reorder')"><AppIcon name="shuffle" :size="15" /> 按此页序重排</button>
       <button class="btn" :disabled="busy" @click="run('split')">✂️ 逐页拆分为 ZIP</button>
     </div>
   </div>

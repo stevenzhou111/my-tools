@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { highlight } from '@/utils/codeHighlight'
 import { downloadCanvas } from '@/utils/image'
@@ -152,7 +153,7 @@ function download() {
     <canvas ref="canvasEl" class="snap-canvas" role="img" aria-label="代码截图预览"></canvas>
   </div>
   <div class="row mt-10">
-    <button class="btn btn-primary" @click="render">🔄 重新渲染</button>
+    <button class="btn btn-primary" @click="render"><AppIcon name="refresh-cw" :size="15" /> 重新渲染</button>
     <button class="btn btn-primary" @click="download">⬇️ 下载 PNG(2x)</button>
   </div>
 </template>

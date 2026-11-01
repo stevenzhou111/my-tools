@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { createJwt, verifyJwt } from '@/utils/jwtSign'
 import { useCopy } from '@/utils/useCopy'
@@ -122,7 +123,7 @@ function pretty(obj) {
 <template>
   <div class="row mb-16" role="tablist">
     <button class="btn" :class="{ 'btn-primary': tab === 'parse' }" role="tab" :aria-selected="tab === 'parse'" @click="tab = 'parse'">
-      🔍 解析 Token
+      <AppIcon name="search" :size="15" /> 解析 Token
     </button>
     <button class="btn" :class="{ 'btn-primary': tab === 'sign' }" role="tab" :aria-selected="tab === 'sign'" @click="tab = 'sign'">
       ✍️ 签名 / 校验(HS256/384/512)
@@ -142,7 +143,7 @@ function pretty(obj) {
     <template v-if="parts">
       <div class="row mb-14">
         <span v-if="expired !== null" class="badge" :class="expired ? 'bad' : 'ok'">
-          {{ expired ? '⛔ 已过期' : '✅ 未过期' }}
+          {{ expired ? '⛔ 已过期' : '<AppIcon name="circle-check" :size="15" /> 未过期' }}
         </span>
         <span class="tip">此处仅解码查看;要验证签名请切到「签名 / 校验」页签</span>
       </div>
@@ -219,9 +220,9 @@ function pretty(obj) {
           <label class="field-label" for="jwt-verify-secret">密钥</label>
           <input id="jwt-verify-secret" v-model="verifySecret" class="input" style="font-family: var(--mono)" spellcheck="false" />
         </div>
-        <button class="btn" @click="doVerify">🔎 校验签名</button>
+        <button class="btn" @click="doVerify"><AppIcon name="search" :size="15" /> 校验签名</button>
         <div v-if="verifyResult" class="verify-box" :class="verifyResult.ok ? 'ok' : 'bad'">
-          <template v-if="verifyResult.ok">✅ 签名一致:Token 由该密钥签发且未被篡改</template>
+          <template v-if="verifyResult.ok"><AppIcon name="circle-check" :size="15" /> 签名一致:Token 由该密钥签发且未被篡改</template>
           <template v-else-if="verifyResult.error">✗ {{ verifyResult.error }}</template>
           <template v-else>⛔ 签名不一致:密钥不对或内容被改过</template>
         </div>

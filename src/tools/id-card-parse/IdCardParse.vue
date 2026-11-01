@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { checkDigit, maskIdCard, parseIdCard } from '@/utils/idCard'
 import { useCopy } from '@/utils/useCopy'
@@ -57,7 +58,7 @@ const SAMPLES = [
         <div>
           <span class="field-label m-0">校验</span>
           <p class="tip" style="margin: 4px 0 0">
-            ✅ 校验位正确:第 18 位由前 17 位按 GB 11643-1999 加权取模得出,应为
+            <AppIcon name="circle-check" :size="15" /> 校验位正确:第 18 位由前 17 位按 GB 11643-1999 加权取模得出,应为
             <code>{{ checkDigit(input.slice(0, 17)) }}</code>,实际 <code>{{ input.slice(17).toUpperCase() }}</code>。
             <template v-if="masked">打码展示:<code>{{ masked }}</code></template>
           </p>
@@ -70,7 +71,7 @@ const SAMPLES = [
   </template>
 
   <details class="panel mt-14">
-    <summary>📖 说明与边界</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 说明与边界</summary>
     <p class="tip">
       校验位算法:前 17 位分别乘权重 [7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2] 求和,模 11 映射到
       「10X98765432」。本工具只内置省级行政区代码(市县级全表数万条且逐年更新,不在此范围);

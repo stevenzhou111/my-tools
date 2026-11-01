@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { PDFDocument } from 'pdf-lib'
@@ -214,20 +215,20 @@ async function exportPdf() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept=".xlsx,.xls,.csv" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">📊</div>
+    <div class="dz-icon"><AppIcon name="chart-column" :size="30" /></div>
     <p><strong>点击选择 Excel / CSV 文件</strong> 或拖拽到此处</p>
     <p class="tip">把表格渲染成图片或 PDF(本地绘制,支持多工作表)</p>
   </div>
 
   <div v-if="error" class="error-box mt-12">✗ {{ error }}</div>
   <p v-if="tableTruncated" class="tip mt-10">⚠️ 表格超出画布上限(8192px),超出部分的行/列已被截断,建议精简数据后重试。</p>
-  <p v-if="info" class="tip mt-10">✅ {{ info }}</p>
+  <p v-if="info" class="tip mt-10"><AppIcon name="circle-check" :size="15" /> {{ info }}</p>
 
   <template v-if="file">
     <p class="tip my-12">工作表:{{ sheetNames.join('、') }}</p>
     <div class="row">
-      <button class="btn btn-primary" :disabled="busy" @click="exportPng">🖼️ 转为图片(PNG)</button>
-      <button class="btn btn-primary" :disabled="busy" @click="exportPdf">📄 转为 PDF(A4 分页)</button>
+      <button class="btn btn-primary" :disabled="busy" @click="exportPng"><AppIcon name="image" :size="15" /> 转为图片(PNG)</button>
+      <button class="btn btn-primary" :disabled="busy" @click="exportPdf"><AppIcon name="file-text" :size="15" /> 转为 PDF(A4 分页)</button>
     </div>
   </template>
 </template>

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -73,7 +74,7 @@ generate()
     </label>
     <label class="check" style="margin-top: 20px"><input v-model="unique" type="checkbox" />不重复</label>
     <label class="check" style="margin-top: 20px"><input v-model="sorted" type="checkbox" />升序排序</label>
-    <button class="btn btn-primary" style="margin-top: 20px" @click="generate">🎲 重新生成</button>
+    <button class="btn btn-primary" style="margin-top: 20px" @click="generate"><AppIcon name="dice-5" :size="15" /> 重新生成</button>
   </div>
 
   <div v-if="error" class="error-box mb-12">✗ {{ error }}</div>

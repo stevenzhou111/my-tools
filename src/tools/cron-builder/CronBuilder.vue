@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import cronstrue from 'cronstrue'
 import 'cronstrue/locales/zh_CN'
@@ -106,7 +107,7 @@ function fmtRun(d) {
   <div v-else class="error-box mt-14">✗ {{ parsed.error }}</div>
 
   <details class="panel mt-16">
-    <summary>📖 字段语法速查</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 字段语法速查</summary>
     <p class="tip">
       每个字段支持:<code>*</code>(任意值)、<code>数字</code>、<code>a-b</code> 区间、<code>*/n</code>(每 n 个)、<code>a-b/n</code>(区间内每 n 个)、<code>a,b,c</code> 列表;
       带步进的单个数字(如 <code>5/15</code>)表示从 5 开始每 15。日与周同时受限时按标准 Cron 语义取「或」(命中任一即执行)。

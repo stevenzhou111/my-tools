@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { toChineseAmount } from '@/utils/chineseAmount'
 import { useCopy } from '@/utils/useCopy'
@@ -45,7 +46,7 @@ const SAMPLES = ['1234.56', '100000000001', '0.05', '10', '1005']
   </template>
 
   <details class="panel mt-16">
-    <summary>📖 书写规则说明</summary>
+    <summary><AppIcon name="book-open" :size="15" /> 书写规则说明</summary>
     <p class="tip">
       按《正确填写票据和结算凭证的基本规定》:数字用零壹贰叁肆伍陆柒捌玖,位用拾佰仟万亿;
       「拾」位必须写「壹拾」;角后无分时结尾写「整」;整数与分之间有零档时补「零」(如 1.05 → 壹圆零伍分)。

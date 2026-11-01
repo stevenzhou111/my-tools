@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref } from 'vue'
 import { groupNames, pickOne, splitNames } from '@/utils/randomPicker'
 import { useCopy } from '@/utils/useCopy'
@@ -56,7 +57,7 @@ onUnmounted(() => {
   <div class="picker-panel">
     <div class="rp-left">
       <button class="btn btn-primary" :disabled="rolling || !names.length" @click="roll">
-        {{ rolling ? '滚动中…' : '🎲 随机抽一个' }}
+        {{ rolling ? '滚动中…' : '<AppIcon name="dice-5" :size="15" /> 随机抽一个' }}
       </button>
       <div class="winner" :class="{ rolling }">{{ winner || '—' }}</div>
       <div v-if="history.length" class="tip" style="max-width: 220px">
@@ -71,7 +72,7 @@ onUnmounted(() => {
           <span class="field-label" for="rp-count">分成几组</span>
           <input id="rp-count" v-model.number="groupCount" type="number" min="2" max="20" class="input" style="width: 90px" />
         </label>
-        <button class="btn btn-primary" style="margin-top: 22px" :disabled="!names.length" @click="doGroup">👥 均衡分组</button>
+        <button class="btn btn-primary" style="margin-top: 22px" :disabled="!names.length" @click="doGroup"><AppIcon name="users" :size="15" /> 均衡分组</button>
       </div>
       <div v-if="groups.length" class="group-grid">
         <div v-for="(g, i) in groups" :key="i" class="group-card">

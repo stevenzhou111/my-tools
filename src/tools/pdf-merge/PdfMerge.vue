@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { PDFDocument } from 'pdf-lib'
 import { downloadBlob } from '@/utils/image'
@@ -50,7 +51,7 @@ async function merge() {
 <template>
   <div class="dropzone" @click="pick">
     <input ref="fileInput" type="file" accept="application/pdf" multiple class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🗂️</div>
+    <div class="dz-icon"><AppIcon name="folder" :size="30" /></div>
     <p><strong>点击选择 PDF 文件</strong>(可多选,按列表顺序合并)</p>
     <p class="tip">全部在浏览器本地完成,PDF 不会上传</p>
   </div>
@@ -71,7 +72,7 @@ async function merge() {
 
   <div v-if="files.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="merge">
-      {{ busy ? '合并中…' : `🔗 合并 ${files.length} 个文件` }}
+      {{ busy ? '合并中…' : `<AppIcon name="link" :size="15" /> 合并 ${files.length} 个文件` }}
     </button>
     <button class="btn" @click="files = []">清空列表</button>
   </div>

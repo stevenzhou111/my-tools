@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { downloadCanvas, loadImageFromFile } from '@/utils/image'
 import { formatSize, debounce } from '@/utils/format'
@@ -103,7 +104,7 @@ function download() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔁</div>
+    <div class="dz-icon"><AppIcon name="repeat" :size="30" /></div>
     <p><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p class="tip">PNG / JPG / WebP 互转,支持 HEIC 之外的常见格式,全程本地转换</p>
   </div>

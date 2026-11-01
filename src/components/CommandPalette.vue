@@ -5,6 +5,7 @@ import { CATEGORIES, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
 import { useTheme } from '@/utils/theme'
 import { evalExpression } from '@/utils/calcExpression'
+import { evalSci } from '@/utils/sciExpression'
 import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
 import { useCopy } from '@/utils/useCopy'
 import { useToast } from '@/utils/toast'
@@ -84,6 +85,14 @@ const items = computed(() => {
   if (q) {
     const { value } = evalExpression(query.value.trim())
     if (value !== null) out.push({ kind: 'calc', value })
+    else {
+      // 四则之外的表达式(sin(30)、sqrt(2)^2)走科学计算解析,角度制符合直觉;
+      // 仅在查询含字母(函数名/常数)时尝试,避免普通数字串出现意外"结果"
+      const sci = evalSci(query.value.trim(), { degrees: true })
+      if (sci.value !== null && /[a-z]/i.test(query.value)) {
+        out.push({ kind: 'calc', value: Number(sci.value.toPrecision(10)) })
+      }
+    }
   }
 
   const actions = matchActions(q).map((a) => ({ kind: 'action', action: a }))
@@ -268,7 +277,7 @@ defineExpose({ open: () => (open.value = true) })
           <p class="palette-empty tip" v-if="!query.trim()" style="padding: 8px 18px; margin: 0; border-top: 1px solid var(--border)">
             输入关键词搜索全部工具
           </p>
-          <div class="palette-foot">↑↓ 选择 · Enter 打开 · Esc 关闭 · 支持拼音/首字母(ewm→二维码)· 直接输入 1+2 可算</div>
+          <div class="palette-foot">↑↓ 选择 · Enter 打开 · Esc 关闭 · 支持拼音/首字母(ewm→二维码)· 输入 1+2 或 sin(30) 可算</div>
         </div>
       </div>
     </transition>

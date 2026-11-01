@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref, watch } from 'vue'
 import { downloadCanvas, loadImageFromFile } from '@/utils/image'
 import { debounce } from '@/utils/format'
@@ -152,7 +153,7 @@ function download() {
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
     <div v-if="!image">
-      <div class="dz-icon">🪪</div>
+      <div class="dz-icon"><AppIcon name="id-card" :size="30" /></div>
       <p><strong>点击选择证件照</strong> 或拖拽到此处</p>
       <p class="tip">自动识别纯色背景(白/蓝/红)并替换;⚠️ 适合背景均匀的证件照</p>
     </div>

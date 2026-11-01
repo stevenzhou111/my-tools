@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
 
@@ -95,7 +96,7 @@ function download() {
 
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🔤</div>
+    <div class="dz-icon"><AppIcon name="type" :size="30" /></div>
     <p v-if="!img"><strong>点击选择图片</strong> 或拖拽到此处</p>
     <p v-else>{{ fileName }} · {{ img.naturalWidth }}×{{ img.naturalHeight }}</p>
   </div>

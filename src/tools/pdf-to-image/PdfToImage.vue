@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref } from 'vue'
 import { loadPdf } from '@/utils/pdfjs'
 import { Zip, ZipDeflate } from 'fflate'
@@ -106,7 +107,7 @@ function downloadZip() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="application/pdf" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🖼️</div>
+    <div class="dz-icon"><AppIcon name="image" :size="30" /></div>
     <p><strong>点击选择 PDF 文件</strong> 或拖拽到此处</p>
     <p class="tip">每一页渲染为高清图片,打包成 ZIP 下载;全部在浏览器本地处理</p>
   </div>
@@ -130,7 +131,7 @@ function downloadZip() {
       </select>
     </label>
     <button class="btn btn-primary" style="margin-top: 22px" :disabled="busy" @click="process(file)">
-      {{ busy ? `转换中 ${progress}%` : '🖼️ 开始转换' }}
+      {{ busy ? `转换中 ${progress}%` : '<AppIcon name="image" :size="15" /> 开始转换' }}
     </button>
   </div>
 

@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { loadImageFromFile } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
@@ -104,7 +105,7 @@ function copyPicked() {
     @drop.prevent="onDrop"
   >
     <input ref="fileInput" type="file" accept="image/*" class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🎯</div>
+    <div class="dz-icon"><AppIcon name="target" :size="30" /></div>
     <p><strong>点击选择图片</strong> 或拖拽图片到此处,然后在图上点击吸取颜色</p>
   </div>
 
@@ -120,7 +121,7 @@ function copyPicked() {
         :class="{ crosshair: true }"
         @click="onClickCanvas"
       ></canvas>
-      <p class="tip mt-8">👆 在图片上点击任意位置吸取颜色;点击色块可加入下方色板。</p>
+      <p class="tip mt-8"><AppIcon name="mouse-pointer-2" :size="15" /> 在图片上点击任意位置吸取颜色;点击色块可加入下方色板。</p>
     </div>
 
     <div class="panel mt-14">
@@ -135,7 +136,7 @@ function copyPicked() {
           {{ copiedKey === 'picked' ? '✓ 已复制' : '复制' }}
         </button>
         <button v-if="picked" class="btn btn-sm" @click="addToPalette">➕ 加入色板</button>
-        <button class="btn btn-sm" style="margin-left: auto" @click="screenPick">💧 屏幕吸管</button>
+        <button class="btn btn-sm" style="margin-left: auto" @click="screenPick"><AppIcon name="droplet" :size="15" /> 屏幕吸管</button>
       </div>
     </div>
 

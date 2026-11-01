@@ -1,4 +1,5 @@
 <script setup>
+import AppIcon from '@/components/AppIcon.vue'
 import { onUnmounted, ref, watch } from 'vue'
 import { downloadCanvas, loadImageFromFile } from '@/utils/image'
 import { debounce } from '@/utils/format'
@@ -109,7 +110,7 @@ function download() {
 <template>
   <div class="dropzone" @click="pick" @dragover.prevent @drop.prevent="onDrop">
     <input ref="fileInput" type="file" accept="image/*" multiple class="sr-only" @change="onFileChange" />
-    <div class="dz-icon">🧷</div>
+    <div class="dz-icon"><AppIcon name="paperclip" :size="30" /></div>
     <p><strong>点击选择多张图片</strong> 或拖拽到此处,按列表顺序拼接</p>
   </div>
 
