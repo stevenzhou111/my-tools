@@ -32,7 +32,24 @@ watch(
     }
   },
 )
-const { favorites } = useToolPrefs()
+const { favorites, reorderFav } = useToolPrefs()
+const dragFavId = ref(null)
+
+function onFavDragStart(e, tool) {
+  dragFavId.value = tool.id
+  e.dataTransfer.effectAllowed = 'move'
+  e.dataTransfer.setData('text/plain', tool.id) // Firefox 需有数据才启动拖拽
+}
+function onFavDragOver(e, tool) {
+  if (!dragFavId.value || dragFavId.value === tool.id) return
+  e.preventDefault()
+  e.dataTransfer.dropEffect = 'move'
+  reorderFav(dragFavId.value, favTools.value.findIndex((f) => f.id === tool.id))
+}
+function onFavDrop(e) {
+  e.preventDefault()
+  dragFavId.value = null
+}
 
 const favTools = computed(() => favorites.value.map((id) => getTool(id)).filter(Boolean))
 
@@ -87,8 +104,13 @@ function emitNavigate() {
           :key="tool.id"
           :to="`/tool/${tool.id}`"
           class="side-link"
-          :class="{ active: route.params.id === tool.id }"
+          :class="{ active: route.params.id === tool.id, 'side-fav-dragging': dragFavId === tool.id }"
+          draggable="true"
           @click="emitNavigate"
+          @dragstart="onFavDragStart($event, tool)"
+          @dragover="onFavDragOver($event, tool)"
+          @drop="onFavDrop($event)"
+          @dragend="dragFavId = null"
         >
           <AppIcon class="side-tool-icon" :name="tool.icon" :size="16" />{{ tool.name }}
         </router-link>
@@ -131,6 +153,9 @@ function emitNavigate() {
   margin-bottom: 12px;
   font-size: 15px;
   padding: 9px 13px;
+}
+.side-fav-dragging {
+  opacity: 0.45;
 }
 .side-cat {
   margin-top: 6px;

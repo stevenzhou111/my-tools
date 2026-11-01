@@ -273,6 +273,13 @@ export const TOOLS = [
     component: lazy(() => import('./http-status/HttpStatusCodes.vue')),
   },
   {
+    id: 'html-entities', name: 'HTML 实体速查', category: 'dev', icon: 'code-xml', fresh: true,
+    desc: '常用命名实体表:必转义/数学/箭头/希腊/货币,点击复制',
+    keywords: 'html 实体 entity nbsp amp 转义 符号 速查 希腊字母 箭头 版权 cheat sheet',
+    about: '按用途分组的常用 HTML 命名实体速查:必转义的 &lt; &gt; &amp; &quot;、标点排版(破折号/省略号/引号)、数学单位(±×÷°√∞)、箭头、希腊字母、货币与版权符号;支持按名称/实体/字符搜索,点击即复制实体写法或字符本身(可切换),全部为 HTML 标准定义,各浏览器通用。',
+    component: lazy(() => import('./html-entities/HtmlEntities.vue')),
+  },
+  {
     id: 'subnet-calc', name: 'IPv4 子网计算器', category: 'dev', icon: 'network',
     desc: 'CIDR / 掩码换算网络地址、广播地址与可用主机范围',
     keywords: '子网 cidr 掩码 ip 网段 广播地址 主机数 运维 网络',
@@ -314,6 +321,13 @@ export const TOOLS = [
     keywords: 'keycode 按键 键盘 key code 修饰键 快捷键 调试 javascript',
     about: '按下键盘上任意一个键,实时显示 event.key、event.code(物理键位)与旧的 keyCode,以及 Ctrl/Alt/Shift/Meta/CapsLock 状态,可一键复制 JSON,适合写快捷键逻辑或排查键盘映射时参考。工具只监听不拦截,不影响你的任何组合键;keyCode 已被标准废弃,仅供兼容旧代码时查用。',
     component: lazy(() => import('./keycode/KeycodeInfo.vue')),
+  },
+  {
+    id: 'ascii-table', name: 'ASCII 码表', category: 'dev', icon: 'table-2', fresh: true,
+    desc: '0~127 全表:十/十六/八/二进制对照,点击复制字符或转义',
+    keywords: 'ascii 码表 字符 编码 hex 十六进制 控制字符 转义 速查对照表',
+    about: '标准 ASCII 0~127 全量对照:十进制、十六进制、八进制、二进制、字符与控制字符的标准缩写与转义写法(LF/CR/TAB/ESC);按控制/标点/数字/大写/小写分类筛选,支持搜 65、0x41、A 或「换行」;点击行即复制字符(控制字符复制转义写法)。排查编码问题与写解析器时的案头速查。',
+    component: lazy(() => import('./ascii-table/AsciiTable.vue')),
   },
   {
     id: 'gitignore-gen', name: '.gitignore 生成', category: 'dev', icon: 'git-branch',

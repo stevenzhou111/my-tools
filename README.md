@@ -3,18 +3,18 @@
 [![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **157 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
+一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **159 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
 
 **所有工具均在浏览器本地运行,数据不上传服务器**——纯静态站点、零后端、零跟踪,可一键部署到 Cloudflare Pages,并支持 PWA 安装后完整离线使用。
 
 布局采用经典的**左侧分类导航 + 右侧内容区**:桌面端侧边栏常驻(当前工具高亮、分类可折叠、支持搜索过滤);移动端自动收起为汉堡按钮唤起的抽屉导航。每个工具底部附有可展开的「关于这个工具」使用说明。
 
-## ✨ 内置工具(157 个 / 12 分类)
+## ✨ 内置工具(159 个 / 12 分类)
 
 | 分类 | 工具 |
 | ---- | ---- |
 | 🔄 编码转换 | JSON 格式化、Base64 编解码、URL 编解码、HTML 转义、进制转换(大数)、文本进制互转、Unicode 转义、哈希计算(SHA 系列)、MD5 编码、URL 解析、JWT 解析、国密 SM2/SM3/SM4、JSON 树查看器 |
-| 🛠️ 开发工具 | SQL 格式化(10 种方言)、YAML ↔ JSON、Cron 表达式中文解读/生成器、UA 解析、HTTP 状态码速查、Chmod 计算、AES 文本加解密(Web Crypto)、文件哈希校验、JSON → TypeScript 类型、Docker run → compose 转换、TOTP 两步验证码(RFC 6238 向量验证)、.gitignore 生成 |
+| 🛠️ 开发工具 | SQL 格式化(10 种方言)、YAML ↔ JSON、Cron 表达式中文解读/生成器、UA 解析、HTTP 状态码速查、ASCII 码表、HTML 实体速查、Chmod 计算、AES 文本加解密(Web Crypto)、文件哈希校验、JSON → TypeScript 类型、Docker run → compose 转换、TOTP 两步验证码(RFC 6238 向量验证)、.gitignore 生成 |
 | 📝 文本工具 | Markdown 预览(可复制 HTML)、正则测试、文本统计、词频统计、文本比对(diff)、文本替换、文本提取(URL/邮箱/数字/手机号/IP)、文本清理、大小写转换、文本反转、空格换行转换、摩尔斯电码、经典密码(凯撒/维吉尼亚/Atbash)、文本分割、HTML → Markdown、Markdown 表格生成(Excel/CSV 粘贴即转) |
 | 🖼️ 图片工具 | 图片压缩、图片转 Base64、图片圆角、图片旋转翻转、图片加边框、图片滤镜调色(含油画/铅笔画)、颜色吸取器、图片裁切、图片拼接、图片格式转换(PNG/JPG/WebP)、图片加水印(文字/Logo/平铺)、九宫格切图、证件照换背景、图片信息/EXIF 查看、favicon 生成器(多尺寸 ICO)、图片隐私清理(去 EXIF/GPS) |
 | ✨ 生成器 | UUID 生成、密码生成、二维码生成、二维码批量生成(打包 ZIP)、网址转二维码、WiFi 转二维码(扫码免密连网)、二维码解析、条形码生成、随机数、数字↔英文互转、随机测试数据、GIF 合成(表情包,逐帧调延迟)、占位图生成 |
