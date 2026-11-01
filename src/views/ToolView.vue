@@ -40,6 +40,10 @@ function share() {
           <div>
             <div class="name-row">
               <h1>{{ tool.name }}</h1>
+              <!-- 联网工具徽章:与 165 个本地工具明确区隔 -->
+              <span v-if="tool.online" class="online-badge" title="此工具需要联网获取数据">
+                <AppIcon name="wifi" :size="13" />需联网
+              </span>
               <!-- 分类徽章:点回首页该分类,长列表里迷路时快速归位 -->
               <router-link :to="`/?cat=${tool.category}`" class="cat-badge" title="回到首页该分类">
                 <AppIcon :name="getCategory(tool.category)?.icon || 'folder'" :size="13" />{{ getCategory(tool.category)?.name }}
@@ -152,6 +156,19 @@ function share() {
   color: var(--accent);
   border-color: var(--accent);
   background: var(--accent-soft);
+}
+.online-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--warning);
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, var(--border));
+  background: rgba(180, 83, 9, 0.1);
+  border-radius: 999px;
+  padding: 3px 11px;
+  flex-shrink: 0;
 }
 .desc {
   color: var(--muted);

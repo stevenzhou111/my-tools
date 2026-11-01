@@ -931,6 +931,14 @@ export const TOOLS = [
     urlState: true,
     component: lazy(() => import('./rate-convert/RateConvert.vue')),
   },
+  {
+    id: 'currency-convert', name: '汇率换算', category: 'calc', icon: 'coins', online: true, fresh: true,
+    desc: '31 种货币实时汇率换算,欧洲央行数据,本站唯一联网工具',
+    keywords: '汇率 换算 美元 人民币 欧元 日元 港币 currency exchange 外汇 牌价',
+    about: '本站唯一需要联网的工具:汇率来自欧洲央行参考汇率(frankfurter.app 转发,免费无密钥),覆盖 31 种货币,工作日更新;一次请求缓存全量牌价(1 小时),任意货币对交叉换算,热门货币一键换算与复制;断网时自动回退最近缓存并如实标注。查询记录不存储;大额换汇请以银行实价为准。',
+    urlState: true,
+    component: lazy(() => import('./currency-convert/CurrencyConvert.vue')),
+  },
 
   // ---------- 文档处理 ----------
   {

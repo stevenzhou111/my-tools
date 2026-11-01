@@ -248,7 +248,7 @@ function onSearchKeydown(e) {
           @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}<span class="new-badge">新</span></span>
+          <span class="tool-name">{{ tool.name }}<span class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -283,7 +283,7 @@ function onSearchKeydown(e) {
           @dragend="dragFavId = null"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -300,7 +300,7 @@ function onSearchKeydown(e) {
           @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -317,7 +317,7 @@ function onSearchKeydown(e) {
           @mouseenter="prefetch(tool)"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
-          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span></span>
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
       </div>
@@ -423,6 +423,12 @@ function onSearchKeydown(e) {
   font-size: 13px;
   font-weight: 400;
   color: var(--muted);
+}
+/* 联网工具小标:与本地工具区分 */
+.online-mark {
+  color: var(--warning);
+  vertical-align: 1px;
+  margin-left: 5px;
 }
 /* 「新」徽章:最新上线的工具在卡片上常显,下批上线后随 fresh 标记消失 */
 .new-badge {
