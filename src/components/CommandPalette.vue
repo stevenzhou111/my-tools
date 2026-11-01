@@ -5,6 +5,7 @@ import { CATEGORIES, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
 import { useTheme } from '@/utils/theme'
 import { evalExpression } from '@/utils/calcExpression'
+import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
 import { useCopy } from '@/utils/useCopy'
 import { useToast } from '@/utils/toast'
 import AppIcon from '@/components/AppIcon.vue'
@@ -29,11 +30,12 @@ const catIcon = computed(() => Object.fromEntries(CATEGORIES.map((c) => [c.id, c
 // 有查询时最多展示的命中数:超出部分键入更精确的关键词即可,避免长列表淹没高频结果
 const MAX_RESULTS = 40
 
-// 简单打分:名称前缀 > 名称包含 > 关键词/描述包含
+// 简单打分:名称前缀 > 名称包含 > 拼音/首字母 > 关键词/描述包含
 function score(tool, q) {
   const name = tool.name.toLowerCase()
   if (name.startsWith(q)) return 0
   if (name.includes(q)) return 1
+  if (pinyinHit(tool, q)) return 1.5
   if (`${tool.keywords} ${tool.desc}`.toLowerCase().includes(q)) return 2
   return Infinity
 }
@@ -118,6 +120,11 @@ const items = computed(() => {
 
   // 空查询时工具优先(收藏/最近直达是面板最高频用法);有查询时计算与动作排在结果前
   return q ? [...out, ...actions, ...tools] : [...tools, ...actions]
+})
+
+// 打开时顺便预热拼音索引:首次搜索要动态加载词典,提前一拍几乎无感
+watch(open, (v) => {
+  if (v) ensurePinyinIndex()
 })
 
 // 打开前记住焦点来源,关闭时归还;Tab 强制留在面板内(命令面板的惯例交互)
@@ -223,7 +230,7 @@ defineExpose({ open: () => (open.value = true) })
               aria-controls="palette-listbox"
               :aria-activedescendant="items[activeIndex] ? `palette-opt-${activeIndex}` : undefined"
               aria-expanded="true"
-              placeholder="搜索工具、执行动作或直接输入算式…(↑↓ 选择)"
+              placeholder="搜索工具(支持拼音 ewm)、动作或算式…(↑↓ 选择)"
             />
             <kbd class="palette-kbd">Esc</kbd>
           </div>
@@ -261,7 +268,7 @@ defineExpose({ open: () => (open.value = true) })
           <p class="palette-empty tip" v-if="!query.trim()" style="padding: 8px 18px; margin: 0; border-top: 1px solid var(--border)">
             输入关键词搜索全部工具
           </p>
-          <div class="palette-foot">↑↓ 选择 · Enter 打开 · Esc 关闭 · 试试输入 1+2</div>
+          <div class="palette-foot">↑↓ 选择 · Enter 打开 · Esc 关闭 · 支持拼音/首字母(ewm→二维码)· 直接输入 1+2 可算</div>
         </div>
       </div>
     </transition>

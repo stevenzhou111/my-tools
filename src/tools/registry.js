@@ -786,6 +786,22 @@ export const TOOLS = [
     component: lazy(() => import('./sci-calc/SciCalc.vue')),
   },
   {
+    id: 'margin-calc', name: '毛利率计算器', category: 'calc', icon: 'store', fresh: true,
+    desc: '成本/售价算毛利率与加价率,按目标毛利率反推定价',
+    keywords: '毛利率 加价率 定价 定价反推 利润 成本 售价 markup margin 电商 定价计算器',
+    about: '输入成本与售价:同时给出毛利率(毛利÷售价,财务口径)与加价率(毛利÷成本,报价口径)与每件毛利;按目标毛利率反推建议售价,并提示当前定价与建议价的差距。毛利率 20% 对应加价率 25%,两套口径别混用;这里是毛利口径,未扣房租人工推广等费用,净利润需另行计算。',
+    urlState: true,
+    component: lazy(() => import('./margin-calc/MarginCalc.vue')),
+  },
+  {
+    id: 'normal-dist', name: '正态分布计算', category: 'calc', icon: 'chart-spline', fresh: true,
+    desc: 'X↔概率双向换算:z 分数、百分位与置信临界值',
+    keywords: '正态分布 高斯 z分数 标准差 概率 百分位 置信区间 统计 显著性 normal distribution',
+    about: '双向计算:「X → 概率」输入均值/标准差/X 得到 P(X≤x)、P(X>x) 与标准化 z 分数;「概率 → X」反推指定百分位的临界值(95% 置信区间常用 z=1.96 就来自这里)。erf 与 Acklam 分位数近似误差小于 1e-6,附 68-95-99.7 经验法则与常用临界值速查,适合考试、质量控制与统计入门。',
+    urlState: true,
+    component: lazy(() => import('./normal-dist/NormalDist.vue')),
+  },
+  {
     id: 'bmi-calc', name: 'BMI 健康计算', category: 'calc', icon: 'heart-pulse',
     desc: 'BMI 分级 + 基础代谢 BMR + 每日消耗 TDEE 一页算清',
     keywords: 'bmi bmr tdee 基础代谢 卡路里 热量 健康 计算 体重 肥胖',
@@ -994,7 +1010,7 @@ export const TOOLS = [
     component: lazy(() => import('./cam-mic-test/CamMicTest.vue')),
   },
   {
-    id: 'video-audio', name: '视频提取音频', category: 'av', icon: 'music-2', fresh: true,
+    id: 'video-audio', name: '视频提取音频', category: 'av', icon: 'music-2',
     desc: '把视频里的声音提取为 WAV,可继续剪辑,本地解码',
     keywords: '视频转音频 提取音频 视频转wav 配音 音轨 分离 mp4 wav 音乐',
     about: '把有音轨的视频(MP4 / WebM / MOV 等)直接解码出音频并打包为 16bit PCM WAV:无需上传,浏览器 WebAudio 本地解码;提取后可在线试听,或一键跳到「音频剪辑」继续裁剪。无声轨或用了 AC-3/DTS 等浏览器不支持的音频编码时会明确提示。WAV 无压缩体积较大,需要小文件可先用本工具导出再压缩。',
@@ -1047,14 +1063,14 @@ export const TOOLS = [
     component: lazy(() => import('./decision/DecisionTool.vue')),
   },
   {
-    id: 'countdown-days', name: '倒数日/纪念日', category: 'office', icon: 'calendar-heart', fresh: true,
+    id: 'countdown-days', name: '倒数日/纪念日', category: 'office', icon: 'calendar-heart',
     desc: '生日、交付日、纪念日,还有多少天一眼看清,本机保存',
     keywords: '倒数日 纪念日 倒计时 天数 生日 提醒 距离 days matter',
     about: '把重要的日子记下来:单次日期显示「还有/已经多少天」,勾选「每年重复」的生日与纪念日自动滚动到下一个周年,今天到点的条目会高亮。条目按临近程度排序,保存在本机浏览器(localStorage),不上传也不跨设备,清除浏览器数据会丢失,请知悉。',
     component: lazy(() => import('./countdown-days/CountdownDays.vue')),
   },
   {
-    id: 'typing-speed', name: '打字速度测试', category: 'office', icon: 'keyboard-music', fresh: true,
+    id: 'typing-speed', name: '打字速度测试', category: 'office', icon: 'keyboard-music',
     desc: '中文/英文打字测速:实时字速、正确率与最佳纪录',
     keywords: '打字 速度 测试 typing wpm cpm 盲打 练习 字数每分钟',
     about: '30/60/120 秒计时打字测试:中文按「字/分钟(CPM)」、英文按标准 WPM(5 字符 = 1 词)统计,逐字标出对错,正确率实时反馈;最佳纪录存本机,本页会话内保留最近 8 轮成绩。中文用整句拼段、英文用常用句,每轮随机抽题。想提速先保正确率,这是打字练习的黄金法则。',

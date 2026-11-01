@@ -1,9 +1,10 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { APP_NAME, APP_TAGLINE } from '@/config'
 import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
 import { useRoute, useRouter } from 'vue-router'
 import { useToolPrefs } from '@/utils/prefs'
+import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
 import AppIcon from '@/components/AppIcon.vue'
 
 const router = useRouter()
@@ -40,6 +41,11 @@ const freshTools = computed(() => TOOLS.filter((t) => t.fresh))
 // "/" 快捷键由 App.vue 统一分发(按当前路由决定聚焦首页搜索还是侧栏搜索),
 // 这里通过 data-hero-search 标记自己的搜索框供其定位,不再重复注册监听
 
+// 拼音索引在首次搜索时才动态加载词典;就绪后 ref 触发 filtered 重算
+watch(query, (v) => {
+  if (v.trim()) ensurePinyinIndex()
+})
+
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
   return CATEGORIES.map((cat) => ({
@@ -47,7 +53,7 @@ const filtered = computed(() => {
     tools: TOOLS.filter(
       (t) =>
         t.category === cat.id &&
-        (!q || `${t.name} ${t.desc} ${t.keywords}`.toLowerCase().includes(q)),
+        (!q || `${t.name} ${t.desc} ${t.keywords}`.toLowerCase().includes(q) || pinyinHit(t, q)),
     ),
   })).filter((cat) => cat.tools.length > 0)
 })
