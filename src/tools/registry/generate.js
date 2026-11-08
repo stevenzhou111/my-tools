@@ -112,4 +112,11 @@ export const TOOLS = [
     urlState: true,
     component: lazy(() => import('../placeholder-img/PlaceholderImg.vue')),
   },
+  {
+    id: 'color-scheme', name: '配色方案生成', category: 'generate', icon: 'swatch-book', fresh: true,
+    desc: '从基色推导互补/邻近/三角等五类方案',
+    keywords: '配色 方案 色彩和谐 互补 邻近 三角 四角 色相 调色',
+    about: '输入一个基色,按色相环推导互补、邻近、三角、分裂互补、四角五类和谐配色;只转色相,保留基色的饱和度与明度,与「色阶生成」「对比度检查」配合使用。点击色块复制十六进制。',
+    component: lazy(() => import('../color-scheme/ColorSchemeTool.vue')),
+  },
 ]

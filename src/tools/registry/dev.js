@@ -268,4 +268,18 @@ export const TOOLS = [
     about: '计算文本或文件的 CRC-32(IEEE 802.3,zip/PNG 同款),8 位十六进制展示,用于比对传输前后是否损坏。注意 CRC-32 只做完整性校验,不能防篡改,安全场景请用「文件哈希校验」的 SHA 系列。',
     component: lazy(() => import('../crc32/Crc32Tool.vue')),
   },
+  {
+    id: 'bcrypt', name: 'Bcrypt 哈希', category: 'dev', icon: 'key-square', fresh: true,
+    desc: 'bcryptjs 生成与校验,cost 可调',
+    keywords: 'bcrypt 哈希 密码 加盐 cost 校验 hash 旧系统',
+    about: 'bcryptjs 纯 JS 实现在浏览器本地生成与校验 bcrypt 哈希($2a/$2b/$2y),cost 4~15 可调并显示实际耗时(指数级)。给对接旧系统/做题时用;新项目请优先 argon2id 并把哈希放服务端。明文只在本机计算,不上传。',
+    component: lazy(() => import('../bcrypt/BcryptTool.vue')),
+  },
+  {
+    id: 'keygen', name: '非对称密钥生成', category: 'dev', icon: 'key-round', fresh: true,
+    desc: 'RSA / EC 密钥对,导出标准 PEM',
+    keywords: '密钥 生成 rsa ec pem 公钥 私钥 webcrypto jwt ssh',
+    about: 'WebCrypto 生成 RSA 2048/4096 与 EC P-256/P-384 密钥对,导出标准 PEM(SPKI 公钥 / PKCS#8 私钥),可直接用于 JWT RS/ES 签名、接口加解密等。私钥只在本页生成展示,刷新即失,生成后立刻下载保存。',
+    component: lazy(() => import('../keygen/KeygenTool.vue')),
+  },
 ]

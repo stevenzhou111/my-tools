@@ -192,4 +192,11 @@ export const TOOLS = [
     about: '基于浏览器内置词典(Intl.Segmenter)切分中文/中英混合文本,零依赖零网络;输出分词结果(分隔符可选)与词频排行(最短词长可调,平局按码点稳定排序)。给标题选关键词、做词云前的清洗都很顺手。',
     component: lazy(() => import('../segmenter/SegmenterTool.vue')),
   },
+  {
+    id: 'csv-json', name: 'CSV ↔ JSON 互转', category: 'text', icon: 'table-2', fresh: true,
+    desc: 'RFC 4180 解析,类型推断可关,双向下载',
+    keywords: 'csv json 互转 转换 表格 导入 导出 类型推断 rfc4180',
+    about: '手写 RFC 4180 解析器:引号包裹、字段内逗号/换行、双写引号转义都正确处理;首行可作表头(重名键自动加后缀),类型推断可关且前导零数字保持字符串(区号 007 不会变 7);分隔符支持逗号/分号/Tab。双向互转并可下载 .json/.csv(带 BOM)。',
+    component: lazy(() => import('../csv-json/CsvJsonTool.vue')),
+  },
 ]
