@@ -5,6 +5,9 @@ import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
 import { useRoute, useRouter } from 'vue-router'
 import { useToolPrefs } from '@/utils/prefs'
 import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
+import { detectFromClipboard } from '@/utils/clipboardDetect'
+import { useFavDrag } from '@/utils/favDrag'
+import { exportFavoritesFile, importFavoritesFile } from '@/utils/favTransfer'
 import { useToast } from '@/utils/toast'
 import AppIcon from '@/components/AppIcon.vue'
 
@@ -12,7 +15,7 @@ const router = useRouter()
 const route = useRoute()
 const query = ref('')
 const searchEl = ref(null)
-const { favorites, recents } = useToolPrefs()
+const { recents } = useToolPrefs()
 
 // 工具页的分类徽章会带 ?cat= 回首页:滚到对应分类并短暂高亮
 function revealCat(id) {
@@ -29,9 +32,6 @@ onMounted(() => {
   }
 })
 
-const favTools = computed(() =>
-  favorites.value.map((id) => getTool(id)).filter(Boolean),
-)
 const recentTools = computed(() =>
   recents.value.map((id) => getTool(id)).filter(Boolean),
 )
@@ -63,55 +63,18 @@ const matchedCount = computed(() =>
   filtered.value.reduce((n, cat) => n + cat.tools.length, 0),
 )
 
-// ---------- 剪贴板智能推荐 ----------
+// ---------- 剪贴板智能推荐(识别规则在 utils/clipboardDetect,含单测) ----------
 const suggestion = ref(null)
 const detectError = ref('')
-
-function detectContentType(text) {
-  const t = text.trim()
-  if (!t || t.length > 100000) return null
-  try {
-    JSON.parse(t)
-    return { label: 'JSON 数据', toolId: 'json' }
-  } catch { /* 继续尝试其他类型 */ }
-  if (/^eyJ[\w-]+\.[\w-]+\.[\w-]*$/.test(t)) return { label: 'JWT Token', toolId: 'jwt' }
-  if (/^https?:\/\/\S+$/i.test(t)) return { label: 'URL 链接', toolId: 'url-parser' }
-  if (/^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(t)) return { label: '颜色值', toolId: 'color' }
-  if (
-    /^[A-Za-z0-9+/=\s]+$/.test(t) &&
-    t.replace(/\s/g, '').length % 4 === 0 &&
-    t.replace(/\s/g, '').length > 8 &&
-    /[A-Za-z]/.test(t) &&
-    /[+/=]/.test(t)
-  ) {
-    return { label: '疑似 Base64 文本', toolId: 'base64' }
-  }
-  if (/^\d{13}$/.test(t)) return { label: '毫秒时间戳', toolId: 'timestamp' }
-  if (/^\d{10}$/.test(t)) return { label: '秒级时间戳', toolId: 'timestamp' }
-  // 图片 dataURL(截图/复制的图片以文本形式出现)→ 二维码解析与图片工具都常用,先推荐解析
-  if (/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(t)) return { label: '图片 Data URL', toolId: 'qr-decode' }
-  if (/^(?:\d{1,3}\.){3}\d{1,3}$/.test(t)) return { label: 'IPv4 地址', toolId: 'subnet-calc' }
-  return null
-}
 
 async function detectClipboard() {
   detectError.value = ''
   suggestion.value = null
-  if (!navigator.clipboard?.readText) {
-    detectError.value = '当前浏览器不支持读取剪贴板'
-    return
-  }
   try {
-    const text = await navigator.clipboard.readText()
-    const hit = detectContentType(text || '')
-    if (hit) {
-      const tool = getTool(hit.toolId)
-      suggestion.value = { ...hit, tool, preview: text.trim().slice(0, 80) }
-    } else {
-      detectError.value = '没有识别出已知类型(支持 JSON / JWT / URL / 颜色 / Base64 / 时间戳 / IP / 图片链接)'
-    }
-  } catch {
-    detectError.value = '读取剪贴板被拒绝或失败,请手动复制后重试'
+    const { hit, preview } = await detectFromClipboard()
+    suggestion.value = { ...hit, tool: getTool(hit.toolId), preview }
+  } catch (e) {
+    detectError.value = e.message
   }
 }
 function openRandom() {
@@ -123,57 +86,28 @@ function prefetch(tool) {
   tool.component?.prefetch?.()
 }
 
-// ---------- 收藏导入导出(换机迁移) ----------
-const { exportPrefs, importPrefs } = useToolPrefs()
+// ---------- 收藏导入导出(换机迁移,实现见 utils/favTransfer) ----------
 const { showToast } = useToast()
 const importInput = ref(null)
 
 function exportFavs() {
-  const blob = new Blob([exportPrefs()], { type: 'application/json' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = `toolbox-favorites-${new Date().toISOString().slice(0, 10)}.json`
-  a.click()
-  URL.revokeObjectURL(a.href)
+  exportFavoritesFile()
 }
 
-function onImportFile(e) {
+async function onImportFile(e) {
   const file = e.target.files?.[0]
   if (!file) return
-  const reader = new FileReader()
-  reader.onload = () => {
-    try {
-      const r = importPrefs(String(reader.result || ''))
-      showToast(`导入完成:新增 ${r.added} 个收藏`)
-    } catch (err) {
-      showToast(err.message || '导入失败')
-    }
+  try {
+    const { added } = await importFavoritesFile(file)
+    showToast(`导入完成:新增 ${added} 个收藏`)
+  } catch (err) {
+    showToast(err.message || '导入失败')
   }
-  reader.readAsText(file)
   e.target.value = ''
 }
 
-// ---------- 收藏拖拽排序 ----------
-const { reorderFav } = useToolPrefs()
-const dragFavId = ref(null)
-
-function onFavDragStart(e, tool) {
-  dragFavId.value = tool.id
-  e.dataTransfer.effectAllowed = 'move'
-  // Firefox 需要有数据才真正启动拖拽
-  e.dataTransfer.setData('text/plain', tool.id)
-}
-function onFavDragOver(e, tool) {
-  if (!dragFavId.value || dragFavId.value === tool.id) return
-  e.preventDefault() // 允许放置
-  e.dataTransfer.dropEffect = 'move'
-  // 悬停即实时重排,favorites 顺序驱动卡片跟着走
-  reorderFav(dragFavId.value, favTools.value.findIndex((f) => f.id === tool.id))
-}
-function onFavDrop(e) {
-  e.preventDefault()
-  dragFavId.value = null
-}
+// ---------- 收藏拖拽排序(与侧边栏共用同一实现) ----------
+const { favTools, dragFavId, onFavDragStart, onFavDragOver, onFavDrop, onFavDragEnd } = useFavDrag()
 
 // 搜索时按 Enter 直达第一个匹配的工具;Esc 清空回到全量列表
 function onSearchKeydown(e) {
@@ -282,7 +216,7 @@ function onSearchKeydown(e) {
           @dragstart="onFavDragStart($event, tool)"
           @dragover="onFavDragOver($event, tool)"
           @drop="onFavDrop($event, tool)"
-          @dragend="dragFavId = null"
+          @dragend="onFavDragEnd"
         >
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>

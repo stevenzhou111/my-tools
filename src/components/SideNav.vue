@@ -2,7 +2,7 @@
 import { computed, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
-import { useToolPrefs } from '@/utils/prefs'
+import { useFavDrag } from '@/utils/favDrag'
 import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
 import AppIcon from '@/components/AppIcon.vue'
 
@@ -33,26 +33,8 @@ watch(
     }
   },
 )
-const { favorites, reorderFav } = useToolPrefs()
-const dragFavId = ref(null)
-
-function onFavDragStart(e, tool) {
-  dragFavId.value = tool.id
-  e.dataTransfer.effectAllowed = 'move'
-  e.dataTransfer.setData('text/plain', tool.id) // Firefox 需有数据才启动拖拽
-}
-function onFavDragOver(e, tool) {
-  if (!dragFavId.value || dragFavId.value === tool.id) return
-  e.preventDefault()
-  e.dataTransfer.dropEffect = 'move'
-  reorderFav(dragFavId.value, favTools.value.findIndex((f) => f.id === tool.id))
-}
-function onFavDrop(e) {
-  e.preventDefault()
-  dragFavId.value = null
-}
-
-const favTools = computed(() => favorites.value.map((id) => getTool(id)).filter(Boolean))
+// 收藏拖拽排序与 favTools 映射:与首页共用同一实现(见 utils/favDrag.js)
+const { favTools, dragFavId, onFavDragStart, onFavDragOver, onFavDrop, onFavDragEnd } = useFavDrag()
 
 const currentTool = computed(() => getTool(route.params.id))
 
@@ -119,7 +101,7 @@ function emitNavigate() {
           @dragstart="onFavDragStart($event, tool)"
           @dragover="onFavDragOver($event, tool)"
           @drop="onFavDrop($event)"
-          @dragend="dragFavId = null"
+          @dragend="onFavDragEnd"
         >
           <AppIcon class="side-tool-icon" :name="tool.icon" :size="16" />{{ tool.name }}
         </router-link>
