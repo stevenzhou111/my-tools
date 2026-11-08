@@ -199,4 +199,18 @@ export const TOOLS = [
     about: '手写 RFC 4180 解析器:引号包裹、字段内逗号/换行、双写引号转义都正确处理;首行可作表头(重名键自动加后缀),类型推断可关且前导零数字保持字符串(区号 007 不会变 7);分隔符支持逗号/分号/Tab。双向互转并可下载 .json/.csv(带 BOM)。',
     component: lazy(() => import('../csv-json/CsvJsonTool.vue')),
   },
+  {
+    id: 'pinyin', name: '文本转拼音', category: 'text', icon: 'spell-check', fresh: true,
+    desc: '全拼/首字母/声调,多音字按词识别',
+    keywords: '拼音 pinyin 首字母 多音字 声调 起名 标注',
+    about: '四种模式:带声调全拼、声调数字、无声调全拼、首字母;多音字按词组语境识别(重庆 chóng、长城 cháng),非中文字符原样保留。词典与站内搜索同源(pinyin-pro),纯本地计算。',
+    component: lazy(() => import('../pinyin/PinyinTool.vue')),
+  },
+  {
+    id: 'edit-distance', name: '文本相似度', category: 'text', icon: 'replace', fresh: true,
+    desc: '编辑距离(Levenshtein)与相似度百分比',
+    keywords: '编辑距离 相似度 levenshtein 拼写 判重 模糊匹配 文本比对',
+    about: '两段文本的 Levenshtein 编辑距离(插入/删除/替换各计 1)与相似度百分比;按码点比较,emoji 不算错位。拼写纠错、模糊匹配阈值、题目判重参考;行级逐行对比请用「文本比对(diff)」。',
+    component: lazy(() => import('../edit-distance/EditDistanceTool.vue')),
+  },
 ]

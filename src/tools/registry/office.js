@@ -81,4 +81,11 @@ export const TOOLS = [
     about: '给推广链接拼接 utm_source/medium/campaign/term/content 五件套,分析后台里分得清流量来自哪个渠道。基于 URL API:原链接的其它查询参数与 #hash 原样保留,重复生成时先清旧 utm_* 防叠加;source/medium 建议必填。纯本地处理。',
     component: lazy(() => import('../utm-builder/UtmBuilder.vue')),
   },
+  {
+    id: 'timesheet', name: '工时累加', category: 'office', icon: 'hourglass', fresh: true,
+    desc: '逐行时间段/时长求和,错行标注',
+    keywords: '工时 时长 累加 考勤 时间段 求和 打卡 加班',
+    about: '每行一条:09:00-18:00(分隔符 - ~ 至,跨午夜自动进位)或纯时长 8.5h / 90m / 2:15,实时汇总成「x 小时 y 分」并给出逐行明细;看不懂的行标注原因后跳过,不影响其它行。纯本地计算。',
+    component: lazy(() => import('../timesheet/TimesheetTool.vue')),
+  },
 ]

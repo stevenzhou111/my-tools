@@ -212,4 +212,11 @@ export const TOOLS = [
     urlState: true,
     component: lazy(() => import('../age-calc/AgeCalc.vue')),
   },
+  {
+    id: 'iso-week', name: 'ISO 周历', category: 'calc', icon: 'calendar-range', fresh: true,
+    desc: '日期↔ISO 周号双向换算,含周区间',
+    keywords: '周 iso 周历 周号 第几周 周报 日期 项目管理',
+    about: 'ISO 8601 口径(周一为一周之始,含 1 月 4 日的那周是第 1 周):日期→年周号(写作 2026-W01)、年+周号→周一到周日区间,53 周年份自动识别。写周报、排项目里程碑常用。',
+    component: lazy(() => import('../iso-week/IsoWeekTool.vue')),
+  },
 ]
