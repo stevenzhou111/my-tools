@@ -117,7 +117,7 @@ const items = computed(() => {
   const actions = matchActions(q).map((a) => ({ kind: 'action', action: a }))
   let tools
   if (!q) {
-    // 空查询只展示收藏 + 最近:全量 193 个条目(约 300+ 个 SVG)在低端设备上首帧压力大,
+    // 空查询只展示收藏 + 最近:全量 195 个条目(约 300+ 个 SVG)在低端设备上首帧压力大,
     // 且收藏/最近本来就被淹没;搜索全部工具请输入关键词。
     // 首次使用(两者皆空)回退展示前 24 个工具,避免打开面板一片空白
     const isFav = (t) => favorites.value.includes(t.id)

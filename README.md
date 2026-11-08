@@ -3,7 +3,7 @@
 [![CI](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/stevenzhou111/my-tools/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **193 个**常用小工具与 **145 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
+一个基于 **Vue 3 + Vite** 的纯前端在线工具箱,内置 **195 个**常用小工具与 **167 款**精选软件推荐(参考 convry.com / IT-Tools 的工具布局复刻)。
 
 **所有工具均在浏览器本地运行,数据不上传服务器**——纯静态站点、零后端、零跟踪,可一键部署到 Cloudflare Pages,并支持 PWA 安装后完整离线使用。
 
@@ -24,7 +24,7 @@
 | 🎬 音视频 | 文字转语音(系统 TTS)、视频截帧、视频转 GIF(截取片段本地合成)、音频剪辑(波形/裁剪/倒放/音量,导出 WAV)、音频转 MP3(WAV/M4A/OGG/FLAC,码率可选)、码率/体积计算、在线录屏(WebM)、在线录音(麦克风)、视频提取音频(WAV) |
 | 📊 数据图表 | 图表制作(柱状/条形/折线/面积/饼/环/雷达/散点/漏斗/仪表盘,导出 PNG)、词云图生成(导出高清 PNG) |
 | 📎 办公辅助 | 番茄钟、小决定、在线画板、ZIP 压缩/解压、CSS 渐变生成、倒数日/纪念日(本机保存)、打字速度测试、天气查询(联网)、UTM 链接生成、工时累加 |
-| 💾 软件推荐 | 系统必备软件推荐(145 款人工精选,见下文) |
+| 💾 软件推荐 | 系统必备软件推荐(167 款人工精选,见下文) |
 
 ## 特性
 
@@ -94,7 +94,7 @@ npm run deploy       # vite build && wrangler pages deploy dist
 │   │   ├── base.css         # 设计系统:CSS 变量/明暗主题/通用组件样式
 │   │   └── icons.js         # 生成物:裁剪后的 SVG 路径数据(勿手改)
 │   ├── components/          # AppIcon / SideNav / CommandPalette / ShortcutsHelp / ToolLoadError
-│   ├── data/software.js     # 软件推荐数据(145 款,人工维护)
+│   ├── data/software.js     # 软件推荐数据(167 款,人工维护)
 │   ├── router/              # 路由与标题/最近使用联动
 │   ├── tools/
 │   │   ├── registry.js      # 唯一数据源:12 分类 + 193 工具(路由/首页/搜索全部由它派生)

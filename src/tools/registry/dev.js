@@ -282,4 +282,11 @@ export const TOOLS = [
     about: 'WebCrypto 生成 RSA 2048/4096 与 EC P-256/P-384 密钥对,导出标准 PEM(SPKI 公钥 / PKCS#8 私钥),可直接用于 JWT RS/ES 签名、接口加解密等。私钥只在本页生成展示,刷新即失,生成后立刻下载保存。',
     component: lazy(() => import('../keygen/KeygenTool.vue')),
   },
+  {
+    id: 'screen-info', name: '浏览器/屏幕信息', category: 'dev', icon: 'monitor', fresh: true,
+    desc: '分辨率/DPR/能力探测,报 bug 一键自查',
+    keywords: '浏览器 屏幕 分辨率 dpr 信息 探测 webgl user agent 环境',
+    about: '只读采集屏幕分辨率、视口、设备像素比、语言、核数、Cookie 与 WebGL/WebGPU/剪贴板等能力探测,UA 一并展示;报 bug 或排查兼容性时把这一页给对方,省一轮来回。信息实时刷新,不上传。',
+    component: lazy(() => import('../screen-info/ScreenInfo.vue')),
+  },
 ]

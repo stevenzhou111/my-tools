@@ -88,4 +88,11 @@ export const TOOLS = [
     about: '每行一条:09:00-18:00(分隔符 - ~ 至,跨午夜自动进位)或纯时长 8.5h / 90m / 2:15,实时汇总成「x 小时 y 分」并给出逐行明细;看不懂的行标注原因后跳过,不影响其它行。纯本地计算。',
     component: lazy(() => import('../timesheet/TimesheetTool.vue')),
   },
+  {
+    id: 'box-shadow', name: 'box-shadow 生成器', category: 'office', icon: 'square-dashed', fresh: true,
+    desc: '阴影参数实时预览,一键复制 CSS',
+    keywords: 'box-shadow 阴影 css 生成器 投影 样式 内阴影',
+    about: '拖滑杆调 X/Y 偏移、模糊、扩散、颜色与不透明度,支持内阴影(inset);棋盘底实时预览让浅色阴影也看得清,生成的 CSS 一键复制。多层阴影可复制后手动逗号叠加。',
+    component: lazy(() => import('../box-shadow/BoxShadowTool.vue')),
+  },
 ]
