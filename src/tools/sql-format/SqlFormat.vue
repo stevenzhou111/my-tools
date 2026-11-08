@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { format } from 'sql-formatter'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('select u.id,u.name,count(o.id) as order_count from users u left join orders o on u.id=o.user_id where u.created_at>"2026-01-01" group by u.id,u.name having count(o.id)>5 order by order_count desc limit 20;')
 const language = ref('sql')
@@ -68,9 +69,7 @@ const output = computed(() => {
   <label class="field-label">格式化结果</label>
   <pre class="output">{{ output }}</pre>
   <div class="row mt-10">
-    <button v-if="output" class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" v-if="output" />
   </div>
 </template>
 

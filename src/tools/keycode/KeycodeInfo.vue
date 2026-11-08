@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const { copiedKey, copy } = useCopy()
 
@@ -68,9 +69,7 @@ const MODS = [
         <span v-for="m in MODS" :key="m.prop" class="mod-chip" :class="{ on: last[m.prop] }">{{ m.label }}</span>
       </div>
       <div class="row" style="justify-content: center; margin-top: 14px">
-        <button class="btn btn-sm btn-primary" @click="copy('json', toJson(last))">
-          {{ copiedKey === 'json' ? '✓ 已复制 JSON' : '复制 JSON' }}
-        </button>
+        <CopyButton class="btn btn-sm btn-primary" :text="toJson(last)" label="复制 JSON" copied-label="✓ 已复制 JSON" />
       </div>
     </div>
 

@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { BASE_ALGOS } from '@/utils/baseEnc'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const mode = ref('encode') // encode | decode
 const algo = ref('base32')
@@ -81,9 +82,7 @@ const placeholder = computed(() =>
     <label class="field-label" for="base-out">{{ mode === 'encode' ? '编码结果' : '解码结果' }}</label>
     <textarea id="base-out" class="textarea" style="min-height: 110px" readonly :value="output" placeholder="结果实时生成…"></textarea>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('base', output)">
-        {{ copiedKey === 'base' ? '✓ 已复制' : '复制结果' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="output" :disabled="!output" />
       <button class="btn btn-sm" :disabled="!output" @click="swap">⇄ 用结果反向继续</button>
     </div>
   </div>

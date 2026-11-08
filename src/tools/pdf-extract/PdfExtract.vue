@@ -5,6 +5,7 @@ import { loadPdf } from '@/utils/pdfjs'
 import { docxBlob } from '@/utils/docx'
 import { downloadBlob, downloadCanvas } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const dragging = ref(false)
@@ -167,9 +168,7 @@ async function downloadWord() {
   <template v-if="text">
     <pre class="output mt-14">{{ text.slice(0, 4000) }}{{ text.length > 4000 ? '\n…(仅预览前 4000 字符,导出为完整内容)' : '' }}</pre>
     <div class="row mt-12">
-      <button class="btn btn-sm" @click="copy('txt', text)">
-        {{ copiedKey === 'txt' ? '✓ 已复制' : '复制文本' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="text" label="复制文本" />
       <button class="btn btn-sm" @click="downloadTxt">⬇️ 纯文本 .txt</button>
       <button class="btn btn-sm" @click="downloadWord">⬇️ Word .docx</button>
       <button class="btn btn-sm" @click="downloadHtml">⬇️ HTML</button>

@@ -4,6 +4,7 @@ import { lookupIp } from '@/utils/ipLookup'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const ipInput = ref('')
 const loading = ref(false)
@@ -52,10 +53,9 @@ const MAPS = computed(() => {
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网(ipwho.is 优先、ip.sb 兜底,免费无密钥);查询记录仅缓存在本机浏览器。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网(ipwho.is 优先、ip.sb 兜底,免费无密钥);查询记录仅缓存在本机浏览器。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="search-row">
@@ -105,15 +105,6 @@ const MAPS = computed(() => {
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .search-row {
   display: flex;
   gap: 14px;

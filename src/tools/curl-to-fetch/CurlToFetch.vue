@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { parseCurl, toFetchCode, toPythonCode } from '@/utils/curlCode'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const cmd = ref(`curl -X POST 'https://api.example.com/v1/users' \\
   -H 'Content-Type: application/json' \\
@@ -68,9 +69,7 @@ const SAMPLES = [
 
     <pre class="output code-out">{{ code }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('code', code)">
-        {{ copiedKey === 'code' ? '✓ 已复制' : '复制代码' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="code" label="复制代码" />
       <span class="tip">{{ parsed.method }} {{ parsed.url }}</span>
     </div>
 

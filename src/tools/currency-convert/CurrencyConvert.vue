@@ -4,6 +4,7 @@ import { CURRENCIES, CURRENCY_NAMES, getRates, convert, rateText, formatMoney } 
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState, shortString } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const amount = ref(100)
 const from = ref('USD')
@@ -60,10 +61,9 @@ function swap() {
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网获取汇率(欧洲央行参考汇率,工作日更新);无密钥、不收集任何数据。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网获取汇率(欧洲央行参考汇率,工作日更新);无密钥、不收集任何数据。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="form-row">
@@ -139,15 +139,6 @@ function swap() {
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .form-row {
   display: flex;
   flex-wrap: wrap;

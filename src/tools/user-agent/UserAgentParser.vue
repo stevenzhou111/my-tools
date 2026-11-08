@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { UAParser } from 'ua-parser-js'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import AppIcon from '@/components/AppIcon.vue'
 
 const input = ref(
@@ -52,9 +53,7 @@ const groups = computed(() => {
   </div>
 
   <div class="row mt-12">
-    <button class="btn btn-sm" @click="copy('ua', input)">
-      {{ copiedKey === 'ua' ? '✓ 已复制' : '复制 UA 字符串' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="input" label="复制 UA 字符串" />
   </div>
 </template>
 

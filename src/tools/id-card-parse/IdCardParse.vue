@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { checkDigit, maskIdCard, parseIdCard } from '@/utils/idCard'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('11010519491231002X')
 const { copiedKey, copy } = useCopy()
@@ -63,9 +64,7 @@ const SAMPLES = [
             <template v-if="masked">打码展示:<code>{{ masked }}</code></template>
           </p>
         </div>
-        <button class="btn btn-sm" @click="copy('masked', masked ?? '')">
-          {{ copiedKey === 'masked' ? '✓ 已复制' : '复制打码号码' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="masked ?? ''" label="复制打码号码" />
       </div>
     </div>
   </template>

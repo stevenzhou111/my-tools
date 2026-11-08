@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { evalSci } from '@/utils/sciExpression'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('sin(30) + sqrt(2)^2')
 const degrees = ref(true)
@@ -81,7 +82,7 @@ function insert(k) {
     <span class="tip">结果</span>
     <strong v-if="result !== null" class="sci-value">{{ result }}</strong>
     <span v-else class="tip">(无法求值:检查括号配对、函数名与除零)</span>
-    <button v-if="result !== null" class="btn btn-sm" @click="copy('sci', String(result))">{{ copiedKey === 'sci' ? '✓ 已复制' : '复制' }}</button>
+    <CopyButton class="btn btn-sm" :text="String(result)" label="复制" v-if="result !== null" />
   </div>
 
   <details v-if="history.length" class="panel hist-panel">

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`苹果,香蕉,橙子,葡萄,西瓜,芒果`)
 const mode = ref('sep')
@@ -56,15 +57,9 @@ const numbered = computed(() => output.value.map((p, i) => `${i + 1}. ${p}`))
     <label class="field-label">分割结果({{ output.length }} 段)</label>
     <pre class="output">{{ output.join('\n') }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('plain', output.join('\n'))">
-        {{ copiedKey === 'plain' ? '✓ 已复制' : '复制(纯列表)' }}
-      </button>
-      <button class="btn btn-sm" @click="copy('num', numbered.join('\n'))">
-        {{ copiedKey === 'num' ? '✓ 已复制' : '复制(带序号)' }}
-      </button>
-      <button class="btn btn-sm" @click="copy('arr', JSON.stringify(output))">
-        {{ copiedKey === 'arr' ? '✓ 已复制' : '复制(JSON 数组)' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="output.join('\n')" label="复制(纯列表)" />
+      <CopyButton class="btn btn-sm" :text="numbered.join('\n')" label="复制(带序号)" />
+      <CopyButton class="btn btn-sm" :text="JSON.stringify(output)" label="复制(JSON 数组)" />
     </div>
   </template>
 </template>

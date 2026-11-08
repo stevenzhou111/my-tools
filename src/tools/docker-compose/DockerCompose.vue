@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { dockerToCompose } from '@/utils/dockerCompose'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`docker run -d --name web \\
   -p 8080:80 \\
@@ -42,9 +43,7 @@ const SAMPLE = 'docker run -it --rm -v "$PWD":/app -w /app node:20 npx create-vi
       <p v-for="(w, i) in result.warnings" :key="i" style="margin: 2px 0">⚠️ {{ w }}</p>
     </div>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('compose', result.yaml)">
-        {{ copiedKey === 'compose' ? '✓ 已复制' : '复制 YAML' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="result.yaml" label="复制 YAML" />
     </div>
   </template>
 </template>

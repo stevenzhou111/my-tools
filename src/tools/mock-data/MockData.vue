@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const count = ref(10)
 const fields = ref({ name: true, phone: true, email: false, idcard: false, company: false, address: false, uuid: false })
@@ -120,9 +121,7 @@ generate()
       <button class="btn btn-sm" @click="copy('csv', [Object.keys(rows[0]).join(','), ...rows.map((r) => Object.values(r).join(','))].join('\n'))">
         {{ copiedKey === 'csv' ? '✓ 已复制' : '复制 CSV' }}
       </button>
-      <button class="btn btn-sm" @click="copy('json', JSON.stringify(rows, null, 2))">
-        {{ copiedKey === 'json' ? '✓ 已复制' : '复制 JSON' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="JSON.stringify(rows, null, 2)" label="复制 JSON" />
     </div>
 
     <p class="tip mt-10">数据完全随机生成(身份证号校验位合法),仅供开发测试填充使用。</p>

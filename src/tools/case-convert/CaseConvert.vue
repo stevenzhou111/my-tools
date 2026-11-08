@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('hello vue toolbox, the online toolkit')
 const mode = ref('upper')
@@ -65,9 +66,7 @@ const output = computed(() => {
   <label class="field-label">输出结果</label>
   <pre class="output">{{ output }}</pre>
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" />
     <button class="btn btn-sm" @click="input = output">将结果放回输入框</button>
   </div>
 </template>

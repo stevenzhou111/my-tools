@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx'
 import { buildInserts } from '@/utils/xlsxSql'
 import { downloadBlob } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const fileName = ref('')
@@ -141,9 +142,7 @@ function downloadSql() {
       <label class="field-label" for="xs-out">SQL(共 {{ result.count }} 行数据)</label>
       <textarea id="xs-out" class="textarea" style="min-height: 260px; font-size: 13px" readonly :value="result.text"></textarea>
       <div class="row mt-10">
-        <button class="btn btn-sm btn-primary" @click="copy('xlsxsql', result.text)">
-          {{ copiedKey === 'xlsxsql' ? '✓ 已复制' : '复制 SQL' }}
-        </button>
+        <CopyButton class="btn btn-sm btn-primary" :text="result.text" label="复制 SQL" />
         <button class="btn btn-sm" @click="downloadSql">⬇️ 下载 .sql 文件</button>
       </div>
     </template>

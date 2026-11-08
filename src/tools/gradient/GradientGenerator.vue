@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const type = ref('linear')
 const angle = ref(135)
@@ -96,9 +97,7 @@ function applyPreset(p) {
   <label class="field-label mt-14">CSS 代码</label>
   <pre class="output">{{ css }}</pre>
   <div class="row mt-10">
-    <button class="btn btn-primary" @click="copy('css', css)">
-      {{ copiedKey === 'css' ? '✓ 已复制' : '复制 CSS' }}
-    </button>
+    <CopyButton class="btn btn-primary" :text="css" label="复制 CSS" />
   </div>
 </template>
 

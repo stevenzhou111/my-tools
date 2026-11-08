@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { downloadBlob } from '@/utils/image'
 
 const fileInput = ref(null)
@@ -188,9 +189,7 @@ function download() {
 
     <pre class="output">{{ previewOutput }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('out', output)">
-        {{ copiedKey === 'out' ? '✓ 已复制' : '复制内容' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="output" label="复制内容" />
       <button class="btn btn-sm btn-primary" @click="download">⬇️ 下载文件</button>
     </div>
   </template>

@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { convertLineEndings, countZeroWidth, detectLineEndings, revealInvisible, stripZeroWidth } from '@/utils/whitespace'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const text = ref(`从网页或 Windows 记事本复制出来的文本,经常带着看不见的字符:\u200b零宽空格、\uFEFF BOM、行尾的 \r\n。它们会让字符串比对失败、正则匹配不上、代码复制报错。用这里的一键清理解决。`)
 
@@ -54,7 +55,7 @@ function applyStrip() {
   </div>
 
   <div class="row">
-    <button class="btn btn-sm btn-primary" @click="copy('iw', text)">{{ copiedKey === 'iw' ? '✓ 已复制' : '复制当前文本' }}</button>
+    <CopyButton class="btn btn-sm btn-primary" :text="text" label="复制当前文本" />
     <span class="tip">清理操作直接替换上方文本,可继续编辑;复制网页文本后先来这里清一遍零宽字符是排除诡异 bug 的好习惯。</span>
   </div>
 </template>

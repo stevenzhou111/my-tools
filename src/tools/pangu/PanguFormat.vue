@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { formatPangu } from '@/utils/pangu'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState } from '@/utils/urlState'
 
 const text = ref('')
@@ -79,9 +80,7 @@ const SAMPLE = `这是一段随手粘贴的文本, mixing English and 中文,标
     </label>
     <textarea id="pangu-out" class="textarea" style="min-height: 150px" readonly :value="output" placeholder="结果实时生成…"></textarea>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('pangu', output)">
-        {{ copiedKey === 'pangu' ? '✓ 已复制' : '复制结果' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="output" :disabled="!output" />
       <button v-if="output" class="btn btn-sm" :disabled="!output" @click="text = output">↑ 用结果覆盖原文(可叠加处理)</button>
     </div>
   </div>

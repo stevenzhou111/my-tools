@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { htmlToMarkdown } from '@/utils/htmlMd'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`<article>
   <h1>会议纪要</h1>
@@ -56,9 +57,7 @@ async function onFile(e) {
       <template v-else-if="result.md">
         <pre class="output md-output">{{ result.md }}</pre>
         <div class="row mt-10">
-          <button class="btn btn-sm btn-primary" @click="copy('md', result.md)">
-            {{ copiedKey === 'md' ? '✓ 已复制' : '复制 Markdown' }}
-          </button>
+          <CopyButton class="btn btn-sm btn-primary" :text="result.md" label="复制 Markdown" />
         </div>
       </template>
     </div>

@@ -4,6 +4,7 @@ import { resolveDns, DNS_TYPES, statusText } from '@/utils/dnsQuery'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const name = ref('github.com')
 const type = ref('A')
@@ -40,10 +41,9 @@ const cacheAgeText = computed(() => {
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网(DNS over HTTPS:阿里 DNS 优先、Google 兜底;免费无密钥)。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网(DNS over HTTPS:阿里 DNS 优先、Google 兜底;免费无密钥)。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="search-row">
@@ -103,15 +103,6 @@ const cacheAgeText = computed(() => {
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .search-row {
   display: flex;
   gap: 14px;

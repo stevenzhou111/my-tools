@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { jsonToTs } from '@/utils/jsonToTs'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`{
   "name": "我的工具箱",
@@ -39,9 +40,7 @@ watch([input, rootName], () => {
       <template v-else-if="result.code">
         <pre class="output ts-output">{{ result.code }}</pre>
         <div class="row mt-10">
-          <button class="btn btn-sm btn-primary" @click="copy('ts', result.code)">
-            {{ copiedKey === 'ts' ? '✓ 已复制' : '复制类型定义' }}
-          </button>
+          <CopyButton class="btn btn-sm btn-primary" :text="result.code" label="复制类型定义" />
         </div>
       </template>
     </div>

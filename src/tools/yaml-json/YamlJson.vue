@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { load as yamlLoad, dump as yamlDump } from 'js-yaml'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const mode = ref('yaml2json')
 const input = ref(`# 服务配置
@@ -46,9 +47,7 @@ const result = computed(() => {
   <label class="field-label">输出</label>
   <pre class="output">{{ result.text }}</pre>
   <div class="row mt-10">
-    <button v-if="result.text" class="btn btn-sm" @click="copy('out', result.text)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="result.text" v-if="result.text" />
     <button v-if="result.text" class="btn btn-sm" @click="input = result.text">将输出放入输入框</button>
   </div>
 

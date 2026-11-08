@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { fillSqlParams } from '@/utils/sqlFill'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const sql = ref(`SELECT u.id, u.name, o.amount
 FROM users u
@@ -67,9 +68,7 @@ const result = computed(() => {
     <label class="field-label" for="sp-out">填充结果(可直接执行)</label>
     <textarea id="sp-out" class="textarea" style="min-height: 210px; font-size: 13.5px" readonly :value="result.text"></textarea>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('sp', result.text)">
-        {{ copiedKey === 'sp' ? '✓ 已复制' : '复制填充后的 SQL' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="result.text" label="复制填充后的 SQL" />
     </div>
   </template>
 

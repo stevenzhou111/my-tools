@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { asciiTable, filterRows } from '@/utils/asciiTable'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState } from '@/utils/urlState'
+import AppIcon from '@/components/AppIcon.vue'
 
 const ROWS = asciiTable()
 const TYPES = [

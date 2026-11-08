@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import jsQR from 'jsqr'
 import { loadImageFromFile } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const dragging = ref(false)
@@ -81,9 +82,7 @@ async function load(file) {
     <label class="field-label">识别结果 <span class="tip">来自 {{ sourceInfo }}</span></label>
     <pre class="output">{{ result }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('out', result)">
-        {{ copiedKey === 'out' ? '✓ 已复制' : '复制内容' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="result" label="复制内容" />
       <a
         v-if="/^https?:\/\//.test(result)"
         :href="result"

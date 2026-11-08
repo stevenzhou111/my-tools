@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { onMounted, ref } from 'vue'
 import { nanoId, ulid } from '@/utils/shortId'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const mode = ref('uuid') // uuid | nano | ulid
 const count = ref(5)
@@ -77,9 +78,7 @@ onMounted(generate)
   <pre class="output">{{ list.join('\n') }}</pre>
 
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('all', list.join('\n'))">
-      {{ copiedKey === 'all' ? '✓ 已复制全部' : '复制全部' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="list.join('\n')" label="复制全部" copied-label="✓ 已复制全部" />
   </div>
 
   <p class="tip mt-12">

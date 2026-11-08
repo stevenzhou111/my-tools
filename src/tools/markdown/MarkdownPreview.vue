@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const SAMPLE = `# 你好,工具箱 👋
 
@@ -41,9 +42,7 @@ const html = computed(() =>
     <div>
       <div class="snippet-head">
         <label class="field-label">预览</label>
-        <button class="btn btn-sm" @click="copy('html', html)">
-          {{ copiedKey === 'html' ? '✓ HTML 已复制' : '复制 HTML' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="html" label="复制 HTML" copied-label="✓ HTML 已复制" />
       </div>
       <!-- eslint-disable-next-line vue/no-v-html — 内容已经过 DOMPurify 消毒 -->
       <div class="panel md-preview" v-html="html"></div>

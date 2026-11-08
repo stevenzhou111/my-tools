@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const mode = ref('escape')
 const input = ref(`<div class="hello">你好 & 欢迎使用 "工具箱"</div>`)
@@ -46,9 +47,7 @@ const output = computed(() => {
   <label class="field-label">输出</label>
   <pre class="output">{{ output }}</pre>
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" label="复制输出" />
     <button class="btn btn-sm" @click="input = output">将输出放入输入框</button>
   </div>
 </template>

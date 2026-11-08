@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`第一行
 
@@ -58,9 +59,7 @@ const stats = computed(() => {
   </div>
 
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" label="复制输出" />
     <span v-if="stats.saved > 0" class="tip">共精简 {{ stats.saved }} 个字符</span>
   </div>
 </template>

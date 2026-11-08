@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const file = ref(null)
 const offset = ref(0)
@@ -108,7 +109,7 @@ const dump = computed(() => rows.value.map((r) => `${r.addr.toString(16).padStar
         <button class="btn btn-sm" @click="jump">跳转</button>
       </span>
       <span class="tip">当前 0x{{ offset.toString(16).padStart(8, '0') }}(第 {{ pageIndex + 1 }}/{{ pageCount }} 页)</span>
-      <button class="btn btn-sm" @click="copy('dump', dump)">{{ copiedKey === 'dump' ? '✓ 已复制' : '复制本页' }}</button>
+      <CopyButton class="btn btn-sm" :text="dump" label="复制本页" />
     </div>
 
     <pre class="output hex-dump">{{ dump }}</pre>

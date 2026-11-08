@@ -4,6 +4,7 @@ import { callFunction } from '@/utils/functions'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState, shortString } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const url = ref('')
 const loading = ref(false)
@@ -56,10 +57,9 @@ const siteLink = computed(() => feed.value?.link || url.value)
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网,经本站 Functions 代理抓取 RSS/Atom 源(只读公开内容);本站不做订阅管理,数据不留在服务端。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网,经本站 Functions 代理抓取 RSS/Atom 源(只读公开内容);本站不做订阅管理,数据不留在服务端。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="search-row">
@@ -120,15 +120,6 @@ const siteLink = computed(() => feed.value?.link || url.value)
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .search-row {
   display: flex;
   gap: 14px;

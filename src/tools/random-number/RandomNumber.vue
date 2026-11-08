@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const min = ref(1)
 const max = ref(100)
@@ -81,12 +82,8 @@ generate()
 
   <pre v-if="list.length" class="output">{{ list.join('\n') }}</pre>
   <div v-if="list.length" class="row mt-10">
-    <button class="btn btn-sm" @click="copy('nl', list.join('\n'))">
-      {{ copiedKey === 'nl' ? '✓ 已复制' : '复制(换行分隔)' }}
-    </button>
-    <button class="btn btn-sm" @click="copy('sp', list.join(' '))">
-      {{ copiedKey === 'sp' ? '✓ 已复制' : '复制(空格分隔)' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="list.join('\n')" label="复制(换行分隔)" />
+    <CopyButton class="btn btn-sm" :text="list.join(' ')" label="复制(空格分隔)" />
   </div>
 </template>
 

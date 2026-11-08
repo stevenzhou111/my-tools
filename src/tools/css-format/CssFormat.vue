@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { beautifyCss, minifyCss } from '@/utils/cssFormat'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`.card{display:flex;flex-direction:column;gap:12px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6)}
 @media screen and (max-width:720px){.card{padding:12px}}
@@ -53,7 +54,7 @@ const stats = computed(() => {
       </label>
       <pre id="css-out" class="output css-out">{{ output }}</pre>
       <div class="row mt-8">
-        <button class="btn btn-sm" @click="copy('css', output)">{{ copiedKey === 'css' ? '✓ 已复制' : '复制结果' }}</button>
+        <CopyButton class="btn btn-sm" :text="output" />
         <button class="btn btn-sm" @click="input = output">⤴ 贴回输入</button>
       </div>
     </div>

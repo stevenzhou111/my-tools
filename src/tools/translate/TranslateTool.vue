@@ -4,6 +4,7 @@ import { translate, byteLength, MAX_BYTES, LANGS, langName } from '@/utils/trans
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState, shortString } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const input = ref('')
 const output = ref('')
@@ -56,10 +57,9 @@ function clearAll() {
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网(MyMemory 免费翻译,无密钥;匿名额度约 5000 字节/日,结果缓存在本机 24 小时)。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网(MyMemory 免费翻译,无密钥;匿名额度约 5000 字节/日,结果缓存在本机 24 小时)。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="lang-row">
@@ -136,15 +136,6 @@ function clearAll() {
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .lang-row {
   display: flex;
   gap: 14px;

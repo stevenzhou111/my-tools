@@ -4,6 +4,7 @@ import { onUnmounted, ref } from 'vue'
 import { extractPalette } from '@/utils/palette'
 import { loadImageFromFile } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const dragging = ref(false)
@@ -100,9 +101,7 @@ const SAMPLE = '支持 JPG / PNG / WebP,纯本地统计'
         <span class="field-label m-0">主色数量(1–12)</span>
         <input v-model.number="count" class="input count-input" type="number" min="1" max="12" @change="reload" />
       </label>
-      <button class="btn btn-sm" @click="copy('cssvars', cssVars())">
-        {{ copiedKey === 'cssvars' ? '✓ 已复制 CSS 变量' : '复制为 CSS 变量' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="cssVars()" label="复制为 CSS 变量" copied-label="✓ 已复制 CSS 变量" />
     </div>
 
     <div class="pal-list mt-12">

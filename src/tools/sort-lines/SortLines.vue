@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { numberLines, removeEmpty, sortLines, splitLines, trimLines, uniqueLines } from '@/utils/lines'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState } from '@/utils/urlState'
 
 const text = ref('')
@@ -124,9 +125,7 @@ function applyPreset(name) {
     </label>
     <textarea id="sort-out" class="textarea" style="min-height: 160px" readonly :value="output" placeholder="结果实时生成…"></textarea>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" :disabled="!output" @click="copy('sort', output)">
-        {{ copiedKey === 'sort' ? '✓ 已复制' : '复制结果' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="output" :disabled="!output" />
       <button v-if="output" class="btn btn-sm" @click="text = output">↑ 用结果覆盖原文(可叠加处理)</button>
     </div>
   </div>

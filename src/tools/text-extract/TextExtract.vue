@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref(`联系我们:support@example.com 或 sales@test.org
 官网:https://example.com/docs?q=工具&page=1
@@ -56,12 +57,8 @@ const results = computed(() => {
     <label class="field-label">提取结果({{ results.length }} 条)</label>
     <pre class="output">{{ results.join('\n') }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('out', results.join('\n'))">
-        {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-      </button>
-      <button class="btn btn-sm" @click="copy('comma', results.join(', '))">
-        {{ copiedKey === 'comma' ? '✓ 已复制' : '复制(逗号分隔)' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="results.join('\n')" />
+      <CopyButton class="btn btn-sm" :text="results.join(', ')" label="复制(逗号分隔)" />
     </div>
   </template>
   <p v-else class="tip">没有提取到匹配内容。</p>

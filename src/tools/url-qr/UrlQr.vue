@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref, watch } from 'vue'
 import QRCode from 'qrcode'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { debounce } from '@/utils/format'
 import { useUrlState, shortString } from '@/utils/urlState'
 
@@ -70,11 +71,7 @@ onUnmounted(() => generateDebounced.cancel())
       <a v-if="dataUrl" :href="dataUrl" download="url-qrcode.png" class="btn btn-primary mt-14">
         ⬇️ 下载 PNG
       </a>
-      <button v-if="dataUrl" class="btn btn-sm mt-10" 
-        @click="copy('url', normalized)"
-      >
-        {{ copiedKey === 'url' ? '✓ 链接已复制' : '复制链接' }}
-      </button>
+      <CopyButton class="btn btn-sm mt-10" :text="normalized" label="复制链接" copied-label="✓ 链接已复制" v-if="dataUrl" />
     </div>
   </div>
 

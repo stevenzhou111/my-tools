@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { lorem } from '@/utils/lorem'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState } from '@/utils/urlState'
 
 const unit = ref('paragraphs')
@@ -77,9 +78,7 @@ watch([unit, count, classicStart, html], generate, { immediate: true })
     <label class="field-label" for="lorem-out">假文(每次生成随机)</label>
     <textarea id="lorem-out" class="textarea" style="min-height: 240px" readonly :value="output"></textarea>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('lorem', output)">
-        {{ copiedKey === 'lorem' ? '✓ 已复制' : '复制全部' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="output" label="复制全部" />
     </div>
   </div>
 

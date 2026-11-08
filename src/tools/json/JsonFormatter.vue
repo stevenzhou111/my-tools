@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { debounce } from '@/utils/format'
 
 const input = ref('')
@@ -74,9 +75,7 @@ function clearAll() {
       <option :value="8">8 空格</option>
     </select>
     <button class="btn" @click="run(null)">压缩</button>
-    <button v-if="output" class="btn" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn" :text="output" v-if="output" />
     <button class="btn" @click="input = SAMPLE; run(indent)">粘贴示例</button>
     <button class="btn" @click="clearAll">清空</button>
   </div>

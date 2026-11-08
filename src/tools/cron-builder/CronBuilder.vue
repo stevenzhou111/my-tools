@@ -5,6 +5,7 @@ import cronstrue from 'cronstrue'
 import 'cronstrue/locales/zh_CN'
 import { nextRuns } from '@/utils/cron'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState, shortString } from '@/utils/urlState'
 
 const expr = ref('30 9 * * 1')
@@ -99,9 +100,7 @@ function fmtRun(d) {
       </div>
     </div>
     <div class="row mt-12">
-      <button class="btn btn-sm btn-primary" @click="copy('cron', expr)">
-        {{ copiedKey === 'cron' ? '✓ 已复制' : '复制表达式' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="expr" label="复制表达式" />
     </div>
   </template>
   <div v-else class="error-box mt-14">✗ {{ parsed.error }}</div>

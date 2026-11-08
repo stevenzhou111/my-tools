@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { debounce } from '@/utils/format'
 import { decorateOps } from '@/utils/inlineDiff'
 
@@ -145,9 +146,7 @@ const diffText = computed(() =>
     <span class="chip add">+ 新增 {{ stats.added }} 行</span>
     <span class="chip del">- 删除 {{ stats.removed }} 行</span>
     <span class="chip">未变化 {{ stats.same }} 行</span>
-    <button class="btn btn-sm" @click="copy('diff', diffText)">
-      {{ copiedKey === 'diff' ? '✓ 已复制' : '复制 diff 结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="diffText" label="复制 diff 结果" />
   </div>
 
   <div v-if="rows" class="panel diff-view">

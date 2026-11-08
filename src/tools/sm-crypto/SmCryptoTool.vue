@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { sm2, sm3, sm4 } from 'sm-crypto'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const tab = ref('sm3')
 const { copiedKey, copy } = useCopy()
@@ -134,9 +135,7 @@ function sm2Decrypt() {
     <label class="field-label" for="sm4Text">SM3 摘要(256 位,与 SHA-256 同长度)</label>
     <pre class="output">{{ sm3Output }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('sm3', sm3Output)">
-        {{ copiedKey === 'sm3' ? '✓ 已复制' : '复制' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="sm3Output" label="复制" />
     </div>
   </template>
 
@@ -179,9 +178,7 @@ function sm2Decrypt() {
       <label class="field-label" for="sm4CipherIn">密文(hex)</label>
       <pre class="output">{{ sm4CipherOut }}</pre>
       <div class="row mt-8">
-        <button class="btn btn-sm" @click="copy('c', sm4CipherOut)">
-          {{ copiedKey === 'c' ? '✓ 已复制' : '复制密文' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="sm4CipherOut" label="复制密文" />
       </div>
     </div>
 
@@ -197,12 +194,8 @@ function sm2Decrypt() {
   <template v-if="tab === 'sm2'">
     <div class="row mb-14">
       <button class="btn" @click="genKeyPair"><AppIcon name="dice-5" :size="15" /> 生成新密钥对</button>
-      <button class="btn btn-sm" @click="copy('pub', sm2PublicKey)">
-        {{ copiedKey === 'pub' ? '✓ 公钥已复制' : '复制公钥' }}
-      </button>
-      <button class="btn btn-sm" @click="copy('pri', sm2PrivateKey)">
-        {{ copiedKey === 'pri' ? '✓ 私钥已复制' : '复制私钥' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="sm2PublicKey" label="复制公钥" copied-label="✓ 公钥已复制" />
+      <CopyButton class="btn btn-sm" :text="sm2PrivateKey" label="复制私钥" copied-label="✓ 私钥已复制" />
     </div>
     <div class="field">
       <label class="field-label" for="sm2PublicKey">公钥(加密用)</label>

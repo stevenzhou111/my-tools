@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { createJwt, verifyJwt } from '@/utils/jwtSign'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const tab = ref('parse')
 const input = ref('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxOTAwMDAwMDAwfQ.dummy-signature-not-verified')
@@ -157,18 +158,14 @@ function pretty(obj) {
         <div>
           <div class="snippet-head">
             <label class="field-label">Header</label>
-            <button class="btn btn-sm" @click="copy('h', pretty(parts.header))">
-              {{ copiedKey === 'h' ? '✓ 已复制' : '复制' }}
-            </button>
+            <CopyButton class="btn btn-sm" :text="pretty(parts.header)" label="复制" />
           </div>
           <pre class="output">{{ pretty(parts.header) }}</pre>
         </div>
         <div>
           <div class="snippet-head">
             <label class="field-label">Payload</label>
-            <button class="btn btn-sm" @click="copy('p', pretty(parts.payload))">
-              {{ copiedKey === 'p' ? '✓ 已复制' : '复制' }}
-            </button>
+            <CopyButton class="btn btn-sm" :text="pretty(parts.payload)" label="复制" />
           </div>
           <pre class="output">{{ pretty(parts.payload) }}</pre>
         </div>
@@ -205,9 +202,7 @@ function pretty(obj) {
         <template v-if="signed">
           <label class="field-label mt-12" for="jwt-signed">生成的 Token</label>
           <textarea id="jwt-signed" class="textarea" style="min-height: 90px; font-size: 12.5px" readonly :value="signed"></textarea>
-          <button class="btn btn-sm btn-primary mt-8" @click="copy('signed', signed)">
-            {{ copiedKey === 'signed' ? '✓ 已复制' : '复制 Token' }}
-          </button>
+          <CopyButton class="btn btn-sm btn-primary mt-8" :text="signed" label="复制 Token" />
         </template>
       </div>
 

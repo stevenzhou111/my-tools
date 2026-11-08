@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onUnmounted, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState } from '@/utils/urlState'
 
 const { copiedKey, copy } = useCopy()
@@ -95,16 +96,12 @@ const parsedDisplay = computed(() => {
         <div class="result-row">
           <span class="result-label">秒级时间戳</span>
           <code class="result-value">{{ reverse.seconds }}</code>
-          <button class="btn btn-sm" @click="copy('r-sec', String(reverse.seconds))">
-            {{ copiedKey === 'r-sec' ? '✓' : '复制' }}
-          </button>
+          <CopyButton class="btn btn-sm" :text="String(reverse.seconds)" label="复制" copied-label="✓" />
         </div>
         <div class="result-row">
           <span class="result-label">毫秒级时间戳</span>
           <code class="result-value">{{ reverse.ms }}</code>
-          <button class="btn btn-sm" @click="copy('r-ms', String(reverse.ms))">
-            {{ copiedKey === 'r-ms' ? '✓' : '复制' }}
-          </button>
+          <CopyButton class="btn btn-sm" :text="String(reverse.ms)" label="复制" copied-label="✓" />
         </div>
       </template>
     </div>

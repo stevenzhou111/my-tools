@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { addDays, addWorkdays, diffDays, formatDate, parseDate, weekdayName, workdaysBetween } from '@/utils/dateCalc'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const { copiedKey, copy } = useCopy()
 
@@ -120,9 +121,7 @@ function setToday(which) {
         <label class="field-label">结果</label>
         <div class="row gap-8">
           <pre class="output" style="flex: 1">{{ shifted.date }} {{ shifted.name }}</pre>
-          <button class="btn btn-sm" @click="copy('date', shifted.date)">
-            {{ copiedKey === 'date' ? '✓ 已复制' : '复制' }}
-          </button>
+          <CopyButton class="btn btn-sm" :text="shifted.date" label="复制" />
         </div>
       </template>
     </section>

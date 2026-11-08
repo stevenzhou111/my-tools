@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { ref, watch } from 'vue'
 import { toChineseAmount } from '@/utils/chineseAmount'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState, shortString } from '@/utils/urlState'
 
 const input = ref('1234.56')
@@ -39,9 +40,7 @@ const SAMPLES = ['1234.56', '100000000001', '0.05', '10', '1005']
     <label class="field-label">中文大写</label>
     <pre class="output" style="font-size: 19px; letter-spacing: 1px">{{ result.text }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('rmb', result.text)">
-        {{ copiedKey === 'rmb' ? '✓ 已复制' : '复制大写金额' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="result.text" label="复制大写金额" />
     </div>
   </template>
 

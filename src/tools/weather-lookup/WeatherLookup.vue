@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { geocode, fetchWeather, wmoInfo } from '@/utils/weather'
 import { useUrlState, shortString } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const query = ref('')
 const searching = ref(false)
@@ -102,10 +103,9 @@ const dayLabel = (d) => {
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网(Open-Meteo 开放数据,免费无密钥);查询记录仅缓存在本机浏览器。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网(Open-Meteo 开放数据,免费无密钥);查询记录仅缓存在本机浏览器。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="search-row">
@@ -183,15 +183,6 @@ const dayLabel = (d) => {
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .search-row {
   display: flex;
   gap: 10px;

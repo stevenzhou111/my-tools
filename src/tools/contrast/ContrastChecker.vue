@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { contrastRatio, hex, parseHex, wcagLevels } from '@/utils/contrast'
 import { useUrlState } from '@/utils/urlState'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 // 状态同步到地址栏,可分享指定配色方案
 const fg = ref('#1c2130')
@@ -107,9 +108,7 @@ const RESULTS = computed(() => {
           <p style="font-size: 22px; font-weight: 700; margin: 4px 0">大文字 22px Bold 适用于 ≥18pt 标准。</p>
         </div>
         <div class="row mt-12">
-          <button class="btn btn-sm" @click="copy('cc', `${fg} on ${bg} = ${ratioText}:1`)">
-            {{ copiedKey === 'cc' ? '✓ 已复制' : '复制结果' }}
-          </button>
+          <CopyButton class="btn btn-sm" :text="`${fg} on ${bg} = ${ratioText}:1`" />
         </div>
       </template>
     </section>

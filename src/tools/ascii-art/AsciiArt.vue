@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const img = ref(null)
@@ -120,7 +121,7 @@ function download() {
 
     <pre class="output ascii-pre">{{ output }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm" @click="copy('ascii', output)">{{ copiedKey === 'ascii' ? '✓ 已复制' : '复制字符画' }}</button>
+      <CopyButton class="btn btn-sm" :text="output" label="复制字符画" />
       <button class="btn btn-sm" @click="download">⬇️ 下载 .txt</button>
       <span class="tip">{{ output.split('\n')[0]?.length }}×{{ output.split('\n').length - 1 }} 字符</span>
     </div>

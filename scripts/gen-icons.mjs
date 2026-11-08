@@ -4,7 +4,6 @@
 // 新增工具无需再手工同步清单;校验不通过(引用了不存在的图标)时先报错退出,不写盘。
 import fs from 'node:fs'
 import path from 'node:path'
-import { execSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
 
 const ICON_DIR = path.resolve('node_modules/lucide-vue-next/dist/esm/icons')
@@ -18,11 +17,19 @@ for (const p of ['src/tools/registry.js', 'src/data/software.js']) {
 }
 
 // 2) 组件:AppIcon 的 name / :name,以及脚本里的 icon:/xxxIcon: 字段
-// 注意 git pathspec 的 src/**/*.vue 不匹配顶层 src/App.vue,要加 src/*.vue
-const vueFiles = execSync('git ls-files "src/*.vue" "src/**/*.vue"', { encoding: 'utf8' })
-  .split('\n')
-  .filter(Boolean)
-  .map((f) => f.replaceAll('\\', '/'))
+// 递归扫描 src(此前用 git ls-files:新工具未 git add 时图标收不进清单,
+// 本地测不到、CI 才挂 —— 改为文件系统扫描消除这个隐性坑)
+const vueFiles = []
+{
+  const walk = (dir) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true }).sort((a, b) => (a.name < b.name ? -1 : 1))) {
+      const p = path.join(dir, e.name)
+      if (e.isDirectory()) walk(p)
+      else if (e.name.endsWith('.vue')) vueFiles.push(p.replaceAll('\\', '/'))
+    }
+  }
+  walk('src')
+}
 
 for (const file of vueFiles) {
   const s = fs.readFileSync(file, 'utf8')

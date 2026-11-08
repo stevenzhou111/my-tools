@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { tzOffsetMin, wallTimeToInstant, zoneRows, ZONES } from '@/utils/tzConvert'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 // datetime-local 默认取当前整点
 function nowLocal() {
@@ -70,9 +71,7 @@ function shareText() {
     </div>
     <div class="row mt-12">
       <button class="btn btn-sm" @click="localTime = nowLocal()">回到现在</button>
-      <button class="btn btn-sm" @click="copy('tz', shareText())">
-        {{ copiedKey === 'tz' ? '✓ 已复制' : '复制对照表' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="shareText()" label="复制对照表" />
     </div>
   </template>
 </template>

@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const text = ref('这是一段需要保密的内容,只有知道密码的人才能解密。')
 const password = ref('')
@@ -115,9 +116,7 @@ function swap() {
   </div>
 
   <div class="row">
-    <button v-if="output" class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制输出' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" label="复制输出" v-if="output" />
     <button v-if="output" class="btn btn-sm" @click="swap">⇄ 将输出放回输入并切换模式</button>
   </div>
 

@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const TABLE = {
   A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....',
@@ -69,9 +70,7 @@ const unknown = computed(() => {
   <label class="field-label">输出结果</label>
   <pre class="output">{{ output }}</pre>
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" />
     <span v-if="unknown && output" class="tip">⚠️ 包含无法转换的字符(以 {{ mode === 'encode' ? '#' : '?' }} 标出)</span>
   </div>
 </template>

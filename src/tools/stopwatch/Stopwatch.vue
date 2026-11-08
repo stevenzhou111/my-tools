@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 // 两个模式共用「基于真实时间戳」的计时,后台标签页被节流也不会越走越慢
 const tab = ref('stopwatch')
@@ -233,9 +234,7 @@ onUnmounted(() => {
         <span class="field-label m-0">计次({{ laps.length }})</span>
         <span class="row" style="gap: 10px">
           <span class="tip"><AppIcon name="circle-dot" :size="15" /> 最快 · <AppIcon name="circle" :size="15" /> 最慢</span>
-          <button class="btn btn-sm" @click="copy('laps', lapsCsv)">
-            {{ copiedKey === 'laps' ? '✓ 已复制' : '复制 CSV' }}
-          </button>
+          <CopyButton class="btn btn-sm" :text="lapsCsv" label="复制 CSV" />
         </span>
       </div>
       <div class="lap-list mt-8">

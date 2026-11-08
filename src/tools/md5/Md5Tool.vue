@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import SparkMD5 from 'spark-md5'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('你好,工具箱!')
 const upper = ref(false)
@@ -39,9 +40,7 @@ const output = computed(() => (short16.value ? full.value.slice(8, 24) : full.va
   <label class="field-label">MD5 摘要</label>
   <pre class="output">{{ output }}</pre>
   <div class="row mt-10">
-    <button class="btn btn-sm" @click="copy('out', output)">
-      {{ copiedKey === 'out' ? '✓ 已复制' : '复制结果' }}
-    </button>
+    <CopyButton class="btn btn-sm" :text="output" />
   </div>
 
   <p class="tip mt-12">

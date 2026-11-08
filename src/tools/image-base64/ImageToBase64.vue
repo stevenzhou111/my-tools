@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { formatSize } from '@/utils/format'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const fileInput = ref(null)
 const dataUrl = ref('')
@@ -101,9 +102,7 @@ function process(file) {
     <div class="field mt-14">
       <div class="snippet-head">
         <label class="field-label">Data URL</label>
-        <button class="btn btn-sm" @click="copy('raw', dataUrl)">
-          {{ copiedKey === 'raw' ? '✓ 已复制' : '复制' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="dataUrl" label="复制" />
       </div>
       <pre class="output snippet">{{ dataUrl }}</pre>
     </div>
@@ -111,9 +110,7 @@ function process(file) {
     <div class="field">
       <div class="snippet-head">
         <label class="field-label">&lt;img&gt; 标签</label>
-        <button class="btn btn-sm" @click="copy('img', imgSnippet)">
-          {{ copiedKey === 'img' ? '✓ 已复制' : '复制' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="imgSnippet" label="复制" />
       </div>
       <pre class="output snippet">{{ imgSnippet }}</pre>
     </div>
@@ -121,9 +118,7 @@ function process(file) {
     <div class="field">
       <div class="snippet-head">
         <label class="field-label">CSS background</label>
-        <button class="btn btn-sm" @click="copy('css', cssSnippet)">
-          {{ copiedKey === 'css' ? '✓ 已复制' : '复制' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="cssSnippet" label="复制" />
       </div>
       <pre class="output snippet">{{ cssSnippet }}</pre>
     </div>

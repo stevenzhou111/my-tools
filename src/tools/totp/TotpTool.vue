@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { randomSecret, secondsRemaining, totp } from '@/utils/totp'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const secret = ref('GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ')
 const digits = ref(6)
@@ -99,9 +100,7 @@ function formatted(code) {
           <div class="bar" :style="{ width: progress * 100 + '%' }" :class="{ warn: remaining <= 5 }"></div>
         </div>
         <p class="tip">{{ remaining }} 秒后刷新 · 密钥仅在本页内存中计算,不会被存储或上传</p>
-        <button class="btn btn-primary" @click="copy('totp', code)">
-          {{ copiedKey === 'totp' ? '✓ 已复制' : '复制验证码' }}
-        </button>
+        <CopyButton class="btn btn-primary" :text="code" label="复制验证码" />
       </div>
     </template>
   </div>

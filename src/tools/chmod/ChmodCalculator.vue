@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const bits = reactive({
   owner: { r: true, w: true, x: true },
@@ -101,14 +102,14 @@ const command = computed(() => `chmod ${symbolic.value} file`)
     <div class="panel">
       <div class="result-head">
         <span class="field-label m-0">八进制</span>
-        <button class="btn btn-sm" @click="copy('oct', octal)">{{ copiedKey === 'oct' ? '✓' : '复制' }}</button>
+        <CopyButton class="btn btn-sm" :text="octal" label="复制" copied-label="✓" />
       </div>
       <code class="big-val">{{ octal }}</code>
     </div>
     <div class="panel">
       <div class="result-head">
         <span class="field-label m-0">符号式</span>
-        <button class="btn btn-sm" @click="copy('sym', symbolic)">{{ copiedKey === 'sym' ? '✓' : '复制' }}</button>
+        <CopyButton class="btn btn-sm" :text="symbolic" label="复制" copied-label="✓" />
       </div>
       <code class="big-val">{{ symbolic }}</code>
     </div>
@@ -117,7 +118,7 @@ const command = computed(() => `chmod ${symbolic.value} file`)
   <div class="panel mt-12">
     <div class="result-head">
       <span class="field-label m-0">Shell 命令</span>
-      <button class="btn btn-sm" @click="copy('cmd', command)">{{ copiedKey === 'cmd' ? '✓ 已复制' : '复制' }}</button>
+      <CopyButton class="btn btn-sm" :text="command" label="复制" />
     </div>
     <code class="cmd">{{ command }}</code>
   </div>

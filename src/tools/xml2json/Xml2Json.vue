@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref, watch } from 'vue'
 import { jsonToXml, xmlToJson } from '@/utils/xmlJson'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { downloadBlob } from '@/utils/image'
 
 const direction = ref('x2j')
@@ -129,9 +130,7 @@ const placeholder = computed(() =>
       <label class="field-label" for="xml-out">{{ direction === 'x2j' ? 'JSON 输出' : 'XML 输出' }}</label>
       <textarea id="xml-out" class="textarea" style="min-height: 220px" readonly :value="output"></textarea>
       <div class="row mt-10">
-        <button class="btn btn-sm btn-primary" @click="copy('xml2json', output)">
-          {{ copiedKey === 'xml2json' ? '✓ 已复制' : '复制结果' }}
-        </button>
+        <CopyButton class="btn btn-sm btn-primary" :text="output" />
         <button class="btn btn-sm" @click="download">⬇️ 下载文件</button>
         <button class="btn btn-sm" @click="switchDirection(direction === 'x2j' ? 'j2x' : 'x2j')">⇄ 反向转换</button>
       </div>

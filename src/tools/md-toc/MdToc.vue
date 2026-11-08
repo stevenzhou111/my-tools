@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, ref } from 'vue'
 import { buildToc } from '@/utils/toc'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 import { useUrlState } from '@/utils/urlState'
 
 const md = ref(`# 我的项目
@@ -74,9 +75,7 @@ const LEVELS = [1, 2, 3, 4, 5, 6]
       <label class="check" style="align-self: flex-end"><input v-model="ordered" type="checkbox" />有序列表</label>
     </div>
     <div class="row mt-12">
-      <button class="btn btn-sm btn-primary" :disabled="!toc" @click="copy('toc', toc)">
-        {{ copiedKey === 'toc' ? '✓ 已复制' : '复制目录' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="toc" label="复制目录" :disabled="!toc" />
       <span v-if="minLevel > maxLevel" class="tip" style="color: var(--danger)">最小层级大于最大层级,已按空区间处理</span>
     </div>
   </div>

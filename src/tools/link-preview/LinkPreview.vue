@@ -4,6 +4,7 @@ import { callFunction } from '@/utils/functions'
 import { useCopy } from '@/utils/useCopy'
 import { useUrlState, shortString } from '@/utils/urlState'
 import AppIcon from '@/components/AppIcon.vue'
+import OnlineBanner from '@/components/OnlineBanner.vue'
 
 const url = ref('')
 const loading = ref(false)
@@ -47,10 +48,9 @@ const devHint = computed(() => error.value.includes('wrangler'))
 </script>
 
 <template>
-  <div class="online-banner panel mb-16">
-    <AppIcon name="wifi" :size="15" />
-    <span>本工具需要联网,经本站 Functions 代理抓取目标页(不带你的 Cookie,不注入脚本)。</span>
-  </div>
+  <OnlineBanner class="mb-16">
+    本工具需要联网,经本站 Functions 代理抓取目标页(不带你的 Cookie,不注入脚本)。
+  </OnlineBanner>
 
   <div class="panel mb-16">
     <div class="search-row">
@@ -90,15 +90,6 @@ const devHint = computed(() => error.value.includes('wrangler'))
 </template>
 
 <style scoped>
-.online-banner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--muted);
-  padding: 10px 16px;
-  border-color: color-mix(in srgb, var(--warning) 35%, var(--border));
-}
 .search-row {
   display: flex;
   gap: 14px;

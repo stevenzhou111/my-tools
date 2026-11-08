@@ -2,6 +2,7 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { ref } from 'vue'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const ALGOS = [
   { id: 'SHA-1', label: 'HMAC-SHA1' },
@@ -99,12 +100,12 @@ const matchState = () =>
     <div class="field" style="margin-top: 14px">
       <label class="field-label">签名(HEX)</label>
       <pre class="output">{{ outHex }}</pre>
-      <button class="btn btn-sm mt-8" @click="copy('hex', outHex)">{{ copiedKey === 'hex' ? '✓ 已复制' : '复制 HEX' }}</button>
+      <CopyButton class="btn btn-sm mt-8" :text="outHex" label="复制 HEX" />
     </div>
     <div class="field">
       <label class="field-label">签名(Base64)</label>
       <pre class="output">{{ outB64 }}</pre>
-      <button class="btn btn-sm mt-8" @click="copy('b64', outB64)">{{ copiedKey === 'b64' ? '✓ 已复制' : '复制 Base64' }}</button>
+      <CopyButton class="btn btn-sm mt-8" :text="outB64" label="复制 Base64" />
     </div>
     <div class="field">
       <label class="field-label" for="hmac-expected">与期望值比对(可选,粘贴对方给出的签名)</label>

@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { downloadBlob } from '@/utils/image'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const tab = ref('toExcel')
 const jsonInput = ref(`[
@@ -126,9 +127,7 @@ const canExport = computed(() => {
     <template v-if="jsonResult">
       <pre class="output mt-14">{{ jsonResult }}</pre>
       <div class="row mt-10">
-        <button class="btn btn-sm" @click="copy('json', jsonResult)">
-          {{ copiedKey === 'json' ? '✓ 已复制' : '复制 JSON' }}
-        </button>
+        <CopyButton class="btn btn-sm" :text="jsonResult" label="复制 JSON" />
       </div>
     </template>
   </template>

@@ -3,6 +3,7 @@ import AppIcon from '@/components/AppIcon.vue'
 import { computed, onUnmounted, ref } from 'vue'
 import { groupNames, pickOne, splitNames } from '@/utils/randomPicker'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const text = ref(Array.from({ length: 12 }, (_, i) => `同学${String(i + 1).padStart(2, '0')}`).join('\n'))
 const names = computed(() => splitNames(text.value))
@@ -80,9 +81,7 @@ onUnmounted(() => {
           <span class="tip">{{ g.join('、') }}</span>
         </div>
       </div>
-      <button v-if="groups.length" class="btn btn-sm mt-10" @click="copy('groups', groupsText)">
-        {{ copiedKey === 'groups' ? '✓ 已复制分组结果' : '复制分组结果' }}
-      </button>
+      <CopyButton class="btn btn-sm mt-10" :text="groupsText" label="复制分组结果" copied-label="✓ 已复制分组结果" v-if="groups.length" />
     </div>
   </div>
 </template>

@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { compactXml, formatXml } from '@/utils/xmlFormat'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('<note id="1">\n  <to>张三</to>\n  <message>你好,<b>工具箱</b>!</message>\n</note>')
 const indent = ref(2)
@@ -46,9 +47,7 @@ const SAMPLE = '<catalog><book id="bk101"><author>葛拉汉姆</author><price>44
     <label class="field-label">结果({{ result.text.length }} 字符)</label>
     <pre class="output">{{ result.text }}</pre>
     <div class="row mt-10">
-      <button class="btn btn-sm btn-primary" @click="copy('xml', result.text)">
-        {{ copiedKey === 'xml' ? '✓ 已复制' : '复制结果' }}
-      </button>
+      <CopyButton class="btn btn-sm btn-primary" :text="result.text" />
     </div>
   </template>
 </template>

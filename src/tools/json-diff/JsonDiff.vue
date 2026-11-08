@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { diffJson, renderDiff } from '@/utils/jsonDiff'
 import { useCopy } from '@/utils/useCopy'
+import CopyButton from '@/components/CopyButton.vue'
 
 const textA = ref('{\n  "name": "工具箱",\n  "version": 1,\n  "tags": ["dev", "tools"]\n}')
 const textB = ref('{\n  "name": "工具箱",\n  "version": 2,\n  "tags": ["dev"],\n  "author": "me"\n}')
@@ -58,9 +59,7 @@ const counts = computed(() => {
         <span style="color: var(--warning)">变更 {{ counts.change }}</span>
       </span>
       <span v-if="result.truncated" class="tip">⚠️ 差异过多,仅展示前 {{ result.entries.length }} 条</span>
-      <button v-if="result.total" class="btn btn-sm" @click="copy('jd', renderDiff(result.entries))">
-        {{ copiedKey === 'jd' ? '✓ 已复制' : '复制差异' }}
-      </button>
+      <CopyButton class="btn btn-sm" :text="renderDiff(result.entries)" label="复制差异" v-if="result.total" />
     </div>
     <pre v-if="result.entries.length" class="output diff-pre">{{ renderDiff(result.entries) }}</pre>
   </template>
