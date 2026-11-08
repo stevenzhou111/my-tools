@@ -140,7 +140,8 @@ export function evalSci(raw, { degrees = false } = {}) {
     if (tk.t === 'word') {
       pos++
       const name = tk.v.toLowerCase()
-      if (name in CONSTANTS) return CONSTANTS[name]
+      // 只认自有属性:'constructor'/'toString' 等 Object 原型链成员不该被当成常数
+      if (Object.hasOwn(CONSTANTS, name)) return CONSTANTS[name]
       if (isOp('(')) {
         pos++
         const arg = expr()
