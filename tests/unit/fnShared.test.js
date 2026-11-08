@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
 import { ReadableStream } from 'node:stream/web'
-import { json, isBlockedHost, readTextCapped, fetchGuarded, MAX_REDIRECTS } from '../../functions/api/_shared.js'
+import { json, isBlockedHost, readTextCapped, fetchGuarded, withEdgeCache, MAX_REDIRECTS } from '../../functions/api/_shared.js'
 
 function res(body, init = {}) {
   return new Response(body, init)
@@ -128,5 +128,59 @@ describe('fetchGuarded()', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(redirect))
     const { res: r } = await fetchGuarded(target, undefined, {})
     expect(r).toBe(redirect)
+  })
+})
+
+describe('withEdgeCache()', () => {
+  function stubCaches() {
+    const store = new Map()
+    const cache = {
+      match: vi.fn(async (req) => store.get(req.url) || undefined),
+      put: vi.fn(async (req, res) => { store.set(req.url, res) }),
+    }
+    vi.stubGlobal('caches', { default: cache })
+    return { cache, store }
+  }
+
+  it('命中缓存直接返回,不再执行 produce', async () => {
+    const { cache, store } = stubCaches()
+    const req = new Request('https://x.test/api?a=1')
+    store.set(req.url, json({ cached: true }))
+    let calls = 0
+    const res = await withEdgeCache(req, undefined, async () => { calls++; return json({ fresh: true }) })
+    expect(await res.json()).toEqual({ cached: true })
+    expect(calls).toBe(0)
+    expect(cache.match).toHaveBeenCalledWith(req)
+  })
+
+  it('200 响应写入缓存,经 ctx.waitUntil 异步完成', async () => {
+    const { cache } = stubCaches()
+    const waited = []
+    const ctx = { waitUntil: (p) => waited.push(p) }
+    const req = new Request('https://x.test/api?b=2')
+    const res = await withEdgeCache(req, ctx, async () => json({ ok: 1 }))
+    expect(res.status).toBe(200)
+    await Promise.all(waited)
+    expect(cache.put).toHaveBeenCalledTimes(1)
+    expect((await cache.match(req)).ok).toBe(true) // Response.ok
+  })
+
+  it('非 200 响应不进缓存(错误不能被钉在边缘)', async () => {
+    const { cache } = stubCaches()
+    const req = new Request('https://x.test/api?c=3')
+    await withEdgeCache(req, undefined, async () => json({ error: 'x' }, 502))
+    expect(cache.put).not.toHaveBeenCalled()
+  })
+
+  it('无 caches 环境(本地 Node/单测)静默降级为直连', async () => {
+    vi.stubGlobal('caches', undefined)
+    const res = await withEdgeCache(new Request('https://x.test/api?d=4'), undefined, async () => json({ direct: true }))
+    expect(await res.json()).toEqual({ direct: true })
+  })
+
+  it('cache.match 抛异常时降级为直连', async () => {
+    vi.stubGlobal('caches', { default: { match: vi.fn(async () => { throw new Error('boom') }), put: vi.fn() } })
+    const res = await withEdgeCache(new Request('https://x.test/api?e=5'), undefined, async () => json({ fallback: true }))
+    expect(await res.json()).toEqual({ fallback: true })
   })
 })

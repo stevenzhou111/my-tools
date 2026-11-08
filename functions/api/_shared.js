@@ -103,3 +103,26 @@ export async function fetchGuarded(target, signal, headers = {}) {
   }
   throw Object.assign(new Error(`重定向超过 ${MAX_REDIRECTS} 次`), { code: 'redirect' })
 }
+
+/**
+ * 边缘短缓存(Cloudflare Cache API):同一 URL 的高频刷新不再重复打上游,
+ * 保护免费档额度。命中直接返回;只缓存 200 响应(错误不进边缘缓存),
+ * TTL 取响应自身 cache-control 的 max-age。本地 Node(无 caches)与
+ * Cache API 异常时静默降级为直连。
+ */
+export async function withEdgeCache(request, ctx, produce) {
+  const cache = globalThis.caches?.default
+  if (cache) {
+    try {
+      const hit = await cache.match(request)
+      if (hit) return hit
+    } catch { /* Cache API 不可用时直连 */ }
+  }
+  const res = await produce()
+  if (cache && res.status === 200) {
+    const put = Promise.resolve(cache.put(request, res.clone())).catch(() => {})
+    if (ctx && typeof ctx.waitUntil === 'function') ctx.waitUntil(put)
+    else await put
+  }
+  return res
+}

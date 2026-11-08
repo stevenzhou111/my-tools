@@ -5,7 +5,7 @@
  * SSRF/重定向/截断等安全关键逻辑在 ./_shared.js,本文件只保留解析。
  */
 
-import { json as sharedJson, isBlockedHost, readTextCapped, fetchGuarded } from './_shared.js'
+import { json as sharedJson, isBlockedHost, readTextCapped, fetchGuarded, withEdgeCache } from './_shared.js'
 
 // 本端点所有响应(含错误)沿用既有 cache-control: max-age=600
 const json = (data, status = 200) => sharedJson(data, status, 600)
@@ -70,7 +70,8 @@ export function parseFeed(xml) {
   return { title: feedTitle, link: feedLink, items }
 }
 
-export async function onRequestGet({ request }) {
+export async function onRequestGet({ request, ctx }) {
+  return withEdgeCache(request, ctx, async () => {
   const { searchParams } = new URL(request.url)
   const url = (searchParams.get('url') || '').trim()
   let target
@@ -99,4 +100,5 @@ export async function onRequestGet({ request }) {
   } finally {
     clearTimeout(timer)
   }
+  })
 }

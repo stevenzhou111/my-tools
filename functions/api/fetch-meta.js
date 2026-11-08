@@ -4,7 +4,7 @@
  * SSRF/重定向/截断等安全关键逻辑在 ./_shared.js,本文件只保留解析。
  */
 
-import { json, isBlockedHost, readTextCapped, fetchGuarded } from './_shared.js'
+import { json, isBlockedHost, readTextCapped, fetchGuarded, withEdgeCache } from './_shared.js'
 
 // 测试与入口校验都引用这一个实现
 export { isBlockedHost }
@@ -31,43 +31,45 @@ function pickMeta(html, re) {
   return m ? decodeEntities(m[1]) : ''
 }
 
-export async function onRequestGet({ request }) {
-  const { searchParams } = new URL(request.url)
-  const url = (searchParams.get('url') || '').trim()
-  let target
-  try {
-    target = new URL(url)
-  } catch {
-    return json({ error: 'URL 不合法' }, 400)
-  }
-  if (!/^https?:$/.test(target.protocol)) return json({ error: '仅支持 http/https 地址' }, 400)
-  if (isBlockedHost(target.hostname)) return json({ error: '不允许访问内网/本地地址' }, 403)
-
-  const ctrl = new AbortController()
-  const timer = setTimeout(() => ctrl.abort(), 9000)
-  try {
-    const { res, finalUrl } = await fetchGuarded(target, ctrl.signal, { 'user-agent': UA, accept: ACCEPT })
-    const ctype = res.headers.get('content-type') || ''
-    if (!/text\/html/i.test(ctype)) {
-      return json({ error: `该地址不是网页(${ctype.split(';')[0] || '未知类型'})`, finalUrl: finalUrl.href }, 415)
+export async function onRequestGet({ request, ctx }) {
+  return withEdgeCache(request, ctx, async () => {
+    const { searchParams } = new URL(request.url)
+    const url = (searchParams.get('url') || '').trim()
+    let target
+    try {
+      target = new URL(url)
+    } catch {
+      return json({ error: 'URL 不合法' }, 400)
     }
-    const html = await readTextCapped(res, MAX_BYTES)
-    const title = pickMeta(html, /<title[^>]*>([\s\S]*?)<\/title>/i)
-    const description =
-      pickMeta(html, /<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i) ||
-      pickMeta(html, /<meta[^>]+property=["']og:description["'][^>]*content=["']([^"']*)["']/i)
-    return json({
-      url: finalUrl.href,
-      title: pickMeta(html, /<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']*)["']/i) || title,
-      description,
-      ogTitle: pickMeta(html, /<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']*)["']/i),
-      ogImage: pickMeta(html, /<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']*)["']/i),
-      h1: pickMeta(html, /<h1[^>]*>([\s\S]*?)<\/h1>/i),
-    })
-  } catch (e) {
-    if (e.code === 'blocked') return json({ error: e.message }, 403)
-    return json({ error: `抓取失败:${e.name === 'AbortError' ? '超时(9 秒)' : e.message}` }, 502)
-  } finally {
-    clearTimeout(timer)
-  }
+    if (!/^https?:$/.test(target.protocol)) return json({ error: '仅支持 http/https 地址' }, 400)
+    if (isBlockedHost(target.hostname)) return json({ error: '不允许访问内网/本地地址' }, 403)
+
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 9000)
+    try {
+      const { res, finalUrl } = await fetchGuarded(target, ctrl.signal, { 'user-agent': UA, accept: ACCEPT })
+      const ctype = res.headers.get('content-type') || ''
+      if (!/text\/html/i.test(ctype)) {
+        return json({ error: `该地址不是网页(${ctype.split(';')[0] || '未知类型'})`, finalUrl: finalUrl.href }, 415)
+      }
+      const html = await readTextCapped(res, MAX_BYTES)
+      const title = pickMeta(html, /<title[^>]*>([\s\S]*?)<\/title>/i)
+      const description =
+        pickMeta(html, /<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i) ||
+        pickMeta(html, /<meta[^>]+property=["']og:description["'][^>]*content=["']([^"']*)["']/i)
+      return json({
+        url: finalUrl.href,
+        title: pickMeta(html, /<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']*)["']/i) || title,
+        description,
+        ogTitle: pickMeta(html, /<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']*)["']/i),
+        ogImage: pickMeta(html, /<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']*)["']/i),
+        h1: pickMeta(html, /<h1[^>]*>([\s\S]*?)<\/h1>/i),
+      })
+    } catch (e) {
+      if (e.code === 'blocked') return json({ error: e.message }, 403)
+      return json({ error: `抓取失败:${e.name === 'AbortError' ? '超时(9 秒)' : e.message}` }, 502)
+    } finally {
+      clearTimeout(timer)
+    }
+  })
 }
