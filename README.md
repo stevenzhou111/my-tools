@@ -80,7 +80,7 @@ npm run gen:icons    # 重新生成 SVG 图标数据(改图标映射后执行)
 npm run deploy       # vite build && wrangler pages deploy dist
 ```
 
-环境要求:Node.js ≥ 18。端到端测试首次运行会下载 Playwright Chromium;若网络受限可设置镜像 `PLAYWRIGHT_DOWNLOAD_HOST=https://cdn.npmmirror.com/binaries/playwright`。
+环境要求:Node.js ≥ 20。端到端测试首次运行会下载 Playwright Chromium;若网络受限可设置镜像 `PLAYWRIGHT_DOWNLOAD_HOST=https://cdn.npmmirror.com/binaries/playwright`。
 
 ## 📁 项目结构
 
