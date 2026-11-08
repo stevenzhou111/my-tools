@@ -674,6 +674,13 @@ export const TOOLS = [
     component: lazy(() => import('./image-diff/ImageDiff.vue')),
   },
   {
+    id: 'ocr', name: '图片文字识别', category: 'image', icon: 'scan-text', online: true, fresh: true,
+    desc: 'OCR 提取图中文字,9 种语言,本机识别不上传',
+    keywords: 'ocr 文字识别 提取文字 图片转文本 tesseract 截图识字 扫描件',
+    about: '用 Tesseract.js 在浏览器本机完成文字识别(WASM 推理,图片不上传),支持简中/繁中/英/日/韩/俄/法/德/西 9 种语言,可多选组合识别混排文字。首次使用需联网下载所选语言的模型(每个约 2~20 MB),之后浏览器缓存、离线可用。识别率小贴士:清晰、文字水平、对比度高;超大图会先等比缩到 2000px 以内。结果可复制或下载 .txt。',
+    component: lazy(() => import('./ocr/OcrTool.vue')),
+  },
+  {
     id: 'ascii-art', name: '图片转字符画', category: 'image', icon: 'type',
     desc: '按亮度把图片映射为 ASCII 字符画,可复制下载',
     keywords: '字符画 ascii art 图片 转换 文字画 弹幕 readme',
