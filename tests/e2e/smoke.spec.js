@@ -308,6 +308,19 @@ test.describe('全局交互', () => {
     await expect(page.locator('.check input[value="g"]')).toBeChecked()
   })
 
+  test('工具页输出 JSON-LD 结构化数据,离开后移除', async ({ page }) => {
+    await page.goto('/tool/regex')
+    const ld = page.locator('script#ld-json')
+    await expect(ld).toHaveCount(1)
+    const data = JSON.parse(await ld.textContent())
+    expect(data['@type']).toBe('WebApplication')
+    expect(data.name).toContain('正则测试')
+    expect(data.url).toContain('/tool/regex')
+
+    await page.goto('/')
+    await expect(page.locator('script#ld-json')).toHaveCount(0)
+  })
+
   test('Ctrl+K 打开命令面板并可跳转到工具', async ({ page }) => {
     await page.goto('/')
     await page.keyboard.press('Control+k')

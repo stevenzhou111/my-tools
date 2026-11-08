@@ -1,6 +1,9 @@
-# 全局安全头。注意:不加 Permissions-Policy —— 录音/录屏/摄像头测试工具
-# 依赖 camera/microphone/display-capture,默认不设即允许自身使用。
-# CSP 需要专门一轮验证(画布导出 data:/blob:、WASM、worker 场景多),暂缓。
+# 全局安全头。
+# 注意:Content-Security-Policy 的唯一来源是 index.html 的 meta 标签(meta 在任何托管
+# 环境下都生效,包括非 Cloudflare 部署与本地 preview)——不要在这里重复声明 CSP,
+# header 与 meta 两份策略会取交集,只改其一必然漏配。
+# 也不设 Permissions-Policy:录音/录屏/摄像头测试工具依赖 camera/microphone/
+# display-capture,默认不设即允许自身使用。
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

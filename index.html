@@ -7,9 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="一个基于 Vue 3 的在线工具箱:JSON、Base64、二维码、PDF、图片处理、文档转换等常用工具与软件推荐,全部在浏览器本地运行,数据不上传,可离线使用。" />
     <meta name="keywords" content="在线工具,工具箱,JSON 格式化,二维码,PDF,图片压缩,正则测试,时间戳,前端工具" />
-    <!-- 纵深防御:站点无任何外部依赖与网络请求,收紧 CSP 把潜在注入的影响封顶。
-         style 需 unsafe-inline(Vue 的 :style 绑定与 Vite 开发态注入样式) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' blob: ws: wss: https://api.frankfurter.dev https://api.open-meteo.com https://geocoding-api.open-meteo.com https://dns.alidns.com https://dns.google https://ipwho.is https://api.ip.sb https://api.github.com https://api.mymemory.translated.net; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <!-- 纵深防御:收紧 CSP 把潜在注入的影响封顶。CSP 唯一来源在本文件(meta 在任何托管环境下都生效),
+         public/_headers 不再重复声明,避免两份策略取交集导致改动漏配。
+         style 需 unsafe-inline(Vue 的 :style 绑定与 Vite 开发态注入样式);
+         script-src 的 wasm-unsafe-eval 与 connect-src 的 cdn.jsdelivr.net 供 OCR(tesseract.js)使用:
+         worker/core/语言模型均从 jsdelivr 拉取,wasm 在 blob worker 内编译 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' blob: ws: wss: https://api.frankfurter.dev https://api.open-meteo.com https://geocoding-api.open-meteo.com https://dns.alidns.com https://dns.google https://ipwho.is https://api.ip.sb https://api.github.com https://api.mymemory.translated.net https://cdn.jsdelivr.net; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'" />
     <!-- 主题色跟随明暗模式,影响浏览器地址栏配色 -->
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f5fb" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f1117" />
