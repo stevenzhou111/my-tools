@@ -2,101 +2,20 @@
  * /api/rss?url= — 抓取 RSS 2.0 / Atom 源并转为 JSON。
  * 纯正则解析(Functions 环境无 DOMParser),覆盖 title/link/日期/摘要四个核心字段;
  * 最多返回 50 条,响应体上限 800KB。
+ * SSRF/重定向/截断等安全关键逻辑在 ./_shared.js,本文件只保留解析。
  */
+
+import { json as sharedJson, isBlockedHost, readTextCapped, fetchGuarded } from './_shared.js'
+
+// 本端点所有响应(含错误)沿用既有 cache-control: max-age=600
+const json = (data, status = 200) => sharedJson(data, status, 600)
+
+export { isBlockedHost }
 
 const MAX_BYTES = 800_000
 const MAX_ITEMS = 50
-const MAX_REDIRECTS = 3
 const UA = 'Mozilla/5.0 (compatible; ToolboxBot/1.0; +rss reader)'
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=600' },
-  })
-}
-
-export function isBlockedHost(hostname) {
-  const h = String(hostname || '').toLowerCase()
-  if (!h) return true
-  if (h === 'localhost' || h.endsWith('.local') || h.endsWith('.internal')) return true
-  if (/^(127\.|10\.|192\.168\.|169\.254\.|0\.)/.test(h)) return true
-  if (/^172\.(1[6-9]|2\d|3[01])\./.test(h)) return true
-  if (h.startsWith('[')) return true
-  return false
-}
-
-/** 只读取前 maxBytes 字节,避免整源下载进内存 */
-async function readTextCapped(res, maxBytes) {
-  if (!res.body || typeof res.body.getReader !== 'function') {
-    return (await res.text()).slice(0, maxBytes)
-  }
-  const reader = res.body.getReader()
-  const chunks = []
-  let size = 0
-  try {
-    while (size < maxBytes) {
-      const { done, value } = await reader.read()
-      if (done) break
-      const remain = maxBytes - size
-      if (value.byteLength > remain) {
-        chunks.push(value.subarray(0, remain))
-        size = maxBytes
-        break
-      }
-      chunks.push(value)
-      size += value.byteLength
-    }
-  } finally {
-    if (size >= maxBytes) {
-      try { await reader.cancel() } catch { /* ignore */ }
-    }
-  }
-  const merged = new Uint8Array(size)
-  let offset = 0
-  for (const chunk of chunks) {
-    merged.set(chunk, offset)
-    offset += chunk.byteLength
-  }
-  return new TextDecoder().decode(merged)
-}
-
-/**
- * 手动跟随重定向并逐跳校验 host,防止公网地址经 302 跳转绕过 SSRF 入口检查。
- */
-async function fetchGuarded(target, signal) {
-  let current = target
-  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-    const res = await fetch(current.href, {
-      signal,
-      redirect: 'manual',
-      headers: { 'user-agent': UA, accept: 'application/rss+xml,application/atom+xml,application/xml,text/xml' },
-    })
-    if (res.status >= 300 && res.status < 400) {
-      const location = res.headers.get('location')
-      if (!location) return { res, finalUrl: current }
-      if (hop === MAX_REDIRECTS) {
-        throw Object.assign(new Error(`重定向超过 ${MAX_REDIRECTS} 次`), { code: 'redirect' })
-      }
-      let next
-      try {
-        next = new URL(location, current.href)
-      } catch {
-        throw Object.assign(new Error('重定向地址不合法'), { code: 'redirect' })
-      }
-      if (!/^https?:$/.test(next.protocol)) {
-        throw Object.assign(new Error('重定向到不支持的协议'), { code: 'redirect' })
-      }
-      if (isBlockedHost(next.hostname)) {
-        throw Object.assign(new Error('不允许访问内网/本地地址'), { code: 'blocked' })
-      }
-      current = next
-      continue
-    }
-    return { res, finalUrl: current }
-  }
-  throw Object.assign(new Error(`重定向超过 ${MAX_REDIRECTS} 次`), { code: 'redirect' })
-}
+const ACCEPT = 'application/rss+xml,application/atom+xml,application/xml,text/xml'
 
 function stripCdata(s) {
   return String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -166,7 +85,7 @@ export async function onRequestGet({ request }) {
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), 9000)
   try {
-    const { res } = await fetchGuarded(target, ctrl.signal)
+    const { res } = await fetchGuarded(target, ctrl.signal, { 'user-agent': UA, accept: ACCEPT })
     const text = await readTextCapped(res, MAX_BYTES)
     if (!/<(rss|feed|channel)[\s>]/i.test(text)) {
       return json({ error: '该地址不是 RSS/Atom 源(未找到 rss/feed 标签)' }, 415)
