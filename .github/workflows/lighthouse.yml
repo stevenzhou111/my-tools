@@ -1,0 +1,21 @@
+# Lighthouse 质量门禁:构建产物上跑性能/无障碍/最佳实践/SEO 四类评分,
+# 阈值在 lighthouserc.json(本地用同配置校准:npx @lhci/cli autorun)。
+# 与 ci.yml 分开:这里是趋势护栏,失败不阻塞 Cloudflare 部署(部署以 ci.yml 为准)。
+name: Lighthouse
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  lhci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Run Lighthouse CI
+        run: npx --yes @lhci/cli@0.16 autorun

@@ -14,3 +14,7 @@ blob-report
 playwright/.cache
 coverage
 .wrangler/
+
+# Lighthouse 本地产物
+.lighthouseci
+lighthouserc.local.json
