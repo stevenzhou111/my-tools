@@ -66,4 +66,12 @@ export const TOOLS = [
     about: '选一个 Excel / CSV,把每行数据生成 INSERT INTO 语句用于给测试库灌数据:MySQL(反引号)与 PostgreSQL(双引号)两种方言、多行合并或每行一条、空单元格输出 NULL、字符串自动转义单引号、日期按 YYYY-MM-DD HH:MM:SS;多工作表可切换,结果可复制或下载 .sql。全部在本地解析,不上传文件。',
     component: lazy(() => import('../xlsx-sql/XlsxSql.vue')),
   },
+  {
+    id: 'pdf-ocr', name: '扫描版 PDF 文字识别', category: 'doc', icon: 'file-scan', online: true, fresh: true,
+    desc: '图片型 PDF 逐页本机 OCR,9 种语言',
+    keywords: 'pdf ocr 文字识别 扫描件 提取文字 图片型 tesseract',
+    about: '扫描件/图片型 PDF(没有文字层、复制不了字)专用:本机逐页渲染成位图后交给 Tesseract.js 识别(与「图片文字识别」同一套引擎与模型缓存,9 种语言可多选)。每页文本按「第 N 页」分节,可复制或下载 .txt;上限 50 页,更长的 PDF 建议先拆分。首次联网下载模型后离线可用,文件全程不上传。',
+    component: lazy(() => import('../pdf-ocr/PdfOcr.vue')),
+  },
+
 ]

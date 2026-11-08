@@ -178,4 +178,12 @@ export const TOOLS = [
     urlState: true,
     component: lazy(() => import('../md-table/MdTable.vue')),
   },
+  {
+    id: 'srt', name: '字幕互转', category: 'text', icon: 'captions', fresh: true,
+    desc: 'SRT ↔ VTT 互转,时间轴平移与帧率缩放',
+    keywords: 'srt vtt 字幕 转换 平移 时间轴 帧率 webvtt',
+    about: '粘贴 SRT 或 WebVTT 字幕自动识别格式,一键转成另一种;附时间轴整体平移(秒,可负,负值截断到 0)与缩放系数(帧率修正,如 25fps 字幕用于 23.976fps 视频填 25/23.976)。多行文本、时间码省略小时、VTT 的 cue 设置与标识行均兼容。纯文本本地处理,可复制或下载 .srt/.vtt(带 BOM,记事本打开不乱码)。',
+    component: lazy(() => import('../srt/SrtSubtitle.vue')),
+  },
+
 ]

@@ -240,4 +240,12 @@ export const TOOLS = [
     about: '单遍扫描 tokenizer:字符串与 url()(含 data URI)内部的分号、花括号、空格按原子保留; 等嵌套规则按 2 空格缩进、一条声明一行;压缩移除注释并可查看节省比例。支持一键贴回输入反复处理。',
     component: lazy(() => import('../css-format/CssFormat.vue')),
   },
+  {
+    id: 'font-preview', name: '本地字体预览器', category: 'dev', icon: 'text-cursor-input', fresh: true,
+    desc: '上传 ttf/otf/woff 本机预览,生成 @font-face 片段',
+    keywords: '字体 预览 font-face ttf otf woff woff2 字重 css',
+    about: '上传 .ttf/.otf/.woff/.woff2 经 FontFace API 本机加载:可调字号、字重、斜体的实时预览 + 全字符表一览,并生成可直接粘贴进项目的 @font-face CSS(font-family 名可改)。字体文件全程不上传。',
+    component: lazy(() => import('../font-preview/FontPreview.vue')),
+  },
+
 ]

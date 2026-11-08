@@ -4,24 +4,13 @@ import AppIcon from '@/components/AppIcon.vue'
 import CopyButton from '@/components/CopyButton.vue'
 import OnlineBanner from '@/components/OnlineBanner.vue'
 import { loadImageFromFile, downloadBlob } from '@/utils/image'
+import { OCR_LANGS as LANGS } from '@/utils/ocrLangs'
 
 /**
  * 图片文字识别(OCR):Tesseract.js 纯浏览器内推理(WASM)。
  * 图片全程不上传;仅识别模型(按语言,每个数 MB)首次使用时从 CDN 下载,
  * 之后由 tesseract.js 缓存在 IndexedDB,离线可用 —— 因此本工具带「需联网」徽章。
  */
-
-const LANGS = [
-  { id: 'chi_sim', label: '简体中文' },
-  { id: 'eng', label: '英语' },
-  { id: 'chi_tra', label: '繁体中文' },
-  { id: 'jpn', label: '日语' },
-  { id: 'kor', label: '韩语' },
-  { id: 'rus', label: '俄语' },
-  { id: 'fra', label: '法语' },
-  { id: 'deu', label: '德语' },
-  { id: 'spa', label: '西班牙语' },
-]
 
 const fileInput = ref(null)
 const dragging = ref(false)
