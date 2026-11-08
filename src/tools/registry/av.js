@@ -73,4 +73,18 @@ export const TOOLS = [
     about: '一键开始/暂停/继续的网页录音机:实时显示输入电平与计时,自动选择浏览器支持的容器(Chrome/Edge 为 WebM/Opus,Safari 为 MP4/AAC),结束后在线试听、一键下载。默认关闭浏览器降噪与回声消除,保留原始声音,适合录乐器与素材;录音完全在本地进行,不上传。',
     component: lazy(() => import('../audio-record/AudioRecord.vue')),
   },
+  {
+    id: 'mp3-convert', name: '音频转 MP3', category: 'av', icon: 'audio-lines', fresh: true,
+    desc: 'WAV/M4A/OGG/FLAC 本机转 MP3,码率可选',
+    keywords: 'mp3 音频 转码 转换 wav m4a ogg flac lame 压缩',
+    about: '用浏览器 AudioContext 解码常见音频格式(WAV/MP3/M4A/OGG/FLAC 等),再经 lamejs 本机重编码为 MP3(128~320kbps 可选),转换后在线试听、一键下载。音频在浏览器内解码、浏览器内编码,不上传;无损格式转出来的是有损 MP3,追求音质请保留原文件。',
+    component: lazy(() => import('../mp3-convert/Mp3Convert.vue')),
+  },
+  {
+    id: 'bitrate-calc', name: '码率/体积计算', category: 'av', icon: 'gauge', fresh: true,
+    desc: '按时长与码率估体积,反推码率与下载耗时',
+    keywords: '码率 体积 文件大小 视频带宽 下载时间 计算 剪辑 投稿',
+    about: '视频剪辑与投稿三件套:按时长+视频/音频码率估算成品体积(1080p 常用 8000~12000kbps 参考)、按目标体积反推总码率、按体积与带宽估算下载耗时。口径:kbps 千比特每秒,MB 兆字节,总码率=视频+音频。纯计算,本地完成。',
+    component: lazy(() => import('../bitrate-calc/BitrateCalc.vue')),
+  },
 ]

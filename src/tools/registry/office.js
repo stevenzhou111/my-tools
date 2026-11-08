@@ -74,4 +74,11 @@ export const TOOLS = [
     about: '支持线性/径向、任意角度与三色停靠点,内置六组精选配色;复制生成的 CSS 可直接使用。',
     component: lazy(() => import('../gradient/GradientGenerator.vue')),
   },
+  {
+    id: 'utm-builder', name: 'UTM 链接生成', category: 'office', icon: 'link-2', fresh: true,
+    desc: '渠道归因参数拼接,保留原参数与 hash',
+    keywords: 'utm 归因 链接 渠道 营销 source medium campaign 推广 参数',
+    about: '给推广链接拼接 utm_source/medium/campaign/term/content 五件套,分析后台里分得清流量来自哪个渠道。基于 URL API:原链接的其它查询参数与 #hash 原样保留,重复生成时先清旧 utm_* 防叠加;source/medium 建议必填。纯本地处理。',
+    component: lazy(() => import('../utm-builder/UtmBuilder.vue')),
+  },
 ]

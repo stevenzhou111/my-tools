@@ -247,5 +247,11 @@ export const TOOLS = [
     about: '上传 .ttf/.otf/.woff/.woff2 经 FontFace API 本机加载:可调字号、字重、斜体的实时预览 + 全字符表一览,并生成可直接粘贴进项目的 @font-face CSS(font-family 名可改)。字体文件全程不上传。',
     component: lazy(() => import('../font-preview/FontPreview.vue')),
   },
-
+  {
+    id: 'ws-client', name: 'WebSocket 调试', category: 'dev', icon: 'plug-zap', fresh: true,
+    desc: '连接 ws/wss 地址收发消息,日志可复制',
+    keywords: 'websocket ws wss 调试 客户端 socket 长连接 实时 接口',
+    about: '输入 ws:// 或 wss:// 地址直连(浏览器原生 WebSocket,无代理,跨域由目标服务决定),收发文本帧并按 OPEN/发送/接收/CLOSE/ERROR 带时间戳记日志;二进制帧显示字节数。可试回显服务 wss://echo.websocket.events。',
+    component: lazy(() => import('../ws-client/WsClient.vue')),
+  },
 ]
