@@ -3,6 +3,7 @@ import { TOOLS } from '@/tools/registry'
 
 const FAV_KEY = 'toolbox-favorites'
 const RECENT_KEY = 'toolbox-recents'
+const USAGE_KEY = 'toolbox-usage'
 export const MAX_RECENTS = 8
 
 function load(key) {
@@ -14,9 +15,19 @@ function load(key) {
   }
 }
 
-// 模块级单例:收藏与最近使用全站共享
+function loadObj(key) {
+  try {
+    const v = JSON.parse(localStorage.getItem(key))
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : {}
+  } catch {
+    return {}
+  }
+}
+
+// 模块级单例:收藏、最近使用与使用统计全站共享
 const favorites = ref(load(FAV_KEY))
 const recents = ref(load(RECENT_KEY))
+const usage = ref(loadObj(USAGE_KEY)) // { [toolId]: 打开次数 }
 
 // 清洗已下线工具的残留 id:展示层靠 filter(Boolean) 静默吞掉,storage 里却永久滞留
 const VALID_IDS = new Set(TOOLS.map((t) => t.id))
@@ -29,6 +40,10 @@ watch(favorites, (v) => {
 
 watch(recents, (v) => {
   try { localStorage.setItem(RECENT_KEY, JSON.stringify(v)) } catch { /* 隐私模式忽略 */ }
+}, { deep: true })
+
+watch(usage, (v) => {
+  try { localStorage.setItem(USAGE_KEY, JSON.stringify(v)) } catch { /* 隐私模式忽略 */ }
 }, { deep: true })
 
 // ---------- 工具本机数据(纳入换机迁移体系) ----------
@@ -104,13 +119,32 @@ export function useToolPrefs() {
     favorites.value.splice(toIndex, 0, id)
   }
 
-  /** 导出:收藏、最近使用与已初始化的工具本机数据打包成 JSON 文本(换机迁移用) */
+  /** 使用统计 +1(进入工具页时调用) */
+  function bumpUsage(id) {
+    usage.value = { ...usage.value, [id]: (usage.value[id] || 0) + 1 }
+  }
+
+  /** 最常用工具 TOP n(按次数降序,平局按 id 码点稳定排序) */
+  function topUsed(n = 8) {
+    return Object.entries(usage.value)
+      .filter(([id]) => VALID_IDS.has(id))
+      .map(([id, count]) => ({ id, count }))
+      .sort((a, b) => b.count - a.count || (a.id < b.id ? -1 : 1))
+      .slice(0, n)
+  }
+
+  /** 清空使用统计(收藏/最近使用不受影响) */
+  function clearUsage() {
+    usage.value = {}
+  }
+
+  /** 导出:收藏、最近使用、使用统计与已初始化的工具本机数据打包成 JSON 文本(换机迁移用) */
   function exportPrefs() {
     const states = {}
     for (const k of APP_STATE_KEYS) {
       if (appStateRefs.has(k)) states[k] = appStateRefs.get(k).value
     }
-    return JSON.stringify({ app: 'vue-toolbox', version: 2, favorites: favorites.value, recents: recents.value, states }, null, 2)
+    return JSON.stringify({ app: 'vue-toolbox', version: 3, favorites: favorites.value, recents: recents.value, usage: usage.value, states }, null, 2)
   }
 
   /**
@@ -134,6 +168,15 @@ export function useToolPrefs() {
     recents.value = [...new Set([...recs, ...recents.value])].slice(0, MAX_RECENTS)
 
     let importedStates = 0
+    // 使用统计:逐工具取两边较大值(避免重复导入把次数翻倍)
+    if (data.usage && typeof data.usage === 'object' && !Array.isArray(data.usage)) {
+      const merged = { ...usage.value }
+      for (const [id, count] of Object.entries(data.usage)) {
+        if (!VALID_IDS.has(id) || !Number.isFinite(count) || count <= 0) continue
+        merged[id] = Math.max(merged[id] || 0, Math.round(count))
+      }
+      usage.value = merged
+    }
     if (data.states && typeof data.states === 'object' && !Array.isArray(data.states)) {
       for (const [k, v] of Object.entries(data.states)) {
         if (v === undefined || !APP_STATE_KEYS.includes(k)) continue
@@ -160,5 +203,5 @@ export function useToolPrefs() {
     recents.value = []
   }
 
-  return { favorites, recents, isFav, toggleFav, pushRecent, reorderFav, exportPrefs, importPrefs, clearRecents }
+  return { favorites, recents, usage, isFav, toggleFav, pushRecent, reorderFav, bumpUsage, topUsed, clearUsage, exportPrefs, importPrefs, clearRecents }
 }

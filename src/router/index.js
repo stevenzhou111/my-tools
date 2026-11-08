@@ -4,7 +4,7 @@ import { APP_NAME } from '@/config'
 import { getTool, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
 
-const { pushRecent } = useToolPrefs()
+const { pushRecent, bumpUsage } = useToolPrefs()
 
 const router = createRouter({
   history: createWebHistory(),
@@ -63,8 +63,11 @@ router.afterEach((to, from) => {
     // 工具总数从 registry 派生,避免文案与实际数量漂移
     setMetaDescription(`${tool.desc} — ${tool.name} 等 ${TOOLS.length} 个工具全部在浏览器本地运行,免费免登录,支持离线使用。`)
     setJsonLd(tool)
-    // useUrlState 同步参数会触发 replace 导航:同一工具内的参数变化不重复记"最近使用"
-    if (from.name !== 'tool' || from.params.id !== to.params.id) pushRecent(tool.id)
+    // useUrlState 同步参数会触发 replace 导航:同一工具内的参数变化不重复记"最近使用"/计数
+    if (from.name !== 'tool' || from.params.id !== to.params.id) {
+      pushRecent(tool.id)
+      bumpUsage(tool.id)
+    }
   } else if (to.name === 'home') {
     document.title = `${APP_NAME} - Vue 3 在线工具集`
     setMetaDescription(HOME_DESC)

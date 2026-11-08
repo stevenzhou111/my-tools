@@ -176,6 +176,46 @@ describe('prefs · 清空最近使用', () => {
   })
 })
 
+describe('prefs · 使用统计', () => {
+  it('bumpUsage 累计次数,topUsed 按次数降序(平局码点稳定)', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { bumpUsage, topUsed } = useToolPrefs()
+    bumpUsage('json'); bumpUsage('json'); bumpUsage('base64')
+    expect(topUsed(8).map((u) => u.id)).toEqual(['json', 'base64'])
+    expect(topUsed(8)[0].count).toBe(2)
+  })
+
+  it('已下线工具的统计被过滤', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    useToolPrefs().bumpUsage('__gone__')
+    expect(useToolPrefs().topUsed(8)).toEqual([])
+  })
+
+  it('导出包含 usage(v3);导入取两边较大值,不翻倍', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { bumpUsage, exportPrefs, importPrefs } = useToolPrefs()
+    bumpUsage('json'); bumpUsage('json')
+    const data = JSON.parse(exportPrefs())
+    expect(data.version).toBe(3)
+    expect(data.usage.json).toBe(2)
+    importPrefs(JSON.stringify({ favorites: [], usage: { json: 5, base64: 1, __gone__: 9 } }))
+    const u = useToolPrefs()
+    expect(u.usage.value.json).toBe(5)
+    expect(u.usage.value.base64).toBe(1)
+    expect(u.usage.value.__gone__).toBeUndefined()
+  })
+
+  it('clearUsage 只清统计', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const { bumpUsage, clearUsage, toggleFav, usage, favorites } = useToolPrefs()
+    bumpUsage('json')
+    toggleFav('json')
+    clearUsage()
+    expect(usage.value).toEqual({})
+    expect(favorites.value).toEqual(['json'])
+  })
+})
+
 describe('prefs · 工具本机数据(useAppData)与迁移', () => {
   it('未登记的键直接抛错(防止散乱键名失控)', async () => {
     const { useAppData } = await freshPrefs()
@@ -204,7 +244,7 @@ describe('prefs · 工具本机数据(useAppData)与迁移', () => {
     useAppData('toolbox-countdown-days', []).value = [{ id: 'local' }]
     useAppData('toolbox-typing-best', null).value = { cn: 100, en: 40 }
     const data = JSON.parse(useToolPrefs().exportPrefs())
-    expect(data.version).toBe(2)
+    expect(data.version).toBe(3)
     expect(data.states['toolbox-countdown-days']).toEqual([{ id: 'local' }])
 
     const r = useToolPrefs().importPrefs(JSON.stringify({

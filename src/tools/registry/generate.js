@@ -119,4 +119,11 @@ export const TOOLS = [
     about: '输入一个基色,按色相环推导互补、邻近、三角、分裂互补、四角五类和谐配色;只转色相,保留基色的饱和度与明度,与「色阶生成」「对比度检查」配合使用。点击色块复制十六进制。',
     component: lazy(() => import('../color-scheme/ColorSchemeTool.vue')),
   },
+  {
+    id: 'password-strength', name: '密码强度检测', category: 'generate', icon: 'shield-alert', fresh: true,
+    desc: 'zxcvbn 本地评分,破解时间双口径估算',
+    keywords: '密码 强度 检测 zxcvbn 破解时间 弱口令 安全 口令',
+    about: 'zxcvbn-ts 在浏览器本地推理(词典/键盘模式/日期/重复检测),打分并估算两种口径的破解耗时:快哈希(明文/MD5 泄露被 GPU 撞库)与慢哈希(bcrypt/argon2 正确姿势)。支持把用户名/站点名加入上下文词典,包含这些词会直接降分。输入不上传、无网络请求。',
+    component: lazy(() => import('../password-strength/PasswordStrength.vue')),
+  },
 ]

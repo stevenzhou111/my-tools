@@ -73,5 +73,11 @@ export const TOOLS = [
     about: '扫描件/图片型 PDF(没有文字层、复制不了字)专用:本机逐页渲染成位图后交给 Tesseract.js 识别(与「图片文字识别」同一套引擎与模型缓存,9 种语言可多选)。每页文本按「第 N 页」分节,可复制或下载 .txt;上限 50 页,更长的 PDF 建议先拆分。首次联网下载模型后离线可用,文件全程不上传。',
     component: lazy(() => import('../pdf-ocr/PdfOcr.vue')),
   },
-
+  {
+    id: 'md-to-pptx', name: 'Markdown 转 PPT', category: 'doc', icon: 'presentation', fresh: true,
+    desc: '=== 分页生成 .pptx,列表转圆点',
+    keywords: 'markdown ppt pptx 演示文稿 幻灯片 转换 汇报 大纲',
+    about: '把大纲式 Markdown 变成 16:9 演示文稿:=== 独占一行强制分页,段内首个标题作页题,- 列表转圆点、数字列表保留序号,代码围栏整块转等宽文本;行内 **粗** *斜* 链接自动剥标记。pptxgenjs 本机生成 .pptx 直接下载,内容不上传;图片/表格暂不支持。',
+    component: lazy(() => import('../md-to-pptx/MdToPptx.vue')),
+  },
 ]

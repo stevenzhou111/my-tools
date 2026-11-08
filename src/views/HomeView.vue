@@ -15,7 +15,7 @@ const router = useRouter()
 const route = useRoute()
 const query = ref('')
 const searchEl = ref(null)
-const { recents } = useToolPrefs()
+const { recents, topUsed, clearUsage } = useToolPrefs()
 
 // 工具页的分类徽章会带 ?cat= 回首页:滚到对应分类并短暂高亮
 function revealCat(id) {
@@ -34,6 +34,13 @@ onMounted(() => {
 
 const recentTools = computed(() =>
   recents.value.map((id) => getTool(id)).filter(Boolean),
+)
+
+// 最常用 TOP 8:按本地打开次数排序(不与他人比较,不上传)
+const topUsedTools = computed(() =>
+  topUsed(8)
+    .map((u) => ({ tool: getTool(u.id), count: u.count }))
+    .filter((x) => x.tool),
 )
 
 // registry 里带 fresh 标记的最新一批工具,首页置顶展示;下批新工具上线时把标记挪过去
@@ -242,6 +249,31 @@ function onSearchKeydown(e) {
           <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
+        </router-link>
+      </div>
+    </section>
+
+    <section v-if="topUsedTools.length && !query.trim()" class="cat-section">
+      <h2 class="cat-title">
+        <AppIcon class="cat-icon" name="flame" :size="20" />最常用
+        <span class="count-hint">按本机打开次数</span>
+        <span class="fav-ops">
+          <button class="op-btn" type="button" title="清空使用统计" aria-label="清空使用统计" @click="clearUsage">
+            <AppIcon name="trash-2" :size="14" />
+          </button>
+        </span>
+      </h2>
+      <div class="tool-grid">
+        <router-link
+          v-for="{ tool, count } in topUsedTools"
+          :key="tool.id"
+          :to="`/tool/${tool.id}`"
+          class="tool-card"
+          @mouseenter="prefetch(tool)"
+        >
+          <AppIcon class="tool-icon" :class="`cat-tint-${tool.category}`" :name="tool.icon" :size="22" />
+          <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
+          <span class="tool-desc">{{ tool.desc }}<span class="usage-count">打开 {{ count }} 次</span></span>
         </router-link>
       </div>
     </section>
@@ -527,6 +559,12 @@ function onSearchKeydown(e) {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.usage-count {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--accent);
 }
 .empty {
   text-align: center;
