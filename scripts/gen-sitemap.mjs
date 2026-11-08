@@ -10,10 +10,21 @@ if (!base) {
   process.exit(0)
 }
 
-const source = fs.readFileSync('src/tools/registry.js', 'utf8')
+// registry 已按分类拆分:聚合读取 src/tools/registry/ 下全部 js(条目 id 的声明格式保持一致)
+const REG_DIR = 'src/tools/registry'
+const source = fs
+  .readdirSync(REG_DIR)
+  .filter((f) => f.endsWith('.js'))
+  .sort()
+  .map((f) => fs.readFileSync(path.join(REG_DIR, f), 'utf8'))
+  .join('\n')
 const ids = [...source.matchAll(/^    id: '([\w-]+)'/gm)].map((m) => m[1])
 if (!ids.length) {
-  console.error('没有从 registry.js 解析到任何工具 id,检查匹配规则')
+  console.error('没有从 registry/ 解析到任何工具 id,检查匹配规则')
+  process.exit(1)
+}
+if (new Set(ids).size !== ids.length) {
+  console.error('解析到重复的工具 id,检查 registry/ 条目')
   process.exit(1)
 }
 

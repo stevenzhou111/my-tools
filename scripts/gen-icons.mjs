@@ -11,10 +11,12 @@ const lucideExists = (n) => fs.existsSync(path.join(ICON_DIR, `${n}.js`))
 
 const names = new Set()
 
-// 1) registry 与软件数据的 icon 字段
-for (const p of ['src/tools/registry.js', 'src/data/software.js']) {
-  for (const m of fs.readFileSync(p, 'utf8').matchAll(/\bicon: '([\w-]+)'/g)) names.add(m[1])
+// 1) registry(按分类拆分的目录)与软件数据的 icon 字段
+const REG_DIR = 'src/tools/registry'
+for (const f of fs.readdirSync(REG_DIR).filter((f) => f.endsWith('.js'))) {
+  for (const m of fs.readFileSync(path.join(REG_DIR, f), 'utf8').matchAll(/\bicon: '([\w-]+)'/g)) names.add(m[1])
 }
+for (const m of fs.readFileSync('src/data/software.js', 'utf8').matchAll(/\bicon: '([\w-]+)'/g)) names.add(m[1])
 
 // 2) 组件:AppIcon 的 name / :name,以及脚本里的 icon:/xxxIcon: 字段
 // 递归扫描 src(此前用 git ls-files:新工具未 git add 时图标收不进清单,
