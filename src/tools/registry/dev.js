@@ -254,4 +254,18 @@ export const TOOLS = [
     about: '输入 ws:// 或 wss:// 地址直连(浏览器原生 WebSocket,无代理,跨域由目标服务决定),收发文本帧并按 OPEN/发送/接收/CLOSE/ERROR 带时间戳记日志;二进制帧显示字节数。可试回显服务 wss://echo.websocket.events。',
     component: lazy(() => import('../ws-client/WsClient.vue')),
   },
+  {
+    id: 'json-schema', name: 'JSON Schema 校验', category: 'dev', icon: 'shapes', fresh: true,
+    desc: 'ajv 本地校验数据,错误精确到路径',
+    keywords: 'json schema 校验 ajv draft-07 2020-12 数据 验证 接口 契约',
+    about: '粘贴 JSON Schema 与待校验数据,ajv(懒加载)在本地给出精确到实例路径的错误列表;支持 Draft-07 与 2020-12 两种草案切换。适合接口契约、配置文件、测试数据的三方对齐。数据与 Schema 都只在本机解析。',
+    component: lazy(() => import('../json-schema/JsonSchema.vue')),
+  },
+  {
+    id: 'crc32', name: 'CRC-32 校验', category: 'dev', icon: 'binary', fresh: true,
+    desc: '文本/文件 CRC-32,与 zip/PNG 同款算法',
+    keywords: 'crc32 校验 checksum 完整性 文件 zip png 十六进制',
+    about: '计算文本或文件的 CRC-32(IEEE 802.3,zip/PNG 同款),8 位十六进制展示,用于比对传输前后是否损坏。注意 CRC-32 只做完整性校验,不能防篡改,安全场景请用「文件哈希校验」的 SHA 系列。',
+    component: lazy(() => import('../crc32/Crc32Tool.vue')),
+  },
 ]

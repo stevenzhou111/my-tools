@@ -185,5 +185,11 @@ export const TOOLS = [
     about: '粘贴 SRT 或 WebVTT 字幕自动识别格式,一键转成另一种;附时间轴整体平移(秒,可负,负值截断到 0)与缩放系数(帧率修正,如 25fps 字幕用于 23.976fps 视频填 25/23.976)。多行文本、时间码省略小时、VTT 的 cue 设置与标识行均兼容。纯文本本地处理,可复制或下载 .srt/.vtt(带 BOM,记事本打开不乱码)。',
     component: lazy(() => import('../srt/SrtSubtitle.vue')),
   },
-
+  {
+    id: 'segmenter', name: '中文分词', category: 'text', icon: 'scissors', fresh: true,
+    desc: 'Intl.Segmenter 词典切词,附词频排行',
+    keywords: '分词 中文 词频 segmenter 切词 nlp 关键词 标题',
+    about: '基于浏览器内置词典(Intl.Segmenter)切分中文/中英混合文本,零依赖零网络;输出分词结果(分隔符可选)与词频排行(最短词长可调,平局按码点稳定排序)。给标题选关键词、做词云前的清洗都很顺手。',
+    component: lazy(() => import('../segmenter/SegmenterTool.vue')),
+  },
 ]

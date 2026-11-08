@@ -151,4 +151,11 @@ export const TOOLS = [
     about: '发原图前先过一遍:自动读取照片的 EXIF 元信息,标出是否含 GPS 位置与拍摄设备,再通过「像素重绘 + 重新编码」把元数据全部剥离(画面不变),完成后会重新检查输出文件证明已清零。JPG 输出自动铺白底处理透明区域。与「图片信息/EXIF」是同一件事的两面:那边查看,这边清理。',
     component: lazy(() => import('../exif-strip/ExifStrip.vue')),
   },
+  {
+    id: 'svg-minify', name: 'SVG 压缩', category: 'image', icon: 'file-code', fresh: true,
+    desc: 'svgo 本机优化,前后对比预览',
+    keywords: 'svg 压缩 svgo 矢量 优化 图标 瘦身 前后对比',
+    about: '粘贴或上传 SVG,svgo 浏览器版(懒加载)本机压缩:去除编辑器元数据、冗余属性、注释与空路径,多轮迭代(multipass)直到不再变小;前后尺寸对比与棋盘底预览,可复制或下载。文件不上传。',
+    component: lazy(() => import('../svg-minify/SvgMinify.vue')),
+  },
 ]
