@@ -40,7 +40,7 @@ function share() {
           <div>
             <div class="name-row">
               <h1>{{ tool.name }}</h1>
-              <!-- 联网工具徽章:与 165 个本地工具明确区隔 -->
+              <!-- 联网工具徽章:与本地工具明确区隔 -->
               <span v-if="tool.online" class="online-badge" title="此工具需要联网获取数据">
                 <AppIcon name="wifi" :size="13" />需联网
               </span>

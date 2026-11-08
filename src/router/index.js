@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { APP_NAME } from '@/config'
-import { getTool } from '@/tools/registry'
+import { getTool, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
 
 const { pushRecent } = useToolPrefs()
@@ -33,7 +33,8 @@ router.afterEach((to, from) => {
   const tool = to.name === 'tool' ? getTool(to.params.id) : null
   if (tool) {
     document.title = `${tool.name} · ${APP_NAME}`
-    setMetaDescription(`${tool.desc} — ${tool.name} 等 100 多个工具全部在浏览器本地运行,免费免登录,支持离线使用。`)
+    // 工具总数从 registry 派生,避免文案与实际数量漂移
+    setMetaDescription(`${tool.desc} — ${tool.name} 等 ${TOOLS.length} 个工具全部在浏览器本地运行,免费免登录,支持离线使用。`)
     // useUrlState 同步参数会触发 replace 导航:同一工具内的参数变化不重复记"最近使用"
     if (from.name !== 'tool' || from.params.id !== to.params.id) pushRecent(tool.id)
   } else if (to.name === 'home') {

@@ -45,7 +45,9 @@ describe('registry · 分类', () => {
 
 describe('registry · 工具', () => {
   it('工具数量符合预期', () => {
-    expect(TOOLS.length).toBeGreaterThanOrEqual(80)
+    // 精确计数:整批条目被合并冲突/误删丢弃时在此暴露,而不是等到线上少一排卡片。
+    // 新增工具后随功能提交一起更新这个数字(失败信息即提醒)。
+    expect(TOOLS.length, '工具数与预期不符:新增工具请更新此数字,意外减少请检查合并').toBe(173)
   })
 
   it('工具 id 唯一', () => {
