@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getTool, getCategory, TOOLS } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
@@ -19,9 +19,9 @@ const related = computed(() =>
   tool.value ? TOOLS.filter((t) => t.category === tool.value.category && t.id !== tool.value.id) : [],
 )
 
-// 工具切换或"重新加载"时强制重挂载异步组件
-const attempts = ref(0)
-const componentKey = computed(() => `${route.params.id}-${attempts.value}`)
+// 工具切换时强制重挂载异步组件。加载失败的重试由错误组件整页刷新完成:
+// 失败的动态 import 会被浏览器 module map 缓存,页内重挂载不会重新拉取 chunk。
+const componentKey = computed(() => route.params.id)
 
 function share() {
   copy('share', location.origin + route.fullPath)
@@ -69,12 +69,12 @@ function share() {
           </button>
         </div>
       </div>
-      <component :is="tool.component" :key="componentKey" @retry="attempts++" />
+      <component :is="tool.component" :key="componentKey" />
 
       <details v-if="tool.about" class="about panel">
         <summary><AppIcon name="info" :size="15" />关于这个工具</summary>
         <p>{{ tool.about }}</p>
-        <!-- 支持 URL 状态的工具统一拼接分享说明,避免 24 个条目各写一遍 -->
+        <!-- 支持 URL 状态的工具统一拼接分享说明,避免 48 个条目各写一遍 -->
         <p v-if="tool.urlState">工具参数会同步到地址栏,点标题栏「分享状态」或直接复制链接即可分享当前配置。</p>
       </details>
 

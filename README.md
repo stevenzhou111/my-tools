@@ -29,24 +29,23 @@
 ## 特性
 
 - 🔒 **隐私优先**:165 个工具全部在浏览器本地完成,零网络请求;8 个联网工具(汇率/天气/DNS 查询/IP 归属地/GitHub 仓库/网页元信息/RSS/文本翻译)统一带「需联网」徽章,其中两个经 Pages Functions 代理(免费档,无存储),无密钥、不收集数据,断网自动回退缓存
-- 📱 **PWA 离线可用**:可安装到桌面 / 手机,断网也能用全部工具(vite-plugin-pwa 全量预缓存约 184 项;发新版自动检测并刷新,后台定时检查保证已打开的页面也会升级)
+- 📱 **PWA 离线可用**:可安装到桌面 / 手机,断网也能用全部工具(vite-plugin-pwa 全量预缓存,当前构建约 357 个文件 / 5.8 MB;发新版自动检测并刷新,后台定时检查保证已打开的页面也会升级)
 - ⌨️ **全局命令面板**:任意页面按 `Ctrl+K` 弹出,↑↓ 选择、Enter 直达任意工具;支持拼音与首字母搜索(`ewm` → 二维码,词典懒加载不占首屏);直接输入算式即时出结果(`12*8+2`、`sin(30)`、`sqrt(2)^2`)、回车复制;内置动作项(切换主题、清空最近记录、打开项目仓库、随机逛工具、快捷键帮助)
 - 📋 **剪贴板智能识别**:首页粘贴 JSON / JWT / URL / 颜色 / Base64 / 时间戳等内容,自动推荐对应工具
-- 🔗 **状态分享**:颜色、时间戳、进制、二维码、正则、子网、Cron、大写金额等 9 个工具的参数实时同步到地址栏,复制链接即可把「当前配置」发给对方,打开即得同样结果;标题栏出现「分享状态」一键复制
+- 🔗 **状态分享**:颜色、时间戳、进制、二维码、正则、子网、Cron、大写金额等 50 个工具的参数实时同步到地址栏,复制链接即可把「当前配置」发给对方,打开即得同样结果;标题栏出现「分享状态」一键复制
 - ⭐ **收藏与最近使用**:工具页一键收藏,自动记录最近 8 个使用的工具,首页和侧边栏置顶展示;收藏卡片可拖拽排序(首页与侧栏一致);支持导出/导入 JSON 文件,换机迁移不丢数据
 - 🆕 **最新上线**:首页顶部聚合展示最新一批工具(带「新」徽章),新工具上线立刻可见
 - 🔍 **搜索直达**:首页搜索框输入关键字实时过滤,按 Enter 直达第一个匹配的工具,Esc 一键清空
 - ⬆️ **返回顶部**:页面滚过一屏后右下角浮出返回顶部按钮,长列表/长输出页一击回到顶部
 - 🏷️ **分类徽章导航**:工具页标题旁显示所属分类,点击回到首页该分类并高亮定位;剪贴板智能识别扩容(IPv4 → 子网计算、图片 Data URL → 二维码解析)
 - 📱 **PWA 快捷方式与分享目标**:安装后长按图标直达常用工具;手机上把链接「分享到工具箱」自动进入二维码生成(?q= 参数直达),配 manifest `share_target`
-- 🔍 **SEO 就绪**:每个工具页路由级同步 meta description,分享卡片与搜索引擎各得其所
 - 🎲 **随机逛一个工具**:首页一键随机跳转;工具页底部展示同分类的其他工具,用完一个顺手就能到相邻的
 - ⌨️ **快捷键**:全局搜索 `Ctrl+K`、首页聚焦搜索 `/`、快捷键帮助 `?`(顶栏也有入口),面板内 ↑↓/Enter/Esc 导航
 - ♿ **无障碍基础**:全局弹层(命令面板/快捷键帮助/移动抽屉)均带 dialog 语义、焦点移入与归还、焦点陷阱;命令面板实现 combobox + listbox + aria-activedescendant 的标准搜索模式,方向键高亮对屏幕阅读器可感知;侧栏折叠按钮带 aria-expanded,图形画布带可读标签
 - 🌗 **深色模式**:跟随系统,可手动切换,自动记忆
 - 📂 **侧边栏默认折叠**:12 个分类收起为标题,进入工具页时自动展开其所在分类,保持导航清爽
-- ⚡ **按需加载 + 悬停预取**:每个工具独立代码块(chunk),首屏 gzip 约 75 KB;echarts / xlsx / pdf.js / pdf-lib 等大依赖只在打开对应工具时下载;卡片悬停即预取该工具的 chunk,点击几乎零等待;弱网下加载失败显示可重试的错误页,路由级失败自动刷新兜底
-- 🔎 **SEO 就绪**:路由级 meta description;构建时按 `SITEMAP_BASE` 生成 sitemap.xml(152 个工具页),robots.txt 常驻
+- ⚡ **按需加载 + 悬停预取**:每个工具独立代码块(chunk),首屏 gzip 约 120 KB;echarts / xlsx / pdf.js / pdf-lib 等大依赖只在打开对应工具时下载;卡片悬停即预取该工具的 chunk,点击几乎零等待;弱网下加载失败显示可重试的错误页,路由级失败自动刷新兜底
+- 🔎 **SEO 就绪**:路由级 meta description;设置 `SITEMAP_BASE` 构建时生成 sitemap.xml(173 个工具页),robots.txt 常驻
 - ⌨️ **无障碍细节**:全局 skip-link(Tab 一下跳过导航直达内容区),弹层焦点管理与 combobox 搜索模式齐备
 - ✍️ **草稿自动保存**:核心文本工具(JSON / 正则 / 文本比对 / Markdown 等)的输入内容在会话内自动暂存,误关页面回来不丢
 - 🎨 **视觉一致**:全部图标统一为 SVG(lucide),批量清理了历史遗留的彩色 emoji;深浅两套主题下语义色走统一 token
@@ -55,7 +54,7 @@
 ## 🧪 测试与质量
 
 ```bash
-npm test                # 单元测试(Vitest,700+ 项)
+npm test                # 单元测试(Vitest,当前 770 项)
 npm run dev:api         # 含 Functions 的本地开发(wrangler pages dev 包裹,可测 /api)
 npm run test:watch      # 单元测试 watch 模式
 npm run test:e2e        # 端到端测试(Playwright,含全部工具页逐页挂载)
@@ -98,7 +97,7 @@ npm run deploy       # vite build && wrangler pages deploy dist
 │   ├── data/software.js     # 软件推荐数据(145 款,人工维护)
 │   ├── router/              # 路由与标题/最近使用联动
 │   ├── tools/
-│   │   ├── registry.js      # 唯一数据源:12 分类 + 90 工具(路由/首页/搜索全部由它派生)
+│   │   ├── registry.js      # 唯一数据源:12 分类 + 173 工具(路由/首页/搜索全部由它派生)
 │   │   └── <tool>/X.vue     # 每个工具一个目录一个组件(懒加载)
 │   ├── utils/               # prefs/draft/clipboard/useCopy/image/pdfjs/docx/
 │   │                        # chineseAmount/dateCalc/subnet/xmlFormat/calcExpression/
@@ -183,7 +182,7 @@ npm run deploy            # 等价于 vite build && wrangler pages deploy dist
 
 ## 🛠 技术栈
 
-Vue 3(`<script setup>`)· Vue Router 4 · Vite 6 · vite-plugin-pwa · marked + DOMPurify · qrcode · jsQR · JsBarcode · pdf-lib · pdf.js · mammoth · SheetJS(xlsx) · echarts(按需引入) · fflate · blueimp-md5 · spark-md5 · sm-crypto · sql-formatter · js-yaml · cronstrue · ua-parser-js · exifr · Web Speech / Web Audio / MediaRecorder / Canvas API
+Vue 3(`<script setup>`)· Vue Router 4 · Vite 6 · vite-plugin-pwa · marked + DOMPurify · qrcode · jsQR · JsBarcode · pdf-lib · pdf.js · mammoth · SheetJS(xlsx) · echarts(按需引入) · fflate · spark-md5 · sm-crypto · sql-formatter · js-yaml · cronstrue · ua-parser-js · exifr · Web Speech / Web Audio / MediaRecorder / Canvas API
 
 测试:Vitest · @vue/test-utils · Playwright · GitHub Actions CI
 

@@ -92,4 +92,28 @@ describe('rss · handler', () => {
     expect(isBlockedHost('169.254.1.1')).toBe(true)
     expect(isBlockedHost('example.com')).toBe(false)
   })
+
+  it('重定向到内网地址被拦截', async () => {
+    const fetchMock = vi.fn(async () => new Response(null, {
+      status: 302,
+      headers: { location: 'http://10.0.0.1/internal' },
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await call('https://blog.example.com/feed')
+    expect(res.status).toBe(403)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('公网重定向会手动跟随', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(null, {
+        status: 301,
+        headers: { location: 'https://cdn.example.com/feed.xml' },
+      }))
+      .mockResolvedValueOnce(new Response(RSS20, { headers: { 'content-type': 'application/rss+xml' } }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await call('https://blog.example.com/rss')
+    expect(res.status).toBe(200)
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
 })

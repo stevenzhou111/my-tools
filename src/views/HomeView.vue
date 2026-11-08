@@ -254,12 +254,14 @@ function onSearchKeydown(e) {
       </div>
     </section>
 
-    <section v-if="favTools.length && !query.trim()" class="cat-section">
+    <!-- 收藏区始终保留:即使收藏为空也要能看到「导入」入口,
+         否则换机/清空浏览器数据后用户无法恢复之前导出的收藏。 -->
+    <section v-if="!query.trim()" class="cat-section">
       <h2 class="cat-title">
         <AppIcon class="cat-icon" name="star" :size="20" />我的收藏
-        <span class="count-hint">拖动卡片可排序</span>
+        <span class="count-hint">{{ favTools.length ? '拖动卡片可排序' : '还没有收藏' }}</span>
         <span class="fav-ops">
-          <button class="op-btn" type="button" title="导出收藏(含最近使用)为 JSON 文件" aria-label="导出收藏" @click="exportFavs">
+          <button v-if="favTools.length" class="op-btn" type="button" title="导出收藏(含最近使用)为 JSON 文件" aria-label="导出收藏" @click="exportFavs">
             <AppIcon name="download" :size="14" />
           </button>
           <button class="op-btn" type="button" title="从 JSON 文件导入收藏" aria-label="导入收藏" @click="importInput?.click()">
@@ -268,7 +270,7 @@ function onSearchKeydown(e) {
           <input ref="importInput" type="file" accept=".json,application/json" class="sr-only" @change="onImportFile" />
         </span>
       </h2>
-      <div class="tool-grid">
+      <div v-if="favTools.length" class="tool-grid">
         <router-link
           v-for="tool in favTools"
           :key="tool.id"
@@ -286,6 +288,10 @@ function onSearchKeydown(e) {
           <span class="tool-name">{{ tool.name }}<span v-if="tool.fresh" class="new-badge">新</span><AppIcon v-if="tool.online" class="online-mark" name="wifi" :size="13" /></span>
           <span class="tool-desc">{{ tool.desc }}</span>
         </router-link>
+      </div>
+      <div v-else class="panel fav-empty">
+        <p>还没有收藏任何工具。在任意工具页点右上角「收藏」即可加入;换电脑或清空浏览器数据后,可从之前导出的 JSON 文件恢复。</p>
+        <button class="btn btn-sm" @click="importInput?.click()"><AppIcon name="upload" :size="14" />从 JSON 文件导入收藏</button>
       </div>
     </section>
 
@@ -479,6 +485,16 @@ function onSearchKeydown(e) {
   display: inline-flex;
   gap: 6px;
   margin-left: auto;
+}
+.fav-empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--muted);
+}
+.fav-empty p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.7;
 }
 .op-btn {
   display: inline-grid;

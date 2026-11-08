@@ -82,6 +82,19 @@ const bad = await locator.evaluateAll(
     await expect(page.locator('.tool-card')).not.toHaveCount(0)
     await expect(page.locator('.tool-card').first()).toContainText('二维码')
   })
+
+  test('侧栏搜索与首页一致:支持描述匹配与拼音首字母', async ({ page }) => {
+    await page.goto('/')
+    await page.locator('.side-search').fill('ewm')
+    await expect(page.locator('.side-link', { hasText: '二维码生成' }).first()).toBeVisible({ timeout: 10_000 })
+  })
+
+  test('收藏为空时仍保留 JSON 导入入口(换机迁移)', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('.fav-empty')).toBeVisible()
+    await expect(page.locator('.fav-empty button')).toContainText('从 JSON 文件导入收藏')
+    await expect(page.locator('.fav-ops button[aria-label="导入收藏"]')).toBeVisible()
+  })
 })
 
 test.describe('工具页', () => {
@@ -125,6 +138,24 @@ test.describe('工具页', () => {
     }
 
     expect(failed, `有 ${failed.length} 个工具页没通过:\n${failed.join('\n')}`).toEqual([])
+  })
+
+  test('工具 chunk 加载失败后点「重新加载」可恢复', async ({ page }) => {
+    let blocked = true
+    // 只拦截 JSON 工具自己的异步 chunk,模拟弱网/发布瞬间的 chunk 失效。
+    // 浏览器会把失败的动态 import 按 URL 缓存,页内重挂载不会重新请求,必须整页刷新。
+    await page.route('**/assets/JsonFormatter-*.js', (route) => {
+      if (blocked) return route.abort()
+      return route.continue()
+    })
+
+    await page.goto('/tool/json')
+    await expect(page.locator('.load-error')).toBeVisible({ timeout: 20_000 })
+
+    blocked = false
+    await page.locator('.load-error .btn-primary').click()
+    await expect(page.locator('.load-error')).toHaveCount(0)
+    await expect(page.locator('.tool-head h1')).toContainText('JSON 格式化')
   })
 
   test('收藏状态可切换并写入 localStorage', async ({ page }) => {

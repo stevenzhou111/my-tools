@@ -3,6 +3,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { CATEGORIES, TOOLS, getTool } from '@/tools/registry'
 import { useToolPrefs } from '@/utils/prefs'
+import { ensurePinyinIndex, pinyinHit } from '@/utils/pinyinSearch'
 import AppIcon from '@/components/AppIcon.vue'
 
 const emit = defineEmits(['navigate'])
@@ -64,12 +65,20 @@ watch(
   { immediate: true },
 )
 
+// 与首页/命令面板保持同一套匹配规则:名称 + 描述 + 关键词 + 拼音首字母。
+// 词典仍是懒加载,首次输入时才请求。
+watch(query, (v) => {
+  if (v.trim()) ensurePinyinIndex()
+})
+
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
   return CATEGORIES.map((cat) => ({
     ...cat,
     tools: TOOLS.filter(
-      (t) => t.category === cat.id && (!q || `${t.name} ${t.keywords}`.toLowerCase().includes(q)),
+      (t) =>
+        t.category === cat.id &&
+        (!q || `${t.name} ${t.desc} ${t.keywords}`.toLowerCase().includes(q) || pinyinHit(t, q)),
     ),
   })).filter((cat) => cat.tools.length > 0)
 })

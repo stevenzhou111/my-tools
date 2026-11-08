@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest'
+import { ReadableStream } from 'node:stream/web'
 import { onRequestGet, isBlockedHost } from '../../functions/api/fetch-meta.js'
 
 function call(url) {
@@ -67,5 +68,47 @@ describe('fetch-meta · 抓取与解析', () => {
     const res = await call('https://unreachable.example.com/x')
     expect(res.status).toBe(502)
     expect((await res.json()).error).toContain('boom')
+  })
+
+  it('重定向到内网地址被拦截(每一跳都校验 host)', async () => {
+    const fetchMock = vi.fn(async () => new Response(null, {
+      status: 302,
+      headers: { location: 'http://127.0.0.1/admin' },
+    }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await call('https://example.com/start')
+    expect(res.status).toBe(403)
+    expect((await res.json()).error).toContain('内网')
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('公网重定向会手动跟随,返回最终地址', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(null, {
+        status: 302,
+        headers: { location: 'https://cdn.example.com/page' },
+      }))
+      .mockResolvedValueOnce(new Response(HTML_PAGE, { headers: { 'content-type': 'text/html' } }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await call('https://example.com/go')
+    expect(res.status).toBe(200)
+    expect((await res.json()).url).toBe('https://cdn.example.com/page')
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('响应体按字节上限截断,不把整页读进内存', async () => {
+    let pulls = 0
+    const stream = new ReadableStream({
+      pull(controller) {
+        pulls++
+        controller.enqueue(new TextEncoder().encode('<title>大页面</title>' + 'x'.repeat(100_000)))
+        if (pulls >= 10) controller.close()
+      },
+    })
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(stream, { headers: { 'content-type': 'text/html' } })))
+    const res = await call('https://example.com/huge')
+    expect(res.status).toBe(200)
+    expect((await res.json()).title).toBe('大页面')
+    expect(pulls).toBeLessThan(10)
   })
 })
