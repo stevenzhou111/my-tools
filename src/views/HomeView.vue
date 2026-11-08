@@ -99,7 +99,7 @@ async function onImportFile(e) {
   if (!file) return
   try {
     const { added } = await importFavoritesFile(file)
-    showToast(`导入完成:新增 ${added} 个收藏`)
+    showToast(`导入完成:新增 ${added} 个收藏${r.importedStates ? `,合并 ${r.importedStates} 项工具数据(倒数日等)` : ''}`)
   } catch (err) {
     showToast(err.message || '导入失败')
   }

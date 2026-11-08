@@ -175,3 +175,76 @@ describe('prefs · 清空最近使用', () => {
     expect(favorites.value).toEqual(['json'])
   })
 })
+
+describe('prefs · 工具本机数据(useAppData)与迁移', () => {
+  it('未登记的键直接抛错(防止散乱键名失控)', async () => {
+    const { useAppData } = await freshPrefs()
+    expect(() => useAppData('some-random-key', [])).toThrow('未登记')
+  })
+
+  it('从 localStorage 恢复已有数据;损坏数据回退默认值', async () => {
+    localStorage.setItem('toolbox-countdown-days', '[{"id":1}]')
+    localStorage.setItem('toolbox-metronome', '{坏')
+    const { useAppData } = await freshPrefs()
+    expect(useAppData('toolbox-countdown-days', []).value).toEqual([{ id: 1 }])
+    expect(useAppData('toolbox-metronome', { bpm: 96 }).value).toEqual({ bpm: 96 })
+  })
+
+  it('同一键重复调用返回同一个 ref;变更自动写回 localStorage', async () => {
+    const { useAppData } = await freshPrefs()
+    const a = useAppData('toolbox-countdown-days', [])
+    expect(a).toBe(useAppData('toolbox-countdown-days', []))
+    a.value = [{ id: 'x' }]
+    await nextTick()
+    expect(JSON.parse(localStorage.getItem('toolbox-countdown-days'))).toEqual([{ id: 'x' }])
+  })
+
+  it('导出包含已初始化的工具数据;导入按「数组合并去重 / 对象覆盖」归并', async () => {
+    const { useAppData, useToolPrefs } = await freshPrefs()
+    useAppData('toolbox-countdown-days', []).value = [{ id: 'local' }]
+    useAppData('toolbox-typing-best', null).value = { cn: 100, en: 40 }
+    const data = JSON.parse(useToolPrefs().exportPrefs())
+    expect(data.version).toBe(2)
+    expect(data.states['toolbox-countdown-days']).toEqual([{ id: 'local' }])
+
+    const r = useToolPrefs().importPrefs(JSON.stringify({
+      favorites: [],
+      states: {
+        'toolbox-countdown-days': [{ id: 'imported' }, { id: 'local' }], // 数组:导入排前、去重
+        'toolbox-typing-best': { cn: 200, en: 60 }, // 对象:整体覆盖
+      },
+    }))
+    expect(r.importedStates).toBe(2)
+    expect(useAppData('toolbox-countdown-days', []).value).toEqual([{ id: 'imported' }, { id: 'local' }])
+    expect(useAppData('toolbox-typing-best', null).value).toEqual({ cn: 200, en: 60 })
+  })
+
+  it('工具未初始化时导入直接落盘,新实例(首次打开工具)可读到', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const r = useToolPrefs().importPrefs(JSON.stringify({
+      favorites: [],
+      states: { 'toolbox-sci-calc-history': [{ expr: '1+1', res: '2' }] },
+    }))
+    expect(r.importedStates).toBe(1)
+
+    const reloaded = await freshPrefs()
+    expect(reloaded.useAppData('toolbox-sci-calc-history', []).value).toEqual([{ expr: '1+1', res: '2' }])
+  })
+
+  it('导入的 states 忽略未登记的键与标量值', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const r = useToolPrefs().importPrefs(JSON.stringify({
+      favorites: [],
+      states: { 'not-registered': [1], 'toolbox-countdown-days': 'corrupted' },
+    }))
+    expect(r.importedStates).toBe(0)
+    expect(localStorage.getItem('toolbox-countdown-days')).toBeNull()
+  })
+
+  it('旧版导出文件(无 states 字段)导入不受影响', async () => {
+    const { useToolPrefs } = await freshPrefs()
+    const r = useToolPrefs().importPrefs(JSON.stringify({ favorites: ['json'], recents: [] }))
+    expect(r.added).toBe(1)
+    expect(r.importedStates).toBe(0)
+  })
+})

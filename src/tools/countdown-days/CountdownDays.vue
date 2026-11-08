@@ -1,28 +1,17 @@
 <script setup>
 import { computed, ref } from 'vue'
 import AppIcon from '@/components/AppIcon.vue'
+import { useAppData } from '@/utils/prefs'
 
 /**
- * 倒数日/纪念日:纯本地 localStorage 管理,无账号无后端。
+ * 倒数日/纪念日:纯本地存储管理,无账号无后端。
  * 单次日期显示「还有/已经 N 天」;每年重复的纪念日自动滚动到下一个周年。
+ * 经 useAppData 持久化:变更自动写回,并随「导出收藏」一起参与换机迁移。
  */
 
 const STORAGE_KEY = 'toolbox-countdown-days'
 
-function load() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-function save(list) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-  } catch { /* 存储不可用时静默跳过 */ }
-}
-
-const items = ref(load())
+const items = useAppData(STORAGE_KEY, [])
 const name = ref('')
 const date = ref('')
 const repeat = ref(false)
@@ -70,7 +59,6 @@ function add() {
     ...items.value.filter((it) => !(it.name === n && it.date === date.value)), // 同名同日去重
     { id: `${Date.now()}`, name: n, date: date.value, repeat: repeat.value },
   ]
-  save(items.value)
   name.value = ''
   date.value = ''
   repeat.value = false
@@ -78,7 +66,6 @@ function add() {
 
 function remove(id) {
   items.value = items.value.filter((it) => it.id !== id)
-  save(items.value)
 }
 
 // 大数字按正负着色:未来是期待(主色),过去是沉淀(灰绿)
@@ -97,7 +84,6 @@ function addSample() {
       items.value = [...items.value, { ...s, id: `${Date.now()}-${Math.random()}` }]
     }
   }
-  save(items.value)
 }
 </script>
 

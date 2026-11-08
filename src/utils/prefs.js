@@ -31,6 +31,53 @@ watch(recents, (v) => {
   try { localStorage.setItem(RECENT_KEY, JSON.stringify(v)) } catch { /* 隐私模式忽略 */ }
 }, { deep: true })
 
+// ---------- 工具本机数据(纳入换机迁移体系) ----------
+// 此前部分工具各自直接读写 localStorage,「导出收藏」带不走它们。统一经 useAppData
+// 创建持久化 ref 后,exportPrefs/importPrefs 会一并打包迁移。
+// 注意:RSS 阅读的 toolbox-rss-last 是带 fetchedAt 的瞬态缓存,刻意不纳入。
+export const APP_STATE_KEYS = [
+  'toolbox-countdown-days', // 倒数日/纪念日条目
+  'toolbox-metronome', // 节拍器设置 { bpm, beatsPerBar }
+  'toolbox-sci-calc-history', // 科学计算历史(30 条)
+  'toolbox-typing-best', // 打字速度最佳成绩 { cn, en }
+]
+
+const appStateRefs = new Map()
+
+/**
+ * 工具本机数据的持久化 ref:登记过的键才可用(防止散乱键名失控),
+ * 首次调用从 localStorage 恢复,之后任何变更自动写回。
+ */
+export function useAppData(key, fallback) {
+  if (!APP_STATE_KEYS.includes(key)) throw new Error(`useAppData: 未登记的存储键 ${key},请加入 APP_STATE_KEYS`)
+  if (appStateRefs.has(key)) return appStateRefs.get(key)
+  let initial = fallback
+  try {
+    const raw = localStorage.getItem(key)
+    if (raw !== null) initial = JSON.parse(raw)
+  } catch { /* 损坏数据回退默认值 */ }
+  const r = ref(initial === undefined ? fallback : initial)
+  watch(r, (v) => {
+    try { localStorage.setItem(key, JSON.stringify(v)) } catch { /* 隐私模式忽略 */ }
+  }, { deep: true })
+  appStateRefs.set(key, r)
+  return r
+}
+
+/** 合并规则:两边都是数组 → 按条目 JSON 去重、导入的排前面(与收藏的合并语义一致);否则导入值整体覆盖 */
+function mergeState(current, imported) {
+  if (Array.isArray(imported) && Array.isArray(current)) {
+    const seen = new Set()
+    const merged = []
+    for (const item of [...imported, ...current]) {
+      const sig = JSON.stringify(item)
+      if (!seen.has(sig)) { seen.add(sig); merged.push(item) }
+    }
+    return merged.slice(0, 500)
+  }
+  return imported
+}
+
 export function useToolPrefs() {
   function isFav(id) {
     return favorites.value.includes(id)
@@ -57,13 +104,19 @@ export function useToolPrefs() {
     favorites.value.splice(toIndex, 0, id)
   }
 
-  /** 导出:收藏与最近使用打包成 JSON 文本(换机迁移用) */
+  /** 导出:收藏、最近使用与已初始化的工具本机数据打包成 JSON 文本(换机迁移用) */
   function exportPrefs() {
-    return JSON.stringify({ app: 'vue-toolbox', version: 1, favorites: favorites.value, recents: recents.value }, null, 2)
+    const states = {}
+    for (const k of APP_STATE_KEYS) {
+      if (appStateRefs.has(k)) states[k] = appStateRefs.get(k).value
+    }
+    return JSON.stringify({ app: 'vue-toolbox', version: 2, favorites: favorites.value, recents: recents.value, states }, null, 2)
   }
 
   /**
    * 导入:解析 JSON 并与现有数据合并(导入的排前面,去重),返回加入的收藏数。
+   * states 仅接受 APP_STATE_KEYS 里登记的键:数组类合并去重、设置类整体覆盖;
+   * 工具尚未在本会话初始化时直接落盘,首次打开该工具即可读到。
    * 非法内容抛出可读错误;已下线工具的 id 静默丢弃。
    */
   function importPrefs(text) {
@@ -79,7 +132,27 @@ export function useToolPrefs() {
     const before = favorites.value.length
     favorites.value = [...new Set([...favs, ...favorites.value])]
     recents.value = [...new Set([...recs, ...recents.value])].slice(0, MAX_RECENTS)
-    return { added: favorites.value.length - before, importedFavs: favs.length, importedRecents: recs.length }
+
+    let importedStates = 0
+    if (data.states && typeof data.states === 'object' && !Array.isArray(data.states)) {
+      for (const [k, v] of Object.entries(data.states)) {
+        if (v === undefined || !APP_STATE_KEYS.includes(k)) continue
+        // 形状防御:只接受数组/对象/null,标量(损坏或伪造的文件)静默跳过
+        if (v !== null && !Array.isArray(v) && typeof v !== 'object') continue
+        const r = appStateRefs.get(k)
+        if (r) {
+          r.value = mergeState(r.value, v)
+        } else {
+          try {
+            let current
+            try { current = JSON.parse(localStorage.getItem(k)) } catch { /* 损坏数据按无处理 */ }
+            localStorage.setItem(k, JSON.stringify(mergeState(current, v)))
+          } catch { /* 隐私模式忽略 */ }
+        }
+        importedStates++
+      }
+    }
+    return { added: favorites.value.length - before, importedFavs: favs.length, importedRecents: recs.length, importedStates }
   }
 
   /** 清空最近使用记录(收藏不受影响) */

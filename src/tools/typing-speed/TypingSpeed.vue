@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onUnmounted, ref } from 'vue'
+import { useAppData } from '@/utils/prefs'
 
 // 题库:中文按短句拼段,英文按句拼段,每次随机抽 3 句
 const CN_POOL = [
@@ -33,22 +34,10 @@ const input = ref('')
 const target = ref('')
 const startedAt = ref(0)
 const now = ref(0)
-const best = ref(loadBest())
+// 最佳成绩经 useAppData 持久(变更自动写回,随「导出收藏」迁移) // { cn: cpm, en: wpm }
+const best = useAppData('toolbox-typing-best', null)
 const history = ref([])
 const justBest = ref(false)
-
-function loadBest() {
-  try {
-    return JSON.parse(localStorage.getItem('toolbox-typing-best') || 'null') // { cn: cpm, en: wpm }
-  } catch {
-    return null
-  }
-}
-function saveBest() {
-  try {
-    localStorage.setItem('toolbox-typing-best', JSON.stringify(best.value))
-  } catch { /* 存储不可用时静默跳过 */ }
-}
 
 function pickText() {
   const pool = (mode.value === 'cn' ? CN_POOL : EN_POOL).slice()
@@ -129,7 +118,6 @@ function finish() {
   justBest.value = score > (best.value[mode.value] || 0)
   if (justBest.value) {
     best.value = { ...best.value, [mode.value]: score }
-    saveBest()
   }
   history.value = [{ score, acc: s.acc, mode: mode.value, at: new Date().toLocaleTimeString('zh-CN') }, ...history.value].slice(0, 8)
 }

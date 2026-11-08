@@ -2,23 +2,16 @@
 import { computed, ref } from 'vue'
 import { evalSci } from '@/utils/sciExpression'
 import { useCopy } from '@/utils/useCopy'
+import { useAppData } from '@/utils/prefs'
 import CopyButton from '@/components/CopyButton.vue'
 
 const input = ref('sin(30) + sqrt(2)^2')
 const degrees = ref(true)
 const { copiedKey, copy } = useCopy()
 
-// 计算历史:localStorage 持久,最近 30 条,点击回填表达式
+// 计算历史:useAppData 持久(变更自动写回,随「导出收藏」迁移),最近 30 条,点击回填表达式
 const HISTORY_KEY = 'toolbox-sci-calc-history'
-function loadHistory() {
-  try {
-    const v = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
-    return Array.isArray(v) ? v.slice(0, 30) : []
-  } catch {
-    return []
-  }
-}
-const history = ref(loadHistory())
+const history = useAppData(HISTORY_KEY, [])
 
 const result = computed(() => {
   const r = evalSci(input.value, { degrees: degrees.value })
@@ -34,9 +27,6 @@ function record() {
   lastRecorded = expr
   if (history.value[0]?.expr === expr && history.value[0]?.res === result.value) return
   history.value = [{ expr, res: result.value, degrees: degrees.value }, ...history.value].slice(0, 30)
-  try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.value))
-  } catch { /* 存储不可用时静默跳过 */ }
 }
 
 function recall(item) {
@@ -47,9 +37,6 @@ function recall(item) {
 function clearHistory() {
   history.value = []
   lastRecorded = ''
-  try {
-    localStorage.removeItem(HISTORY_KEY)
-  } catch { /* 静默 */ }
 }
 
 const KEYS = ['sin(', 'cos(', 'tan(', 'asin(', 'acos(', 'atan(', 'sqrt(', 'ln(', 'log(', 'exp(', 'abs(', 'round(', 'floor(', 'ceil(', 'pi', 'e', '^', '(', ')']

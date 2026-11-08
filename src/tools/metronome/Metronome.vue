@@ -1,11 +1,24 @@
 <script setup>
 import AppIcon from '@/components/AppIcon.vue'
-import { onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
+import { useAppData } from '@/utils/prefs'
 
 const STORAGE_KEY = 'toolbox-metronome'
 
-const bpm = ref(96)
-const beatsPerBar = ref(4)
+// 设置经 useAppData 持久(变更自动写回,随「导出收藏」迁移);可写 computed 保持原 bpm/beatsPerBar 用法不变
+const persisted = useAppData(STORAGE_KEY, { bpm: 96, beatsPerBar: 4 })
+const bpm = computed({
+  get: () => persisted.value.bpm,
+  set: (v) => { persisted.value = { ...persisted.value, bpm: v } },
+})
+const beatsPerBar = computed({
+  get: () => persisted.value.beatsPerBar,
+  set: (v) => { persisted.value = { ...persisted.value, beatsPerBar: v } },
+})
+// 旧数据一次性校准(约束同原 loadPrefs)
+if (!Number.isFinite(bpm.value) || bpm.value < 30 || bpm.value > 240) bpm.value = 96
+if (![2, 3, 4].includes(beatsPerBar.value)) beatsPerBar.value = 4
+
 const running = ref(false)
 const activeBeat = ref(-1)
 const error = ref('')
@@ -57,7 +70,6 @@ async function start() {
   nextNoteTime = ctx.currentTime + 0.05
   tick()
   timer = setInterval(tick, 25)
-  persist()
 }
 
 function stop() {
@@ -65,7 +77,6 @@ function stop() {
   clearInterval(timer)
   timer = null
   activeBeat.value = -1
-  persist()
 }
 
 function tap() {
@@ -82,27 +93,6 @@ function tap() {
     }
   }
 }
-
-function persist() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ bpm: bpm.value, beatsPerBar: beatsPerBar.value }))
-  } catch {
-    /* 隐私模式忽略 */
-  }
-}
-
-function loadPrefs() {
-  try {
-    const p = JSON.parse(localStorage.getItem(STORAGE_KEY))
-    if (p) {
-      if (Number.isFinite(p.bpm)) bpm.value = Math.min(240, Math.max(30, p.bpm))
-      if ([2, 3, 4].includes(p.beatsPerBar)) beatsPerBar.value = p.beatsPerBar
-    }
-  } catch {
-    /* ignore */
-  }
-}
-loadPrefs()
 
 onUnmounted(() => {
   stop()
@@ -127,9 +117,9 @@ onUnmounted(() => {
     </div>
 
     <div class="bpm-line">
-      <button class="btn btn-sm" aria-label="减慢" @click="bpm = Math.max(30, bpm - 4); persist()">−</button>
+      <button class="btn btn-sm" aria-label="减慢" @click="bpm = Math.max(30, bpm - 4)">−</button>
       <span class="bpm-num">{{ bpm }}</span>
-      <button class="btn btn-sm" aria-label="加快" @click="bpm = Math.min(240, bpm + 4); persist()">+</button>
+      <button class="btn btn-sm" aria-label="加快" @click="bpm = Math.min(240, bpm + 4)">+</button>
       <span class="tip">BPM</span>
     </div>
 
@@ -140,13 +130,13 @@ onUnmounted(() => {
       max="240"
       aria-label="调节 BPM"
       style="width: 100%; max-width: 360px"
-      @change="persist(); if (running) { stop(); start() }"
+      @change="if (running) { stop(); start() }"
     />
 
     <div class="row" style="margin-top: 14px">
       <label class="ctrl">
         <span class="field-label" for="metro-bar">拍号</span>
-        <select id="metro-bar" v-model.number="beatsPerBar" class="select" style="width: 100px" @change="persist(); if (running) { stop(); start() }">
+        <select id="metro-bar" v-model.number="beatsPerBar" class="select" style="width: 100px" @change="if (running) { stop(); start() }">
           <option :value="2">2/4</option>
           <option :value="3">3/4</option>
           <option :value="4">4/4</option>

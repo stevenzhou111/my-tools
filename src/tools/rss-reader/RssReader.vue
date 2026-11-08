@@ -16,6 +16,7 @@ const { copiedKey, copy } = useCopy()
 const short = (s) => (s && s.length <= 500 ? s : undefined)
 useUrlState([{ key: 'u', ref: url, parse: short }])
 
+// 瞬态缓存(带 fetchedAt 的上次抓取结果),刻意不走 useAppData:不参与「导出收藏」迁移
 const CACHE_KEY = 'toolbox-rss-last'
 const CACHE_TTL = 15 * 60 * 1000
 
