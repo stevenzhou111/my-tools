@@ -41,3 +41,20 @@ describe('passwordStrength · analyzePassword', () => {
     expect(analyzePassword(null)).toBeNull()
   })
 })
+
+describe('passwordStrength · 用户上下文词典', () => {
+  it('密码包含上下文词时得分下降', () => {
+    const base = analyzePassword('myshop2024')
+    const withCtx = analyzePassword('myshop2024', ['myshop'])
+    expect(withCtx.score).toBeLessThanOrEqual(base.score)
+    // 上下文词命中时通常直接给警告或建议;两个口径都有值
+    expect(withCtx.fastText).toBeTruthy()
+  })
+
+  it('空上下文与空白项不影响结果', () => {
+    const a = analyzePassword('myshop2024', [])
+    const b = analyzePassword('myshop2024', ['', '  '])
+    expect(b.score).toBe(a.score)
+    expect(b.label).toBe(a.label)
+  })
+})

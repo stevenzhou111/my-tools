@@ -95,6 +95,17 @@ const bad = await locator.evaluateAll(
     await expect(page.locator('.fav-empty button')).toContainText('从 JSON 文件导入收藏')
     await expect(page.locator('.fav-ops button[aria-label="导入收藏"]')).toBeVisible()
   })
+
+  test('最常用 TOP 8:进过工具后首页出现排行,可一键清空', async ({ page }) => {
+    await page.goto('/tool/json')
+    await expect(page.locator('.tool-head h1')).toContainText('JSON')
+    await page.goto('/')
+    const top = page.locator('.cat-section').filter({ hasText: '最常用' })
+    await expect(top).toBeVisible()
+    await expect(top.locator('.usage-count').first()).toContainText('打开 1 次')
+    await top.locator('button[aria-label="清空使用统计"]').click()
+    await expect(page.locator('.cat-section').filter({ hasText: '最常用' })).toHaveCount(0)
+  })
 })
 
 test.describe('工具页', () => {

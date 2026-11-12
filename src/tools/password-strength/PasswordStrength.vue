@@ -10,12 +10,12 @@ import { analyzePassword } from '@/utils/passwordStrength'
 
 const password = ref('')
 const visible = ref(false)
-const userInputs = ref('')
+const context = ref('')
 
-// 用户名/站点等个人上下文可加入候选词典:包含这些词会直接降分
-const extra = computed(() => userInputs.value.split(/[\s,，]+/).filter(Boolean))
+// 用户名/站点等个人上下文加入候选词典:密码包含这些词会直接降分
+const extra = computed(() => context.value.split(/[\s,，]+/).filter(Boolean))
 
-const result = computed(() => analyzePassword(password.value))
+const result = computed(() => analyzePassword(password.value, extra.value))
 </script>
 
 <template>
@@ -33,6 +33,11 @@ const result = computed(() => analyzePassword(password.value))
         />
       </label>
       <label class="check" style="align-self: flex-end"><input v-model="visible" type="checkbox" />显示明文</label>
+    </div>
+
+    <div class="field mt-10">
+      <label class="field-label" for="ps-context">个人上下文词(可选:用户名/站点名/生日,逗号分隔)</label>
+      <input id="ps-context" v-model="context" class="input" spellcheck="false" placeholder="如:zhangsan, myshop" />
     </div>
 
     <div v-if="result" class="mt-14">

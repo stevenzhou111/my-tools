@@ -71,12 +71,15 @@ function humanTime(seconds) {
 
 /**
  * 分析密码强度。
+ * @param {string} password
+ * @param {string[]} userInputs 用户上下文词(用户名/站点名等),出现在密码里会直接降分
  * @returns {{score:number,label:string,fastText:string,slowText:string,suggestions:string[],warning:string}|null}
  */
-export function analyzePassword(password) {
+export function analyzePassword(password, userInputs = []) {
   const pw = String(password ?? '')
   if (!pw) return null
-  const r = getAnalyzer().check(pw)
+  const inputs = (Array.isArray(userInputs) ? userInputs : []).map((s) => String(s).trim()).filter(Boolean)
+  const r = getAnalyzer().check(pw, inputs)
   return {
     score: r.score,
     label: SCORE_LABELS[r.score],
