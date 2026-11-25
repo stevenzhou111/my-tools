@@ -11,6 +11,12 @@ const devices = ref([])
 const videoInfo = ref(null)
 const micLevel = ref(0)
 
+const KIND_META = {
+  videoinput: { icon: 'camera', label: '摄像头' },
+  audioinput: { icon: 'mic', label: '麦克风' },
+  audiooutput: { icon: 'volume-2', label: '扬声器' },
+}
+
 let audioCtx = null
 let levelTimer = 0
 // 卸载标志:getUserMedia 等待期间组件可能已销毁,await 恢复后必须据此放弃后续副作用,
@@ -154,7 +160,10 @@ onUnmounted(() => {
     <span class="field-label">检测到的设备({{ devices.length }})</span>
     <div class="dev-list">
       <div v-for="(d, i) in devices" :key="d.deviceId + '-' + i" class="dev-row">
-        <span class="dev-kind">{{ d.kind === 'videoinput' ? '<AppIcon name="camera" :size="15" /> 摄像头' : d.kind === 'audioinput' ? '<AppIcon name="mic" :size="15" /> 麦克风' : '<AppIcon name="volume-2" :size="15" /> 扬声器' }}</span>
+        <span class="dev-kind">
+          <AppIcon :name="KIND_META[d.kind]?.icon || 'volume-2'" :size="15" />
+          {{ KIND_META[d.kind]?.label || '扬声器' }}
+        </span>
         <span class="dev-label">{{ d.label }}</span>
       </div>
     </div>
@@ -225,6 +234,9 @@ onUnmounted(() => {
   flex-shrink: 0;
   width: 90px;
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .dev-label {
   word-break: break-all;

@@ -140,7 +140,10 @@ async function split(f) {
       </div>
     </div>
     <div v-if="files.length" class="row mt-14">
-      <button class="btn btn-primary" :disabled="busy" @click="merge">{{ busy ? '合并中…' : `<AppIcon name="library" :size="15" /> 合并 ${files.length} 个文件` }}</button>
+      <button class="btn btn-primary" :disabled="busy" @click="merge">
+        <template v-if="busy">合并中…</template>
+        <template v-else><AppIcon name="library" :size="15" /> 合并 {{ files.length }} 个文件</template>
+      </button>
       <button class="btn" @click="files = []">清空</button>
     </div>
   </template>
@@ -153,7 +156,10 @@ async function split(f) {
       <p class="tip">每个工作表导出为独立的 xlsx,打包成 ZIP 下载</p>
     </div>
     <div class="row mt-14">
-      <button class="btn btn-primary" :disabled="busy" @click="split">{{ busy ? '处理中…' : '<AppIcon name="folder-open" :size="15" /> 选择文件并拆分' }}</button>
+      <button class="btn btn-primary" :disabled="busy" @click="split">
+        <template v-if="busy">处理中…</template>
+        <template v-else><AppIcon name="folder-open" :size="15" /> 选择文件并拆分</template>
+      </button>
     </div>
   </template>
 </template>

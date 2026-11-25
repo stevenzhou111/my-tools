@@ -1,4 +1,4 @@
-// 文本工具分类的工具(24 个)。条目按上线时间追加在本文件内;
+// 文本工具分类的工具(31 个)。条目按上线时间追加在本文件内;
 // 新增工具请把条目加到对应分类的数组末尾。
 import { lazy } from './lazy'
 
@@ -212,5 +212,19 @@ export const TOOLS = [
     keywords: '编辑距离 相似度 levenshtein 拼写 判重 模糊匹配 文本比对',
     about: '两段文本的 Levenshtein 编辑距离(插入/删除/替换各计 1)与相似度百分比;按码点比较,emoji 不算错位。拼写纠错、模糊匹配阈值、题目判重参考;行级逐行对比请用「文本比对(diff)」。',
     component: lazy(() => import('../edit-distance/EditDistanceTool.vue')),
+  },
+  {
+    id: 'chinese-number', name: '中文数字互转', category: 'text', icon: 'file-digit', fresh: true, urlState: true,
+    desc: '「一百二十三」与 123 双向转换,支持小数、负数与万亿',
+    keywords: '中文数字 数字 转换 一百 一千 一万 亿 兆 京 大写 小写 读数 金额',
+    about: '阿拉伯数字与中文小写数字双向互转:支持小数(点)、负数(负)、两/廿/卅,以及壹贰叁等大写数字的识别;数字转中文支持到 9999 京,中文转数字用 BigInt 精确解析,不丢大数精度。金额财务大写请用「人民币大写」。',
+    component: lazy(() => import('../chinese-number/ChineseNumber.vue')),
+  },
+  {
+    id: 'zh-convert', name: '简繁中文转换', category: 'text', icon: 'languages', fresh: true, urlState: true,
+    desc: '简 ↔ 繁:台湾 / 香港字形与用词,本地词典转换',
+    keywords: '简繁 繁体 简体 中文 转换 台湾 香港 opencc 字形 用词',
+    about: '基于 OpenCC 词典做简繁双向转换:支持台湾正体、台湾常用词替换(软件→軟體)与香港字形用词,也能把台繁 / 港繁转回简体。转换完全在浏览器本地完成,文本不上传、不写入草稿;专有名词与古文存在多对一情况,重要文本请人工复核。',
+    component: lazy(() => import('../zh-convert/ZhConvert.vue')),
   },
 ]

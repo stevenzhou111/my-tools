@@ -133,7 +133,8 @@ async function convert() {
         </select>
       </label>
       <button class="btn btn-primary" style="margin-top: 22px" :disabled="busy" @click="convert">
-        {{ busy ? '转换中…' : '<AppIcon name="repeat" :size="15" /> 转换并下载' }}
+        <template v-if="busy">转换中…</template>
+        <template v-else><AppIcon name="repeat" :size="15" /> 转换并下载</template>
       </button>
     </div>
   </template>

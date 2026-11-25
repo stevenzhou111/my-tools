@@ -1,4 +1,4 @@
-// 音视频分类的工具(10 个)。条目按上线时间追加在本文件内;
+// 音视频分类的工具(13 个)。条目按上线时间追加在本文件内;
 // 新增工具请把条目加到对应分类的数组末尾。
 import { lazy } from './lazy'
 
@@ -86,5 +86,12 @@ export const TOOLS = [
     keywords: '码率 体积 文件大小 视频带宽 下载时间 计算 剪辑 投稿',
     about: '视频剪辑与投稿三件套:按时长+视频/音频码率估算成品体积(1080p 常用 8000~12000kbps 参考)、按目标体积反推总码率、按体积与带宽估算下载耗时。口径:kbps 千比特每秒,MB 兆字节,总码率=视频+音频。纯计算,本地完成。',
     component: lazy(() => import('../bitrate-calc/BitrateCalc.vue')),
+  },
+  {
+    id: 'audio-merge', name: '音频合并/拼接', category: 'av', icon: 'combine', fresh: true,
+    desc: '多段音频按顺序拼接,可调间隙与接缝淡入淡出',
+    keywords: '音频 合并 拼接 串烧 连播 wav mp3 音乐 录音',
+    about: '把多段音频按列表顺序首尾拼接:支持上移/下移调整顺序、段间静音(0~3 秒)与 10ms 接缝淡入淡出防爆音,统一为单声道或立体声后导出未压缩 WAV。浏览器本地解码与合并,不上传;MP3/M4A/OGG/FLAC 等格式均可作为输入。',
+    component: lazy(() => import('../audio-merge/AudioMerge.vue')),
   },
 ]

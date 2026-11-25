@@ -59,7 +59,10 @@ onUnmounted(() => clearInterval(timer))
   </div>
 
   <div class="panel result-panel">
-    <div class="result" :class="{ spinning }">{{ answer || '<AppIcon name="circle-question-mark" :size="15" />' }}</div>
+    <div class="result" :class="{ spinning }">
+      <AppIcon v-if="!answer" name="circle-question-mark" :size="32" />
+      {{ answer }}
+    </div>
     <button
       v-if="mode === 'yesno'"
       class="btn btn-primary"

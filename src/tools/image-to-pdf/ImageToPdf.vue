@@ -114,7 +114,8 @@ async function convert() {
 
   <div v-if="items.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="convert">
-      {{ busy ? '转换中…' : `<AppIcon name="printer" :size="15" /> 转换为 PDF(${items.length} 张图)` }}
+      <template v-if="busy">转换中…</template>
+      <template v-else><AppIcon name="printer" :size="15" /> 转换为 PDF({{ items.length }} 张图)</template>
     </button>
     <button class="btn" @click="clearAll">清空</button>
   </div>

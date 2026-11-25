@@ -58,7 +58,8 @@ onUnmounted(() => {
   <div class="picker-panel">
     <div class="rp-left">
       <button class="btn btn-primary" :disabled="rolling || !names.length" @click="roll">
-        {{ rolling ? '滚动中…' : '<AppIcon name="dice-5" :size="15" /> 随机抽一个' }}
+        <template v-if="rolling">滚动中…</template>
+        <template v-else><AppIcon name="dice-5" :size="15" /> 随机抽一个</template>
       </button>
       <div class="winner" :class="{ rolling }">{{ winner || '—' }}</div>
       <div v-if="history.length" class="tip" style="max-width: 220px">

@@ -72,7 +72,8 @@ async function merge() {
 
   <div v-if="files.length" class="row mt-14">
     <button class="btn btn-primary" :disabled="busy" @click="merge">
-      {{ busy ? '合并中…' : `<AppIcon name="link" :size="15" /> 合并 ${files.length} 个文件` }}
+      <template v-if="busy">合并中…</template>
+      <template v-else><AppIcon name="link" :size="15" /> 合并 {{ files.length }} 个文件</template>
     </button>
     <button class="btn" @click="files = []">清空列表</button>
   </div>

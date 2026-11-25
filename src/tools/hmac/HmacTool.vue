@@ -93,7 +93,10 @@ const matchState = () =>
     <textarea id="hmac-msg" v-model="message" class="textarea" rows="3" spellcheck="false"></textarea>
   </div>
 
-  <button class="btn btn-primary" :disabled="busy" @click="compute">{{ busy ? '计算中…' : '<AppIcon name="lock" :size="15" /> 计算 HMAC' }}</button>
+  <button class="btn btn-primary" :disabled="busy" @click="compute">
+    <template v-if="busy">计算中…</template>
+    <template v-else><AppIcon name="lock" :size="15" /> 计算 HMAC</template>
+  </button>
   <div v-if="error" class="error-box" style="margin-top: 12px">✗ {{ error }}</div>
 
   <template v-if="outHex">

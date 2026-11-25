@@ -117,7 +117,8 @@ function download() {
       </select>
     </label>
     <button class="btn btn-primary" style="margin-top: 22px" :disabled="busy" @click="process(file)">
-      {{ busy ? `压缩中 ${progress}%` : '<AppIcon name="shrink" :size="15" /> 开始压缩' }}
+      <template v-if="busy">压缩中 {{ progress }}%</template>
+      <template v-else><AppIcon name="shrink" :size="15" /> 开始压缩</template>
     </button>
   </div>
 

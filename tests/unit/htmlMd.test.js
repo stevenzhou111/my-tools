@@ -42,3 +42,29 @@ describe('htmlToMarkdown', () => {
     expect(md).toContain('标签')
   })
 })
+describe('htmlToMarkdown 表格', () => {
+  it('转成 GFM 管道表格', () => {
+    const { md } = htmlToMarkdown(
+      '<table><thead><tr><th>名称</th><th>数量</th></tr></thead><tbody><tr><td>苹果</td><td>3</td></tr></tbody></table>',
+    )
+    expect(md).toContain('| 名称 | 数量 |')
+    expect(md).toContain('| --- | --- |')
+    expect(md).toContain('| 苹果 | 3 |')
+  })
+
+  it('没有 thead 的表格自动补分隔符(Word 导出的表头也是 td)', () => {
+    const { md } = htmlToMarkdown(
+      '<table><tr><td><p>名称</p></td><td><p>数量</p></td></tr><tr><td><p>苹果</p></td><td><p>3</p></td></tr></table>',
+    )
+    expect(md).toContain('| 名称 | 数量 |')
+    expect(md).toContain('| --- | --- |')
+    expect(md).toContain('| 苹果 | 3 |')
+  })
+
+  it('表头 align 映射为对齐标记', () => {
+    const { md } = htmlToMarkdown(
+      '<table><thead><tr><th align="left">a</th><th align="center">b</th></tr></thead><tbody><tr><td>1</td><td>2</td></tr></tbody></table>',
+    )
+    expect(md).toMatch(/\| :-- \| :-: \|/)
+  })
+})

@@ -115,7 +115,8 @@ function previewText(entry) {
     </div>
     <div v-if="files.length" class="row mt-14">
       <button class="btn btn-primary" :disabled="busy" @click="compress">
-        {{ busy ? '压缩中…' : `<AppIcon name="package" :size="15" /> 打包 ${files.length} 个文件` }}
+        <template v-if="busy">压缩中…</template>
+        <template v-else><AppIcon name="package" :size="15" /> 打包 {{ files.length }} 个文件</template>
       </button>
       <button class="btn" @click="files = []">清空</button>
     </div>

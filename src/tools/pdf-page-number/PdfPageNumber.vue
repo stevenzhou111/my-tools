@@ -105,7 +105,8 @@ async function apply() {
       </label>
     </div>
     <button class="btn btn-primary" :disabled="busy" @click="apply">
-      {{ busy ? '处理中…' : '<AppIcon name="hash" :size="15" /> 添加页码并下载' }}
+      <template v-if="busy">处理中…</template>
+      <template v-else><AppIcon name="hash" :size="15" /> 添加页码并下载</template>
     </button>
   </div>
 </template>

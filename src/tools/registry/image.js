@@ -158,4 +158,11 @@ export const TOOLS = [
     about: '粘贴或上传 SVG,svgo 浏览器版(懒加载)本机压缩:去除编辑器元数据、冗余属性、注释与空路径,多轮迭代(multipass)直到不再变小;前后尺寸对比与棋盘底预览,可复制或下载。文件不上传。',
     component: lazy(() => import('../svg-minify/SvgMinify.vue')),
   },
+  {
+    id: 'image-redact', name: '图片局部打码', category: 'image', icon: 'eraser', fresh: true,
+    desc: '框选区域做马赛克/模糊/纯色脱敏,导出原分辨率 PNG',
+    keywords: '图片 打码 马赛克 模糊 遮挡 脱敏 隐私 证件 截图 敏感信息 redact',
+    about: '在图片上按住拖拽框出要遮挡的区域,可连续框选多处,支持马赛克、高斯模糊与纯色填充;预览按屏幕尺寸渲染,导出仍为原始分辨率 PNG。适合发聊天截图、证件、票据前遮住姓名、号码与头像。图片全程留在本机,不上传。与「图片滤镜调色」的整图马赛克不同,这里只处理你框选的范围。',
+    component: lazy(() => import('../image-redact/ImageRedact.vue')),
+  },
 ]

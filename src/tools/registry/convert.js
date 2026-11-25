@@ -1,4 +1,4 @@
-// 编码转换分类的工具(16 个)。条目按上线时间追加在本文件内;
+// 编码转换分类的工具(17 个)。条目按上线时间追加在本文件内;
 // 新增工具请把条目加到对应分类的数组末尾。
 import { lazy } from './lazy'
 
@@ -115,5 +115,12 @@ export const TOOLS = [
     keywords: '国密 sm2 sm3 sm4 加密 解密 哈希 签名',
     about: 'SM3 输出 256 位摘要;SM4 支持 ECB/CBC;SM2 为 C1C3C2 模式,可一键生成密钥对。全部由 sm-crypto 在本地完成。',
     component: lazy(() => import('../sm-crypto/SmCryptoTool.vue')),
+  },
+  {
+    id: 'file-base64', name: '文件 ↔ Base64', category: 'convert', icon: 'file-digit', fresh: true,
+    desc: '任意文件转 Base64 / Data URL,也能反向还原下载',
+    keywords: '文件 base64 dataurl 编码 解码 内联 上传 data uri',
+    about: '任意文件双向转换:文件转 Data URL 或纯 Base64(可复制、下载 .txt),也可把 Data URL / Base64 还原成文件并按 MIME 自动补扩展名。文件只在浏览器本地读取,不上传;单文件上限 20MB,含密钥的文本请勿粘贴到公共页面。',
+    component: lazy(() => import('../file-base64/FileBase64.vue')),
   },
 ]

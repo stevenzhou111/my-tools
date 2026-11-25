@@ -115,6 +115,16 @@ function share() {
     display: inline-flex;
   }
 }
+/* 窄屏下标题里出现长英文词时,固定宽度的收藏按钮会被挤出屏幕 */
+@media (max-width: 560px) {
+  .title-row {
+    flex-wrap: wrap;
+  }
+  .title-row > div {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
 .icon {
   width: 56px;
   height: 56px;

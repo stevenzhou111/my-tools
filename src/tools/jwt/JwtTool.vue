@@ -144,7 +144,8 @@ function pretty(obj) {
     <template v-if="parts">
       <div class="row mb-14">
         <span v-if="expired !== null" class="badge" :class="expired ? 'bad' : 'ok'">
-          {{ expired ? '⛔ 已过期' : '<AppIcon name="circle-check" :size="15" /> 未过期' }}
+          <template v-if="expired">⛔ 已过期</template>
+          <template v-else><AppIcon name="circle-check" :size="15" /> 未过期</template>
         </span>
         <span class="tip">此处仅解码查看;要验证签名请切到「签名 / 校验」页签</span>
       </div>
@@ -237,6 +238,9 @@ function pretty(obj) {
   font-size: 14px;
   padding: 3px 12px;
   border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .badge.ok {
   background: rgba(22, 163, 74, 0.12);

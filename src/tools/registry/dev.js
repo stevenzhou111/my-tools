@@ -289,4 +289,18 @@ export const TOOLS = [
     about: '只读采集屏幕分辨率、视口、设备像素比、语言、核数、Cookie 与 WebGL/WebGPU/剪贴板等能力探测,UA 一并展示;报 bug 或排查兼容性时把这一页给对方,省一轮来回。信息实时刷新,不上传。',
     component: lazy(() => import('../screen-info/ScreenInfo.vue')),
   },
+  {
+    id: 'css-unit', name: 'CSS 单位换算', category: 'dev', icon: 'ruler', fresh: true, urlState: true,
+    desc: 'px / rem / em / pt / vw 互转,附 A4 等纸张 @DPI 像素表',
+    keywords: 'css 单位 换算 px rem em pt pc vw vh vmin 百分比 dpi 像素 a4 设计稿 响应式',
+    about: '输入数值与单位,按 1in = 96px、1pt = 4/3px 的 CSS 参考换算到全部常用单位;rem 用根字号、em 与 % 用父字号、vw/vh 用视口尺寸,都可手动覆盖,也能一键取当前浏览器视口。下方附纸张尺寸 → 像素表(A4/A3/A5/Letter,72/96/150/300 DPI),设计稿与打印前对齐尺寸很方便。',
+    component: lazy(() => import('../css-unit/CssUnit.vue')),
+  },
+  {
+    id: 'env-convert', name: '.env ↔ JSON / YAML', category: 'dev', icon: 'settings', fresh: true,
+    desc: '环境变量 .env 与 JSON / YAML 双向转换,本地解析',
+    keywords: 'env dotenv 环境变量 json yaml 配置 转换 部署 docker compose 密钥',
+    about: '支持 .env、JSON、YAML 三种格式互转:解析 KEY=VALUE、export 前缀、单双引号、转义与行内注释;转到 .env 时可自动加 export,值含空格、#、引号或换行会自动加引号。仅支持扁平键值(嵌套对象会明确报错),数组按逗号连接,注释不会保留。配置里常有密钥,内容只在页面内存中处理,不写入地址栏、草稿或本地存储。',
+    component: lazy(() => import('../env-convert/EnvConvert.vue')),
+  },
 ]

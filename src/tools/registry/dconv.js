@@ -1,4 +1,4 @@
-// 文档转换分类的工具(7 个)。条目按上线时间追加在本文件内;
+// 文档转换分类的工具(8 个)。条目按上线时间追加在本文件内;
 // 新增工具请把条目加到对应分类的数组末尾。
 import { lazy } from './lazy'
 
@@ -51,5 +51,12 @@ export const TOOLS = [
     keywords: 'xlsx xls ods csv 转换 格式互转 openoffice wps',
     about: '基于 SheetJS 的全格式互转:现代 Excel、Excel 97-2003、OpenDocument(ODS)、CSV 与 HTML 网页表格之间任意转换,多工作表完整保留(CSV 仅导出首个)。',
     component: lazy(() => import('../format-convert/FormatConvert.vue')),
+  },
+  {
+    id: 'word-to-md', name: 'Word 转 Markdown', category: 'dconv', icon: 'file-code', fresh: true,
+    desc: '.docx 转 .md:标题/列表/表格,内嵌图可保留或移除',
+    keywords: 'word docx markdown md 转换 笔记 博客 文档',
+    about: '基于 mammoth 在浏览器本地解析 .docx,把标题、列表、粗斜体、链接、表格与代码转换为 Markdown,可复制或下载 .md;内嵌图片默认转成 base64,也可一键移除只留占位。⚠️ 仅支持 .docx;页眉页脚、文本框、批注与浮动排版会被忽略。',
+    component: lazy(() => import('../word-to-md/WordToMd.vue')),
   },
 ]

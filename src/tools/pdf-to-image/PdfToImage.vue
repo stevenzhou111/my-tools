@@ -131,7 +131,8 @@ function downloadZip() {
       </select>
     </label>
     <button class="btn btn-primary" style="margin-top: 22px" :disabled="busy" @click="process(file)">
-      {{ busy ? `转换中 ${progress}%` : '<AppIcon name="image" :size="15" /> 开始转换' }}
+      <template v-if="busy">转换中 {{ progress }}%</template>
+      <template v-else><AppIcon name="image" :size="15" /> 开始转换</template>
     </button>
   </div>
 

@@ -157,7 +157,8 @@ async function downloadWord() {
   <div v-if="file" class="row mt-14">
     <span class="tip">{{ file.name }} · {{ pageCount }} 页 · 提取出 {{ text.split('\n').filter((l) => l.trim()).length }} 行文字</span>
     <button class="btn btn-primary" :disabled="busy" @click="process(file)">
-      {{ busy ? `提取中 ${progress}%` : '<AppIcon name="pen-line" :size="15" /> 重新提取' }}
+      <template v-if="busy">提取中 {{ progress }}%</template>
+      <template v-else><AppIcon name="pen-line" :size="15" /> 重新提取</template>
     </button>
   </div>
 

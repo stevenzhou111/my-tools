@@ -138,6 +138,9 @@ test.describe('工具页', () => {
         // 关于说明
         await expect(page.locator('details.about summary')).toBeVisible()
 
+        // 组件标签被误写成字符串时会原样显示在页面上
+        await expect(page.locator('body')).not.toContainText('<AppIcon')
+
         // 页面标题带上工具名
         await expect(page).toHaveTitle(new RegExp(`·`))
 
@@ -379,6 +382,22 @@ test.describe('全局交互', () => {
     await expect(cards.first().locator('a[href^="https://"]')).toHaveCount(1)
 
     expect(errors, `软件推荐页有运行期错误:\n${errors.join('\n')}`).toEqual([])
+  })
+
+  test('窄屏工具标题含长英文词时,收藏按钮不被挤出屏幕', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto('/tool/word-to-md')
+    await expect(page.locator('.tool-head h1')).toBeVisible()
+
+    const ok = await page.evaluate(() => {
+      const fav = document.querySelector('.fav-btn')
+      return (
+        document.documentElement.scrollWidth <= window.innerWidth + 1 &&
+        !!fav &&
+        fav.getBoundingClientRect().right <= window.innerWidth + 0.5
+      )
+    })
+    expect(ok).toBe(true)
   })
 
   test('移动端抽屉可打开并跳转', async ({ page }) => {
